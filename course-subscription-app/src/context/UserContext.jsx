@@ -8,10 +8,10 @@ export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    const fetchUsers = async () => {
+    const fetchUser = async () => {
       try {
         const response = await axios.get(
-          import.meta.env.VITE_SN_API_URL_USERS,
+          import.meta.env.VITE_SN_API_URL_USER,
           {
             auth: {
               username: import.meta.env.VITE_SN_USERNAME,
@@ -25,14 +25,14 @@ export const UserProvider = ({ children }) => {
         );
         setUser(response.data.result);
         console.log(
-          "🚀 ~ fetchUsers ~ response.data.result:",
+          "🚀 ~ fetchUser ~ response.data.result:",
           response.data.result
         );
       } catch (error) {
         console.error("Error fetching courses:", error);
       }
     };
-    fetchUsers();
+    fetchUser();
   }, []);
 
   return (

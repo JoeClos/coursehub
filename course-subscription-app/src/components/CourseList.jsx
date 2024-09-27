@@ -12,78 +12,36 @@ import {
   Tooltip,
 } from "@mui/material";
 import { SlClock } from "react-icons/sl";
-import MyCourses from "./MyCourses";
 
 const CourseList = () => {
   const [courses, setCourses] = useState([]);
   const [subscribedCourses, setSubscribedCourses] = useState([]);
+  const learnerId = "8c17c7f0eb32010045e1a5115206fe17"; // Learner ID
 
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const response = await axios.get(
-          import.meta.env.VITE_SN_API_URL_COURSES,
-          {
-            auth: {
-              username: import.meta.env.VITE_SN_USERNAME,
-              password: import.meta.env.VITE_SN_PASSWORD,
-            },
-            headers: {
-              "Content-Type": "application/json", 
-              "Accept": "application/json",
-            },
-          }
-        );
-        setCourses(response.data.result);
-        // console.log(
-        //   "🚀 ~ fetchCourses ~ response.data.result:",
-        //   response.data.result
-        // );
-      } catch (error) {
-        console.error("Error fetching courses:", error);
-      }
-    };
-    fetchCourses();
-
-    fetchSubscribedCourses();
-  }, []);
-
-  const getHoursFromDuration = (duration) => {
-    const timePart = duration.split(" ")[1];
-    // console.log("🚀 ~ getHoursFromDuration ~ timePart:", timePart);
-
-    const hours = timePart.split(":")[0];
-    return hours;
-  };
-
-  const fetchSubscribedCourses = async () => {
-    const url = import.meta.env.VITE_SN_API_URL_BASE;
-
-    try {
-      const learnerId = "8c17c7f0eb32010045e1a5115206fe17";
-      // const learnerId = "22826bf03710200044e0bfc8bcbe5dec";
-      const response = await axios.get(
-        `${url}/x_quo_coursehub_course_subscription?sysparm_query=learner=${learnerId}`,
-        {
+        const response = await axios.get(import.meta.env.VITE_SN_API_URL_COURSES, {
           auth: {
             username: import.meta.env.VITE_SN_USERNAME,
             password: import.meta.env.VITE_SN_PASSWORD,
           },
           headers: {
             "Content-Type": "application/json",
-            "Accept": "application/json",
+            Accept: "application/json",
           },
-        }
-      );
+        });
+        setCourses(response.data.result);
+      } catch (error) {
+        console.error("Error fetching courses:", error);
+      }
+    };
 
-      // Fetch course details for the subscribed courses
-      const subscribedCourseIds = response.data.result.map(
-        (sub) => sub.course
-      );
-
-      if (subscribedCourseIds.length > 0) {
-        const coursesResponse = await axios.get(
-          `${url}/x_quo_coursehub_course?sysparm_query=sys_idIN${subscribedCourseIds.join(",")}`,
+    const fetchSubscribedCourses = async () => {
+      const url = import.meta.env.VITE_SN_API_URL_BASE;
+      try {
+        const response = await axios.get(
+          `${url}/x_quo_coursehub_course_subscription?sysparm_query=learner=${learnerId}`,
           {
             auth: {
               username: import.meta.env.VITE_SN_USERNAME,
@@ -91,25 +49,30 @@ const CourseList = () => {
             },
             headers: {
               "Content-Type": "application/json",
-              "Accept": "application/json",
+              Accept: "application/json",
             },
           }
         );
 
-        setSubscribedCourses(coursesResponse.data.result);
+        // Update state with the subscription details (subscriptionId, courseId)
+        const subscriptions = response.data.result.map((sub) => ({
+          subscriptionId: sub.sys_id, // Subscription record ID
+          courseId: sub.course.value, // Course ID from the subscription
+        }));
+        setSubscribedCourses(subscriptions);
+      } catch (error) {
+        console.error("Error fetching subscribed courses:", error);
       }
-    } catch (error) {
-      console.error("Error fetching subscribed courses:", error);
-    }
-  };
+    };
+
+    fetchCourses();
+    fetchSubscribedCourses();
+  }, []);
 
   const handleSubscribe = async (course) => {
     const url = import.meta.env.VITE_SN_API_URL_BASE;
-
     try {
-      const learnerId = "8c17c7f0eb32010045e1a5115206fe17"; 
-      // const learnerId = "22826bf03710200044e0bfc8bcbe5dec"; 
-      await axios.post(
+      const response = await axios.post(
         `${url}/x_quo_coursehub_course_subscription`,
         {
           learner: learnerId,
@@ -123,17 +86,49 @@ const CourseList = () => {
           },
           headers: {
             "Content-Type": "application/json",
-            "Accept": "application/json",
+            Accept: "application/json",
           },
         }
       );
 
-      // Update local subscribed courses state
-      setSubscribedCourses((prev) => [...prev, course]);
-      console.log(`Subscribed to course: ${course.title}`);
+      // Add the new subscription to the state
+      const newSubscription = {
+        subscriptionId: response.data.result.sys_id, // Subscription ID returned from API
+        courseId: course.sys_id, // Course ID
+      };
+      setSubscribedCourses((prev) => [...prev, newSubscription]);
     } catch (error) {
       console.error("Error subscribing to course:", error);
     }
+  };
+
+  const handleUnsubscribe = async (subscriptionId) => {
+    const url = import.meta.env.VITE_SN_API_URL_BASE;
+    try {
+      await axios.delete(`${url}/x_quo_coursehub_course_subscription/${subscriptionId}`, {
+        auth: {
+          username: import.meta.env.VITE_SN_USERNAME,
+          password: import.meta.env.VITE_SN_PASSWORD,
+        },
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+      });
+
+      // Remove the unsubscribed course from the state
+      setSubscribedCourses((prev) =>
+        prev.filter((sub) => sub.subscriptionId !== subscriptionId)
+      );
+    } catch (error) {
+      console.error("Error unsubscribing", error);
+    }
+  };
+
+  // Function to check if a course is already subscribed and return the subscription ID
+  const getSubscriptionForCourse = (courseId) => {
+    const subscription = subscribedCourses.find((sub) => sub.courseId === courseId);
+    return subscription ? subscription.subscriptionId : null;
   };
 
   return (
@@ -171,20 +166,30 @@ const CourseList = () => {
                     </IconButton>
                   </Tooltip>
                   <Typography variant="body2" color="text.secondary">
-                    {getHoursFromDuration(course.duration)} hours
+                    {course.duration} hours
                   </Typography>
                 </Box>
               </CardContent>
               <CardActions>
-                <Button size="small" onClick={() => handleSubscribe(course)}>
-                  Subscribe
-                </Button>
+                {getSubscriptionForCourse(course.sys_id) ? (
+                  <Button
+                    size="small"
+                    onClick={() =>
+                      handleUnsubscribe(getSubscriptionForCourse(course.sys_id))
+                    }
+                  >
+                    Unsubscribe
+                  </Button>
+                ) : (
+                  <Button size="small" onClick={() => handleSubscribe(course)}>
+                    Subscribe
+                  </Button>
+                )}
               </CardActions>
             </Card>
           </Grid>
         ))}
       </Grid>
-      <MyCourses subscribedCourses={subscribedCourses} />
     </Box>
   );
 };
