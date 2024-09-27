@@ -5,13 +5,15 @@ import UserContext from "../context/UserContext";
 
 const MyCourses = () => {
   const { user } = useContext(UserContext);
-  console.log("🚀 ~ MyCourses ~ user:", user);
+  // console.log("🚀 ~ MyCourses ~ user:", user);
   const [subscribedCourses, setSubscribedCourses] = useState([]);
+  const [courseTitles, setCourseTitles] = useState({});
 
   useEffect(() => {
     const fetchSubscribedCourses = async () => {
       const url = import.meta.env.VITE_SN_API_URL_BASE;
-      const learnerId = "8c17c7f0eb32010045e1a5115206fe17"; // Example learner ID
+      const learnerId = user.sys_id; 
+      // console.log("🚀 ~ fetchSubscribedCourses ~ learnerId:", learnerId)
 
       try {
         const response = await axios.get(
@@ -21,10 +23,6 @@ const MyCourses = () => {
               username: import.meta.env.VITE_SN_USERNAME,
               password: import.meta.env.VITE_SN_PASSWORD,
             },
-            headers: {
-              "Content-Type": "application/json",
-              Accept: "application/json",
-            },
           }
         );
 
@@ -32,6 +30,34 @@ const MyCourses = () => {
         const subscriptions = response.data.result;
         setSubscribedCourses(subscriptions);
 
+        // Fetch course titles for each subscription
+        const titlesPromises = subscriptions.map(async (sub) => {
+          const courseLink = sub.course.link;
+          const courseResponse = await axios.get(courseLink, {
+            auth: {
+              username: import.meta.env.VITE_SN_USERNAME,
+              password: import.meta.env.VITE_SN_PASSWORD,
+            },
+            headers: {
+              "Content-Type": "application/json",
+              Accept: "application/json",
+            },
+          });
+          return {
+            id: sub.sys_id,
+            title: courseResponse.data.result.title, // Get the title from course response
+          };
+        });
+
+        // Wait for all titles to be fetched
+        const titles = await Promise.all(titlesPromises);
+        // Create a mapping of course titles
+        const titlesMap = titles.reduce((acc, { id, title }) => {
+          acc[id] = title;
+          return acc;
+        }, {});
+
+        setCourseTitles(titlesMap); // Store course titles in state
         // Log to see the full fetched data
         console.log("Fetched subscriptions:", subscriptions);
       } catch (error) {
@@ -51,10 +77,6 @@ const MyCourses = () => {
             username: import.meta.env.VITE_SN_USERNAME,
             password: import.meta.env.VITE_SN_PASSWORD,
           },
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
         }
       );
       console.log("Unsubscribed successfully", response.data);
@@ -63,6 +85,13 @@ const MyCourses = () => {
       setSubscribedCourses((prevCourses) =>
         prevCourses.filter((sub) => sub.sys_id !== subscriptionId)
       );
+
+      // Also remove course title
+      setCourseTitles((prevTitles) => {
+        const newTitles = { ...prevTitles };
+        delete newTitles[subscriptionId];
+        return newTitles;
+      });
     } catch (error) {
       console.error("Error unsubscribing", error);
     }
@@ -78,12 +107,16 @@ const MyCourses = () => {
           <Typography>No subscribed courses available.</Typography>
         ) : (
           subscribedCourses.map((sub) => (
-            <div key={sub.sys_id}>
-              <p>{sub.course.value}</p>
-              <Button onClick={() => unsubscribeCourse(sub.sys_id)}>
-                Unsubscribe
-              </Button>
-            </div>
+            <Grid item xs={12} sm={6} md={4} key={sub.sys_id}>
+              <Box border={1} borderRadius={5} padding={2}>
+                <Typography variant="h6">
+                  {courseTitles[sub.sys_id] || "Loading title..."}
+                </Typography>
+                <Button onClick={() => unsubscribeCourse(sub.sys_id)}>
+                  Unsubscribe
+                </Button>
+              </Box>
+            </Grid>
           ))
         )}
       </Grid>

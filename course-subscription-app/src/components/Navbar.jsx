@@ -11,17 +11,18 @@ import {
   MenuItem,
   Badge,
 } from "@mui/material";
-import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import UserContext from "../context/UserContext";
 import { FaCartShopping, FaCircleUser } from "react-icons/fa6";
 import { IoMdMore } from "react-icons/io";
 import { IoHome } from "react-icons/io5";
+import { useCart } from "../context/CartContext";
 
-const Navbar = ({ subscribedCourses }) => {
-  console.log("🚀 ~ Navbar ~ subscribedCourses:", subscribedCourses);
+const Navbar = () => {
   const { user } = useContext(UserContext);
   const [anchorEl, setAnchorEl] = useState(null);
+  const { subscribedCourses } = useCart(); // Access subscribed courses from context
+  // console.log("🚀 ~ Navbar ~ subscribedCourses:", subscribedCourses);
 
   const handleMobileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -61,10 +62,7 @@ const Navbar = ({ subscribedCourses }) => {
             <Button color="inherit" component={Link} to="/my-courses">
               <Tooltip title="My subscriptions">
                 <IconButton>
-                  <Badge
-                    badgeContent={subscribedCourses.length}
-                    color="error" // Use a valid color like 'primary' or 'secondary'
-                  >
+                  <Badge badgeContent={subscribedCourses.length} color="error">
                     <FaCartShopping
                       style={{ fontSize: "1.6rem", color: "#FFFFFF" }}
                     />
@@ -130,10 +128,6 @@ const Navbar = ({ subscribedCourses }) => {
       </AppBar>
     </Box>
   );
-};
-
-Navbar.propTypes = {
-  subscribedCourses: PropTypes.array.isRequired,
 };
 
 export default Navbar;

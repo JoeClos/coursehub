@@ -24,10 +24,10 @@ export const UserProvider = ({ children }) => {
           }
         );
         setUser(response.data.result);
-        console.log(
-          "🚀 ~ fetchUser ~ response.data.result:",
-          response.data.result
-        );
+        // console.log(
+        //   "🚀 ~ fetchUser ~ response.data.result:",
+        //   response.data.result
+        // );
       } catch (error) {
         console.error("Error fetching courses:", error);
       }

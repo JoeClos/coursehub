@@ -21,16 +21,15 @@ const CourseList = () => {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const response = await axios.get(import.meta.env.VITE_SN_API_URL_COURSES, {
-          auth: {
-            username: import.meta.env.VITE_SN_USERNAME,
-            password: import.meta.env.VITE_SN_PASSWORD,
-          },
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
-        });
+        const response = await axios.get(
+          import.meta.env.VITE_SN_API_URL_COURSES,
+          {
+            auth: {
+              username: import.meta.env.VITE_SN_USERNAME,
+              password: import.meta.env.VITE_SN_PASSWORD,
+            },
+          }
+        );
         setCourses(response.data.result);
       } catch (error) {
         console.error("Error fetching courses:", error);
@@ -46,10 +45,6 @@ const CourseList = () => {
             auth: {
               username: import.meta.env.VITE_SN_USERNAME,
               password: import.meta.env.VITE_SN_PASSWORD,
-            },
-            headers: {
-              "Content-Type": "application/json",
-              Accept: "application/json",
             },
           }
         );
@@ -105,16 +100,19 @@ const CourseList = () => {
   const handleUnsubscribe = async (subscriptionId) => {
     const url = import.meta.env.VITE_SN_API_URL_BASE;
     try {
-      await axios.delete(`${url}/x_quo_coursehub_course_subscription/${subscriptionId}`, {
-        auth: {
-          username: import.meta.env.VITE_SN_USERNAME,
-          password: import.meta.env.VITE_SN_PASSWORD,
-        },
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-      });
+      await axios.delete(
+        `${url}/x_quo_coursehub_course_subscription/${subscriptionId}`,
+        {
+          auth: {
+            username: import.meta.env.VITE_SN_USERNAME,
+            password: import.meta.env.VITE_SN_PASSWORD,
+          },
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+        }
+      );
 
       // Remove the unsubscribed course from the state
       setSubscribedCourses((prev) =>
@@ -127,7 +125,9 @@ const CourseList = () => {
 
   // Function to check if a course is already subscribed and return the subscription ID
   const getSubscriptionForCourse = (courseId) => {
-    const subscription = subscribedCourses.find((sub) => sub.courseId === courseId);
+    const subscription = subscribedCourses.find(
+      (sub) => sub.courseId === courseId
+    );
     return subscription ? subscription.subscriptionId : null;
   };
 

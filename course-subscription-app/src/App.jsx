@@ -1,13 +1,15 @@
+// App.jsx
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import axios from "axios";
 import CourseList from "./components/CourseList";
 import Navbar from "./components/Navbar";
 import MyCourses from "./components/MyCourses";
 import { UserProvider } from "./context/UserContext";
+import { CartProvider, useCart } from "./context/CartContext";
 
-function App() {
-  const [subscribedCourses, setSubscribedCourses] = useState([]);
+const FetchSubscribedCourses = () => {
+  const { updateSubscribedCourses } = useCart();
 
   useEffect(() => {
     const fetchSubscribedCourses = async () => {
@@ -28,27 +30,36 @@ function App() {
             },
           }
         );
+
         const subscriptions = response.data.result.map((sub) => ({
           subscriptionId: sub.sys_id,
           courseId: sub.course.value,
         }));
-        setSubscribedCourses(subscriptions);
+
+        updateSubscribedCourses(subscriptions);
       } catch (error) {
         console.error("Error fetching subscribed courses:", error);
       }
     };
 
     fetchSubscribedCourses();
-  }, []);
-  
+  }, [updateSubscribedCourses]);
+
+  return null; // This component doesn't render anything
+};
+
+function App() {
   return (
     <Router>
       <UserProvider>
-        <Navbar subscribedCourses={subscribedCourses} />
-        <Routes>
-          <Route path="/" element={<CourseList />} />
-          <Route path="/my-courses" element={<MyCourses />} />
-        </Routes>
+        <CartProvider>
+          <FetchSubscribedCourses /> 
+          <Navbar />
+          <Routes>
+            <Route path="/" element={<CourseList />} />
+            <Route path="/my-courses" element={<MyCourses />} />
+          </Routes>
+        </CartProvider>
       </UserProvider>
     </Router>
   );
