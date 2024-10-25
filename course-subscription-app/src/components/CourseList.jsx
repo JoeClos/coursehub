@@ -131,6 +131,14 @@ const CourseList = () => {
     return subscription ? subscription.subscriptionId : null;
   };
 
+  const getHoursFromDuration = (duration) => {
+    const timePart = duration.split(" ")[1];
+    console.log("🚀 ~ getHoursFromDuration ~ timePart:", timePart);
+
+    const hours = timePart.split(":")[0];
+    return hours;
+  };
+
   return (
     <Box style={{ padding: "20px" }}>
       <Typography variant="h4" gutterBottom>
@@ -166,7 +174,7 @@ const CourseList = () => {
                     </IconButton>
                   </Tooltip>
                   <Typography variant="body2" color="text.secondary">
-                    {course.duration} hours
+                    {getHoursFromDuration(course.duration)} hours
                   </Typography>
                 </Box>
               </CardContent>
