@@ -65,7 +65,7 @@ const MyCourses = () => {
       }
     };
     fetchSubscribedCourses();
-  }, []);
+  }, [user.sys_id]);
 
   const unsubscribeCourse = async (subscriptionId) => {
     const url = import.meta.env.VITE_SN_API_URL_BASE;
