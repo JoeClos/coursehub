@@ -5,8 +5,10 @@ import axios from "axios";
 import CourseList from "./components/CourseList";
 import Navbar from "./components/Navbar";
 import MyCourses from "./components/MyCourses";
-import { UserProvider } from "./context/UserContext";
 import { CartProvider, useCart } from "./context/CartContext";
+import Login from "./components/Login";
+import ProtectedRoute from "./components/ProtectedRoute";
+import Dashboard from "./components/Dashboard";
 
 const FetchSubscribedCourses = () => {
   const { updateSubscribedCourses } = useCart();
@@ -45,22 +47,47 @@ const FetchSubscribedCourses = () => {
     fetchSubscribedCourses();
   }, [updateSubscribedCourses]);
 
-  return null; // This component doesn't render anything
+  return null;
 };
 
 function App() {
+  // const [user, setUser] = useState(null);
+
+  // useEffect(() => {
+  //   const token = localStorage.getItem("token");
+  //   if (token) {
+  //     // Fetch user details with the token
+  //     axios
+  //       .get("/api/auth/me", { headers: { Authorization: `Bearer ${token}` } })
+  //       .then((response) => {
+  //         setUser(response.data.user);
+  //       })
+  //       .catch(() => {
+  //         // If token is invalid, clear it
+  //         localStorage.removeItem("token");
+  //       });
+  //   }
+  // }, []);
+
   return (
     <Router>
-      <UserProvider>
-        <CartProvider>
-          <FetchSubscribedCourses /> 
-          <Navbar />
-          <Routes>
-            <Route path="/" element={<CourseList />} />
-            <Route path="/my-courses" element={<MyCourses />} />
-          </Routes>
-        </CartProvider>
-      </UserProvider>
+      <CartProvider>
+        <FetchSubscribedCourses />
+        <Navbar />
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute requiredRole="admin">
+                <Dashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route path="/" element={<CourseList />} />
+          <Route path="/my-courses" element={<MyCourses />} />
+        </Routes>
+      </CartProvider>
     </Router>
   );
 }

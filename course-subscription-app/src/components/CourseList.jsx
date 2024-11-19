@@ -37,7 +37,7 @@ const CourseList = () => {
     // };
 
     const fetchCourses = async () => {
-      const baseUrl = import.meta.env.VITE_API_URL_BASE;
+      const baseUrl = import.meta.env.VITE_API_BASE_URL;
       try {
         const response = await fetch(`${baseUrl}/courses`)
 

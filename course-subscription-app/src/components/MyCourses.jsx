@@ -1,10 +1,10 @@
 import { useEffect, useState, useContext } from "react";
 import axios from "axios";
 import { Box, Typography, Grid, Button } from "@mui/material";
-import UserContext from "../context/UserContext";
+import AuthContext from "../context/AuthContext";
 
 const MyCourses = () => {
-  const { user } = useContext(UserContext);
+  const { user } = useContext(AuthContext);
   // console.log("🚀 ~ MyCourses ~ user:", user);
   const [subscribedCourses, setSubscribedCourses] = useState([]);
   const [courseTitles, setCourseTitles] = useState({});
@@ -125,3 +125,4 @@ const MyCourses = () => {
 };
 
 export default MyCourses;
+
