@@ -1,4 +1,3 @@
-// App.jsx
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useEffect } from "react";
 import axios from "axios";
@@ -9,6 +8,7 @@ import { CartProvider, useCart } from "./context/CartContext";
 import Login from "./components/Login";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Dashboard from "./components/Dashboard";
+import Register from "./components/Register";
 
 const FetchSubscribedCourses = () => {
   const { updateSubscribedCourses } = useCart();
@@ -51,23 +51,6 @@ const FetchSubscribedCourses = () => {
 };
 
 function App() {
-  // const [user, setUser] = useState(null);
-
-  // useEffect(() => {
-  //   const token = localStorage.getItem("token");
-  //   if (token) {
-  //     // Fetch user details with the token
-  //     axios
-  //       .get("/api/auth/me", { headers: { Authorization: `Bearer ${token}` } })
-  //       .then((response) => {
-  //         setUser(response.data.user);
-  //       })
-  //       .catch(() => {
-  //         // If token is invalid, clear it
-  //         localStorage.removeItem("token");
-  //       });
-  //   }
-  // }, []);
 
   return (
     <Router>
@@ -75,6 +58,7 @@ function App() {
         <FetchSubscribedCourses />
         <Navbar />
         <Routes>
+        <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
           <Route
             path="/dashboard"
