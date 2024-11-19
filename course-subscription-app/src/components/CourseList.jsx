@@ -19,18 +19,35 @@ const CourseList = () => {
   const learnerId = "8c17c7f0eb32010045e1a5115206fe17"; // Learner ID
 
   useEffect(() => {
+    // const fetchCourses = async () => {
+    //   try {
+    //     const response = await axios.get(
+    //       import.meta.env.VITE_SN_API_URL_COURSES,
+    //       {
+    //         auth: {
+    //           username: import.meta.env.VITE_SN_USERNAME,
+    //           password: import.meta.env.VITE_SN_PASSWORD,
+    //         },
+    //       }
+    //     );
+    //     setCourses(response.data.result);
+    //   } catch (error) {
+    //     console.error("Error fetching courses:", error);
+    //   }
+    // };
+
     const fetchCourses = async () => {
+      const baseUrl = import.meta.env.VITE_API_URL_BASE;
       try {
-        const response = await axios.get(
-          import.meta.env.VITE_SN_API_URL_COURSES,
-          {
-            auth: {
-              username: import.meta.env.VITE_SN_USERNAME,
-              password: import.meta.env.VITE_SN_PASSWORD,
-            },
-          }
-        );
-        setCourses(response.data.result);
+        const response = await fetch(`${baseUrl}/courses`)
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch courses");
+        }
+
+        const data = await response.json();
+        setCourses(data);
+        console.log("🚀 ~ fetchCourses ~ data:", data);
       } catch (error) {
         console.error("Error fetching courses:", error);
       }
@@ -131,13 +148,13 @@ const CourseList = () => {
     return subscription ? subscription.subscriptionId : null;
   };
 
-  const getHoursFromDuration = (duration) => {
-    const timePart = duration.split(" ")[1];
-    console.log("🚀 ~ getHoursFromDuration ~ timePart:", timePart);
+  // const getHoursFromDuration = (duration) => {
+  //   const timePart = duration.split(" ")[1];
+  //   console.log("🚀 ~ getHoursFromDuration ~ timePart:", timePart);
 
-    const hours = timePart.split(":")[0];
-    return hours;
-  };
+  //   const hours = timePart.split(":")[0];
+  //   return hours;
+  // };
 
   return (
     <Box style={{ padding: "20px" }}>
@@ -146,7 +163,8 @@ const CourseList = () => {
       </Typography>
       <Grid container spacing={3}>
         {courses.map((course) => (
-          <Grid item xs={12} sm={6} md={4} xl={3} key={course.sys_id}>
+          // <Grid item xs={12} sm={6} md={4} xl={3} key={course.sys_id}>
+          <Grid item xs={12} sm={6} md={4} xl={3} key={course._id}>
             <Card
               sx={{
                 minHeight: 300,
@@ -173,9 +191,13 @@ const CourseList = () => {
                       <SlClock />
                     </IconButton>
                   </Tooltip>
+                  {/* map through course to get hours*/}
                   <Typography variant="body2" color="text.secondary">
-                    {getHoursFromDuration(course.duration)} hours
+                    {course.duration.hours} hours
                   </Typography>
+                  {/* <Typography variant="body2" color="text.secondary">
+                    {getHoursFromDuration(course.duration)} hours
+                  </Typography> */}
                 </Box>
               </CardContent>
               <CardActions>
