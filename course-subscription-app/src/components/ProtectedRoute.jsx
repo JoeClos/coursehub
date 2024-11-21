@@ -7,7 +7,7 @@ const ProtectedRoute = ({ children, requiredRole }) => {
   const { user } = useContext(AuthContext);
 
   // Check if user is logged in and has the required role
-  if (!user || user.role !== requiredRole) {
+  if (!user || requiredRole && user.role !== requiredRole) {
     return <Navigate to="/" />;
   }
 
