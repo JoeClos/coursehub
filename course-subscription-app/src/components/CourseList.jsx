@@ -1,21 +1,12 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import {
-  Box,
-  Card,
-  CardActions,
-  CardContent,
-  Typography,
-  Button,
-  Grid,
-  IconButton,
-  Tooltip,
-} from "@mui/material";
+import { Box, Card, CardActions, CardContent, Typography, Button, Grid, IconButton, Tooltip } from "@mui/material";
 import { SlClock } from "react-icons/sl";
-import PropTypes from "prop-types";
+import { useCart } from "../context/CartContext";
 
-const CourseList = ({ subscribedCourses, setSubscribedCourses }) => {
+const CourseList = () => {
   const [courses, setCourses] = useState([]);
+  const { subscribedCourses, updateSubscribedCourses } = useCart();
   const learnerId = localStorage.getItem("learnerId");
 
   useEffect(() => {
@@ -48,7 +39,6 @@ const CourseList = ({ subscribedCourses, setSubscribedCourses }) => {
         subscriptionDate: new Date().toISOString(),
       });
 
-      // Ensure courseId is an object in the subscribedCourses state
       const newSubscription = {
         ...response.data,
         courseId: {
@@ -57,7 +47,7 @@ const CourseList = ({ subscribedCourses, setSubscribedCourses }) => {
         },
       };
 
-      setSubscribedCourses((prev) => [...prev, newSubscription]);
+      updateSubscribedCourses((prev) => [...prev, newSubscription]);
     } catch (error) {
       console.error("Error subscribing to course:", error);
     }
@@ -67,19 +57,13 @@ const CourseList = ({ subscribedCourses, setSubscribedCourses }) => {
     const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
     try {
-      console.log(`Unsubscribing from subscription ID: ${subscriptionId}`);
+      await axios.delete(`${baseUrl}/unsubscribe/${subscriptionId}`);
 
-      const response = await axios.delete(
-        `${baseUrl}/unsubscribe/${subscriptionId}`
-      );
-
-      console.log("Response from server:", response.data);
-
-      setSubscribedCourses((prev) =>
+      updateSubscribedCourses((prev) =>
         prev.filter((sub) => sub._id !== subscriptionId)
       );
     } catch (error) {
-      console.error("Error unsubscribing from course:", error.response.data);
+      console.error("Error unsubscribing from course:", error);
     }
   };
 
@@ -87,7 +71,7 @@ const CourseList = ({ subscribedCourses, setSubscribedCourses }) => {
     const subscription = subscribedCourses.find(
       (sub) => sub.courseId._id === courseId // Ensure matching against _id
     );
-    return subscription ? subscription._id : null; // Correctly use subscription._id
+    return subscription ? subscription._id : null;
   };
 
   return (
@@ -151,19 +135,6 @@ const CourseList = ({ subscribedCourses, setSubscribedCourses }) => {
       </Grid>
     </Box>
   );
-};
-
-CourseList.propTypes = {
-  subscribedCourses: PropTypes.arrayOf(
-    PropTypes.shape({
-      _id: PropTypes.string.isRequired,
-      courseId: PropTypes.shape({
-        _id: PropTypes.string.isRequired,
-        title: PropTypes.string.isRequired,
-      }).isRequired,
-    })
-  ).isRequired,
-  setSubscribedCourses: PropTypes.func.isRequired,
 };
 
 export default CourseList;

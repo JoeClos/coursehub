@@ -1,13 +1,22 @@
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { Link, useNavigate } from "react-router-dom";
-import { AppBar, Toolbar, Button, Typography } from "@mui/material";
+import {
+  AppBar,
+  Toolbar,
+  Button,
+  Typography,
+  Badge,
+} from "@mui/material";
+import { useCart } from "../context/CartContext";
+import { ShoppingCart } from "@mui/icons-material";
 
 const Navbar = () => {
   const { user, logout } = useContext(AuthContext); // Get user and logout from context
-  console.log("🚀 ~ Navbar ~ user:", user);
+  // console.log("🚀 ~ Navbar ~ user:", user);
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
+  const { subscribedCourses } = useCart();
 
   const handleLogout = () => {
     logout(); // Use logout from context to clear user state
@@ -40,18 +49,18 @@ const Navbar = () => {
               Home
             </Button>
             {user?.role === "admin" ? (
-              <>
-                <Button color="inherit" component={Link} to="/dashboard">
-                  Dashboard
-                </Button>
-              
-              </>
+              <Button color="inherit" component={Link} to="/dashboard">
+                Dashboard
+              </Button>
             ) : (
-              <>
-                <Button color="inherit" component={Link} to="/my-courses">
-                  Cart
-                </Button>
-              </>
+              <Button color="inherit" component={Link} to="/my-courses">
+                <Badge
+                  badgeContent={subscribedCourses.length}
+                  color="secondary"
+                >
+                  <ShoppingCart />
+                </Badge>
+              </Button>
             )}
             <Typography variant="body1" sx={{ marginLeft: 2 }}>
               Welcome, {user?.firstName || "Guest"}
@@ -67,3 +76,4 @@ const Navbar = () => {
 };
 
 export default Navbar;
+
