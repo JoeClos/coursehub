@@ -9,70 +9,65 @@ import Login from "./components/Login";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Dashboard from "./components/Dashboard";
 import Register from "./components/Register";
+import { AuthProvider } from "./context/AuthContext";
 
-const FetchSubscribedCourses = () => {
-  const { updateSubscribedCourses } = useCart();
+// const FetchSubscribedCourses = () => {
+//   const { updateSubscribedCourses } = useCart();
+//   const learnerId = localStorage.getItem("learnerId");
 
-  useEffect(() => {
-    const fetchSubscribedCourses = async () => {
-      const url = import.meta.env.VITE_SN_API_URL_BASE;
-      const learnerId = "8c17c7f0eb32010045e1a5115206fe17";
+//   useEffect(() => {
+//     const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
-      try {
-        const response = await axios.get(
-          `${url}/x_quo_coursehub_course_subscription?sysparm_query=learner=${learnerId}`,
-          {
-            auth: {
-              username: import.meta.env.VITE_SN_USERNAME,
-              password: import.meta.env.VITE_SN_PASSWORD,
-            },
-            headers: {
-              "Content-Type": "application/json",
-              Accept: "application/json",
-            },
-          }
-        );
+//     const fetchSubscribedCourses = async () => {
+//       try {
+//         // Update with your backend URL
+//         const response = await axios.get(
+//           `${baseUrl}/subscriptions/${learnerId}`
+//         );
 
-        const subscriptions = response.data.result.map((sub) => ({
-          subscriptionId: sub.sys_id,
-          courseId: sub.course.value,
-        }));
+//         // Assuming the response data structure includes the result
+//         const subscriptions = response.data.map((sub) => ({
+//           subscriptionId: sub._id, // MongoDB's ObjectId field
+//           courseId: sub.courseId, // Assuming the course has an _id field
+//           // courseTitle: sub.course.title, // Assuming the course model has a 'title' field
+//         }));
 
-        updateSubscribedCourses(subscriptions);
-      } catch (error) {
-        console.error("Error fetching subscribed courses:", error);
-      }
-    };
+//         updateSubscribedCourses(subscriptions);
+//       } catch (error) {
+//         console.error("Error fetching subscribed courses:", error);
+//       }
+//     };
 
-    fetchSubscribedCourses();
-  }, [updateSubscribedCourses]);
+//     fetchSubscribedCourses();
+//   }, [learnerId, updateSubscribedCourses]);
 
-  return null;
-};
+//   return null;
+// };
 
 function App() {
-
   return (
-    <Router>
-      <CartProvider>
-        <FetchSubscribedCourses />
-        <Navbar />
-        <Routes>
-        <Route path="/register" element={<Register />} />
-          <Route path="/login" element={<Login />} />
-          <Route
-            path="/dashboard"
-            element={
-              <ProtectedRoute requiredRole="admin">
-                <Dashboard />
-              </ProtectedRoute>
-            }
-          />
-          <Route path="/" element={<CourseList />} />
-          <Route path="/my-courses" element={<MyCourses />} />
-        </Routes>
-      </CartProvider>
-    </Router>
+    <AuthProvider>
+      <Router>
+        <CartProvider>
+          {/* <FetchSubscribedCourses /> */}
+          <Navbar />
+          <Routes>
+            <Route path="/register" element={<Register />} />
+            <Route path="/login" element={<Login />} />
+            <Route
+              path="/dashboard"
+              element={
+                <ProtectedRoute requiredRole="admin">
+                  <Dashboard />
+                </ProtectedRoute>
+              }
+            />
+            <Route path="/" element={<CourseList />} />
+            <Route path="/my-courses" element={<MyCourses />} />
+          </Routes>
+        </CartProvider>
+      </Router>
+    </AuthProvider>
   );
 }
 

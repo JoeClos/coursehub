@@ -112,7 +112,7 @@ const Login = () => {
       console.log("API response:", response.data); // Log the response to verify structure
 
       const { token, user } = response.data; // Extract token and user from response
-      login.login({ token, email: user.email, role: user.role, firstName: user.firstName }); // Pass token and user data
+      login.login({ token, email: user.email, role: user.role, firstName: user.firstName, id: user._id }); // Pass token and user data
       console.log("🚀 ~ loginUser ~ user:", user);
       if (user.role === "admin") {
         console.log("🚀 ~ loginUser ~ user.role:", user.role);
