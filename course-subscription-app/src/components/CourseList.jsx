@@ -12,8 +12,10 @@ const CourseList = () => {
   useEffect(() => {
     const fetchCourses = async () => {
       const baseUrl = import.meta.env.VITE_API_BASE_URL;
+      const fullUrl = `${baseUrl}/api/courses`;
       try {
-        const response = await fetch(`${baseUrl}api/courses`);
+        console.log("🚀 ~ fetchCourses ~ fullUrl:", fullUrl)
+        const response = await fetch(fullUrl);
 
         if (!response.ok) {
           throw new Error("Failed to fetch courses");
