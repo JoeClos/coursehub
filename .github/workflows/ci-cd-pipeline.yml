@@ -10,28 +10,24 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-    - name: Set up Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '16' # or any version you want
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "22" # or any version you want
 
-    - name: Install dependencies (Frontend)
-      run: |
-        cd course-subscription-app
-        npm install
+      - name: Install dependencies (Frontend)
+        run: |
+          cd course-subscription-app
+          npm install
 
-    - name: Build frontend
-      run: |
-        cd course-subscription-app
-        npm run build
+      - name: Build frontend
+        run: |
+          cd course-subscription-app
+          npm run build
 
-    - name: Deploy to Netlify (or any other deployment step)
-      run: |
-        cd course-subscription-app
-        npm run deploy
-      env:
-        NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-        NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
