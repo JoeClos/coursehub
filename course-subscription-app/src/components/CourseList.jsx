@@ -12,12 +12,11 @@ import {
   Tooltip,
 } from "@mui/material";
 import { SlClock } from "react-icons/sl";
+import PropTypes from "prop-types";
 
-const CourseList = () => {
+const CourseList = ({ subscribedCourses, setSubscribedCourses }) => {
   const [courses, setCourses] = useState([]);
-  const [subscribedCourses, setSubscribedCourses] = useState([]);
   const learnerId = localStorage.getItem("learnerId");
-  console.log("🚀 ~ CourseList ~ learnerId:", learnerId);
 
   useEffect(() => {
     const fetchCourses = async () => {
@@ -31,33 +30,13 @@ const CourseList = () => {
 
         const data = await response.json();
         setCourses(data);
-        console.log("🚀 ~ fetchCourses ~ data:", data);
       } catch (error) {
         console.error("Error fetching courses:", error);
       }
     };
 
-    // Fetch subscribed courses
-    const fetchSubscribedCourses = async () => {
-      const baseUrl = import.meta.env.VITE_API_BASE_URL;
-
-      try {
-        const response = await axios.get(
-          `${baseUrl}/subscriptions/${learnerId}`
-        );
-        setSubscribedCourses(response.data);
-        console.log(
-          "🚀 ~ fetchSubscribedCourses ~ response.data:",
-          response.data
-        );
-      } catch (error) {
-        console.error("Error fetching subscribed courses:", error);
-      }
-    };
-
     fetchCourses();
-    fetchSubscribedCourses();
-  }, [learnerId]);
+  }, []);
 
   const handleSubscribe = async (course) => {
     const baseUrl = import.meta.env.VITE_API_BASE_URL;
@@ -69,8 +48,16 @@ const CourseList = () => {
         subscriptionDate: new Date().toISOString(),
       });
 
-      // Add the new subscription to state
-      setSubscribedCourses((prev) => [...prev, response.data]);
+      // Ensure courseId is an object in the subscribedCourses state
+      const newSubscription = {
+        ...response.data,
+        courseId: {
+          _id: course._id,
+          title: course.title,
+        },
+      };
+
+      setSubscribedCourses((prev) => [...prev, newSubscription]);
     } catch (error) {
       console.error("Error subscribing to course:", error);
     }
@@ -80,22 +67,27 @@ const CourseList = () => {
     const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
     try {
-      await axios.delete(`${baseUrl}/unsubscribe/${subscriptionId}`);
-      // Remove the unsubscribed course from state
+      console.log(`Unsubscribing from subscription ID: ${subscriptionId}`);
+
+      const response = await axios.delete(
+        `${baseUrl}/unsubscribe/${subscriptionId}`
+      );
+
+      console.log("Response from server:", response.data);
+
       setSubscribedCourses((prev) =>
         prev.filter((sub) => sub._id !== subscriptionId)
       );
     } catch (error) {
-      console.error("Error unsubscribing from course:", error);
+      console.error("Error unsubscribing from course:", error.response.data);
     }
   };
 
-  // Function to check if a course is already subscribed and return the subscription ID
   const getSubscriptionForCourse = (courseId) => {
     const subscription = subscribedCourses.find(
-      (sub) => sub.courseId === courseId
+      (sub) => sub.courseId._id === courseId // Ensure matching against _id
     );
-    return subscription ? subscription._id : null;
+    return subscription ? subscription._id : null; // Correctly use subscription._id
   };
 
   return (
@@ -132,7 +124,6 @@ const CourseList = () => {
                       <SlClock />
                     </IconButton>
                   </Tooltip>
-                  {/* map through course to get hours*/}
                   <Typography variant="body2" color="text.secondary">
                     {course.duration.hours} hours
                   </Typography>
@@ -160,6 +151,19 @@ const CourseList = () => {
       </Grid>
     </Box>
   );
+};
+
+CourseList.propTypes = {
+  subscribedCourses: PropTypes.arrayOf(
+    PropTypes.shape({
+      _id: PropTypes.string.isRequired,
+      courseId: PropTypes.shape({
+        _id: PropTypes.string.isRequired,
+        title: PropTypes.string.isRequired,
+      }).isRequired,
+    })
+  ).isRequired,
+  setSubscribedCourses: PropTypes.func.isRequired,
 };
 
 export default CourseList;

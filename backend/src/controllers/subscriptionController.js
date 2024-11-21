@@ -15,8 +15,8 @@ const subscribeCourse = async (req, res) => {
 
   try {
     const newSubscription = new Subscription({
-      learnerId: new mongoose.Types.ObjectId(learnerId), // Use new to create ObjectId
-      courseId: new mongoose.Types.ObjectId(courseId),   // Use new to create ObjectId
+      learnerId: new mongoose.Types.ObjectId(learnerId),
+      courseId: new mongoose.Types.ObjectId(courseId),
       subscriptionDate: new Date(),
     });
 
@@ -28,26 +28,23 @@ const subscribeCourse = async (req, res) => {
   }
 };
 
-// Fetch subscriptions for a specific learner
 const getSubscriptions = async (req, res) => {
   const { learnerId } = req.params;
-
-  // Validate learnerId
   if (!mongoose.Types.ObjectId.isValid(learnerId)) {
     return res.status(400).json({ error: "Invalid learner ID" });
   }
-
   try {
-    // Find subscriptions for the given learnerId
     const subscriptions = await Subscription.find({
       learnerId: new mongoose.Types.ObjectId(learnerId),
+    }).populate({
+      path: "courseId",
+      select: "title", // Include only the course title
     });
-
-    // If no subscriptions found
+    console.log("Subscriptions with populated courseId:", subscriptions);
+    // If no subscriptions found, return an empty array
     if (!subscriptions.length) {
-      return res.status(404).json({ message: "No subscriptions found" });
+      return res.status(200).json([]); // Return an empty array with 200 status
     }
-
     // Return the subscriptions
     res.json(subscriptions);
   } catch (error) {
@@ -56,11 +53,16 @@ const getSubscriptions = async (req, res) => {
   }
 };
 
+
 // Unsubscribe from a course
 const unsubscribeCourse = async (req, res) => {
-  const { subscriptionId } = req.body; // Accept subscription _id from the frontend
+  const { subscriptionId } = req.params; // Accept subscription _id from the request parameters
 
   try {
+    console.log(
+      `Received request to unsubscribe subscription ID: ${subscriptionId}`
+    );
+
     if (!subscriptionId) {
       return res.status(400).json({ message: "Subscription ID is required" });
     }
