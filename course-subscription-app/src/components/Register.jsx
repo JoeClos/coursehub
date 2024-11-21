@@ -10,7 +10,6 @@ const Register = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [modalType, setModalType] = useState("error");
   const [message, setMessage] = useState("");
-  console.log("🚀 ~ Register ~ message:", message);
 
   const [formData, setFormData] = useState({
     firstName: "",
@@ -35,6 +34,10 @@ const Register = () => {
     try {
       // Send the request and await the response
       const res = await axios.post(`${baseUrl}/api/register`, formData);
+      console.log(`Full API URL: ${baseUrl}/api/register`);
+
+      
+      console.log("🚀 ~ handleSubmit ~ baseUrl:", baseUrl)
 
       // Check if the response status is 201 (Created)
       if (res.status === 201) {

@@ -13,7 +13,7 @@ const CourseList = () => {
     const fetchCourses = async () => {
       const baseUrl = import.meta.env.VITE_API_BASE_URL;
       try {
-        const response = await fetch(`${baseUrl}/api/courses`);
+        const response = await fetch(`${baseUrl}api/courses`);
 
         if (!response.ok) {
           throw new Error("Failed to fetch courses");
