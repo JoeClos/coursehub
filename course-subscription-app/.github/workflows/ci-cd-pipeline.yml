@@ -16,29 +16,20 @@ jobs:
         node-version:
           - 22.x
     steps:
-      # Checkout code
       - uses: actions/checkout@v3
 
-      # Set up Node.js
-      - name: Set up Node.js ${{ matrix.node-version }}
+      - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-          cache: 'npm'
+          cache: npm
 
-      # Install dependencies
+      # Navigate to the frontend folder and install dependencies
       - name: Install dependencies
-        run: |
-          echo "Checking for package.json in course-subscription-app directory"
-          ls -al ./course-subscription-app
-          if [ -f ./course-subscription-app/package-lock.json ]; then
-            npm ci --prefix ./course-subscription-app
-          else
-            npm install --prefix ./course-subscription-app
-          fi
+        run: npm ci
         working-directory: ./course-subscription-app
 
-      # Run tests (optional)
+      # Run tests
       - name: Run tests
         run: npm test
         working-directory: ./course-subscription-app
@@ -51,7 +42,7 @@ jobs:
       - name: Deploy to Netlify
         uses: nwtgck/actions-netlify@v1.2
         with:
-          publish-dir: './course-subscription-app/dist'  # Adjust based on your build output directory
+          publish-dir: './course-subscription-app/dist' # Adjust based on your build output directory
           production-branch: main
           github-token: ${{ secrets.GITHUB_TOKEN }}
           deploy-message: "Deploy from GitHub Actions"
