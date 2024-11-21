@@ -37,7 +37,7 @@ jobs:
 
       # Build the project
       - name: Build project
-        run: npm run build
+        run: npm run build --prefix ./course-subscription-app
         working-directory: ./course-subscription-app
 
       # Deploy to Netlify
