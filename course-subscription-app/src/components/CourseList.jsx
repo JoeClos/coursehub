@@ -13,7 +13,7 @@ const CourseList = () => {
     const fetchCourses = async () => {
       const baseUrl = import.meta.env.VITE_API_BASE_URL;
       try {
-        const response = await fetch(`${baseUrl}/courses`);
+        const response = await fetch(`${baseUrl}/api/courses`);
 
         if (!response.ok) {
           throw new Error("Failed to fetch courses");
@@ -33,7 +33,7 @@ const CourseList = () => {
     const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
     try {
-      const response = await axios.post(`${baseUrl}/subscribe`, {
+      const response = await axios.post(`${baseUrl}/api/subscribe`, {
         learnerId: learnerId,
         courseId: course._id,
         subscriptionDate: new Date().toISOString(),
@@ -57,7 +57,7 @@ const CourseList = () => {
     const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
     try {
-      await axios.delete(`${baseUrl}/unsubscribe/${subscriptionId}`);
+      await axios.delete(`${baseUrl}/api/unsubscribe/${subscriptionId}`);
 
       updateSubscribedCourses((prev) =>
         prev.filter((sub) => sub._id !== subscriptionId)

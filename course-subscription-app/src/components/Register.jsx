@@ -34,7 +34,7 @@ const Register = () => {
 
     try {
       // Send the request and await the response
-      const res = await axios.post(`${baseUrl}/register`, formData);
+      const res = await axios.post(`${baseUrl}/api/register`, formData);
 
       // Check if the response status is 201 (Created)
       if (res.status === 201) {

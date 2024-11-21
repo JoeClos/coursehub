@@ -1,84 +1,3 @@
-
-// import axios from "axios";
-// import { useState } from "react";
-// import { useNavigate } from "react-router-dom";
-// import PropTypes from "prop-types";
-
-// const Login = ({ setUser }) => {
-//   const [email, setEmail] = useState("");
-//   const [password, setPassword] = useState("");
-//   const [error, setError] = useState("");
-//   const navigate = useNavigate();
-
-//   const handleLogin = async (e) => {
-//     e.preventDefault();
-//     const baseUrl = import.meta.env.VITE_API_URL_BASE;
-//     try {
-//       const response = await axios.post(`${baseUrl}/login`, {
-//         email,
-//         password,
-//       });
-
-//       const { token, user } = response.data;
-
-//       // Save token to localStorage
-//       localStorage.setItem("token", token);
-
-//       // Set the logged-in user in state/
-//       setUser(user);
-//       alert("Login successful!");
-
-//        // Redirect based on user role
-//        if (user.role === "admin") {
-//         navigate("/dashboard");
-//       } else {
-//         navigate("/");
-//       }
-
-//       //Clear the form after successful login
-//       setEmail("");
-//       setPassword("");
-//       setError("");
-//     } catch (error) {
-//       setError(error.response?.data?.message || "Login failed!");
-//     }
-//   };
-
-//   return (
-//     <div>
-//       <h2>Login</h2>
-//       {error && <p style={{ color: "red" }}>{error}</p>}
-//       <form onSubmit={handleLogin}>
-//         <div>
-//           <label>Email:</label>
-//           <input
-//             type="email"
-//             value={email}
-//             onChange={(e) => setEmail(e.target.value)}
-//             required
-//           />
-//         </div>
-//         <div>
-//           <label>Password:</label>
-//           <input
-//             type="password"
-//             value={password}
-//             onChange={(e) => setPassword(e.target.value)}
-//             required
-//           />
-//         </div>
-//         <button type="submit">Login</button>
-//       </form>
-//     </div>
-//   );
-// };
-
-// Login.propTypes = {
-//   setUser: PropTypes.func.isRequired,
-// };
-
-// export default Login;
-
 import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
@@ -108,7 +27,7 @@ const Login = () => {
     const baseUrl = import.meta.env.VITE_API_BASE_URL;
     console.log("🚀 ~ loginUser ~ baseUrl:", baseUrl);
     try {
-      const response = await axios.post(`${baseUrl}/login`, credentials);
+      const response = await axios.post(`${baseUrl}/api/login`, credentials);
       console.log("API response:", response.data); // Log the response to verify structure
 
       const { token, user } = response.data; // Extract token and user from response

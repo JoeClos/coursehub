@@ -13,7 +13,7 @@ const MyCourses = () => {
 
       try {
         const response = await axios.get(
-          `${baseUrl}/subscriptions/${learnerId}`
+          `${baseUrl}/api/subscriptions/${learnerId}`
         );
 
         if (response.data.length === 0) {
