@@ -33,9 +33,9 @@ const CourseList = () => {
 
   const handleSubscribe = async (course) => {
     const baseUrl = import.meta.env.VITE_API_BASE_URL;
-
+    const fullUrl = `${baseUrl}/api/subscribe`;
     try {
-      const response = await axios.post(`${baseUrl}/api/subscribe`, {
+      const response = await axios.post(fullUrl, {
         learnerId: learnerId,
         courseId: course._id,
         subscriptionDate: new Date().toISOString(),
@@ -57,9 +57,9 @@ const CourseList = () => {
 
   const handleUnsubscribe = async (subscriptionId) => {
     const baseUrl = import.meta.env.VITE_API_BASE_URL;
-
+    const fullUrl = `${baseUrl}/api/unsubscribe/${subscriptionId}`;
     try {
-      await axios.delete(`${baseUrl}/api/unsubscribe/${subscriptionId}`);
+      await axios.delete(fullUrl);
 
       updateSubscribedCourses((prev) =>
         prev.filter((sub) => sub._id !== subscriptionId)

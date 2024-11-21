@@ -30,11 +30,12 @@ const Register = () => {
 
     const baseUrl = import.meta.env.VITE_API_BASE_URL;
     console.log("🚀 ~ handleSubmit ~ baseUrl:", baseUrl);
+    const fullUrl = `${baseUrl}/api/register`;
 
     try {
       // Send the request and await the response
-      const res = await axios.post(`${baseUrl}/api/register`, formData);
-      console.log(`Full API URL: ${baseUrl}/api/register`);
+      const res = await axios.post(fullUrl, formData);
+      console.log("Full API URL", fullUrl);
 
       
       console.log("🚀 ~ handleSubmit ~ baseUrl:", baseUrl)

@@ -10,11 +10,9 @@ const MyCourses = () => {
   useEffect(() => {
     const fetchSubscribedCourses = async () => {
       const baseUrl = import.meta.env.VITE_API_BASE_URL;
-
+      const fullUrl = `${baseUrl}/api/subscriptions/${learnerId}`;
       try {
-        const response = await axios.get(
-          `${baseUrl}/api/subscriptions/${learnerId}`
-        );
+        const response = await axios.get(fullUrl);
 
         if (response.data.length === 0) {
           console.log("No subscriptions found.");

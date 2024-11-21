@@ -26,8 +26,9 @@ const Login = () => {
   const loginUser = async (credentials) => {
     const baseUrl = import.meta.env.VITE_API_BASE_URL;
     console.log("🚀 ~ loginUser ~ baseUrl:", baseUrl);
+    const fullUrl = `${baseUrl}/api/login`;
     try {
-      const response = await axios.post(`${baseUrl}/api/login`, credentials);
+      const response = await axios.post(fullUrl, credentials);
       console.log("API response:", response.data); // Log the response to verify structure
 
       const { token, user } = response.data; // Extract token and user from response
