@@ -24,4 +24,9 @@ app.use("/api", courseRoutes);
 app.use('/api', userRoutes);
 app.use('/api', subscriptionRoutes)
 
+// Catch-all for undefined routes
+// app.use((req, res) => {
+//   res.status(404).json({ error: 'Route not found' });
+// });
+
 app.listen(PORT, () => console.log(`Server running on port ${PORT} `));
