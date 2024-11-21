@@ -26,12 +26,16 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
 
-      # Install dependencies in the course-subscription-app subdirectory
+      # Install dependencies
       - name: Install dependencies
         run: |
           echo "Checking for package.json in course-subscription-app directory"
           ls -al ./course-subscription-app
-          npm install
+          if [ -f ./course-subscription-app/package-lock.json ]; then
+            npm ci --prefix ./course-subscription-app
+          else
+            npm install --prefix ./course-subscription-app
+          fi
         working-directory: ./course-subscription-app
 
       # Run tests (optional)
@@ -41,8 +45,7 @@ jobs:
 
       # Build the project
       - name: Build project
-        run: npm run build
-        working-directory: ./course-subscription-app
+        run: npm run build --prefix ./course-subscription-app
 
       # Deploy to Netlify
       - name: Deploy to Netlify
