@@ -5,6 +5,7 @@ const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
   const [subscribedCourses, setSubscribedCourses] = useState([]);
+  console.log("🚀 ~ CartProvider ~ subscribedCourses:", subscribedCourses)
 
   const updateSubscribedCourses = (courses) => {
     setSubscribedCourses(courses);

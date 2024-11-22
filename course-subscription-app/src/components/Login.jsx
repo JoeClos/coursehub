@@ -1,11 +1,11 @@
 import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
-import axios from "axios";
 import { Button, TextField, Container, Typography, Box } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import AuthContext from "../context/AuthContext";
 import PasswordInput from "./PasswordInput";
+import { loginUser } from "../utils/api";
 
 const Login = () => {
   const [credentials, setCredentials] = useState({
@@ -17,38 +17,31 @@ const Login = () => {
   const login = useContext(AuthContext);
 
   const handleChange = (e) => {
-    setCredentials({
-      ...credentials,
-      [e.target.name]: e.target.value,
-    });
+    const { name, value } = e.target;
+    setCredentials((prev) => ({ ...prev, [name]: value }));
   };
 
-  const loginUser = async (credentials) => {
-    const baseUrl = import.meta.env.VITE_API_BASE_URL;
-    console.log("🚀 ~ loginUser ~ baseUrl:", baseUrl);
-    const fullUrl = `${baseUrl}/api/login`;
-    try {
-      const response = await axios.post(fullUrl, credentials);
-      console.log("API response:", response.data); // Log the response to verify structure
-
-      const { token, user } = response.data; // Extract token and user from response
-      login.login({ token, email: user.email, role: user.role, firstName: user.firstName, id: user._id }); // Pass token and user data
-      console.log("🚀 ~ loginUser ~ user:", user);
-      if (user.role === "admin") {
-        console.log("🚀 ~ loginUser ~ user.role:", user.role);
-        navigate("/dashboard"); // Redirect to dashboard for admin
-      } else {
-        navigate("/"); // Redirect to home page for non-admin users
-      }
-    } catch (error) {
-      console.error("Login error:", error);
-      setError("Invalid credentials or server error");
-    }
-  };
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    loginUser(credentials);
+    setError(""); // Clear previous errors
+    try {
+      const { token, user } = await loginUser(credentials); 
+      login.login({
+        token,
+        email: user.email,
+        role: user.role,
+        firstName: user.firstName,
+        id: user._id,
+      }); // Update AuthContext with user data
+      if (user.role === "admin") {
+        navigate("/dashboard");
+      } else {
+        navigate("/");
+      }
+    } catch (err) {
+      console.log(err)
+      setError("Invalid credentials or server error.");
+    }
   };
 
   return (

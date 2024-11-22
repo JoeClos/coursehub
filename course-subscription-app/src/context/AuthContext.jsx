@@ -13,7 +13,7 @@ export const AuthProvider = ({ children }) => {
     const userData = localStorage.getItem("user");
     if (token && userData) {
       const parsedUser = JSON.parse(userData);
-      console.log("🚀 ~ useEffect ~ parsedUser:", parsedUser)
+      // console.log("🚀 ~ useEffect ~ parsedUser:", parsedUser)
       setUser(parsedUser); // Restore user data from local storage
     }
     setLoading(false);
@@ -21,9 +21,11 @@ export const AuthProvider = ({ children }) => {
 
   const login = (userData) => {
     setUser(userData);
+    console.log("🚀 ~ login ~ userData:", userData)
+
     localStorage.setItem("token", userData.token);
-    // localStorage.setItem("id", userData._id);
-    // console.log("🚀 ~ login ~ userData._id:", userData._id)
+    localStorage.setItem("id", userData.id);
+    console.log("🚀 ~ login ~ userData.id:", userData.id)
 
     localStorage.setItem("firstName", userData.firstName);
     localStorage.setItem("user", JSON.stringify(userData));

@@ -1,6 +1,20 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
-import { Box, Card, CardActions, CardContent, Typography, Button, Grid, IconButton, Tooltip } from "@mui/material";
+import {
+  fetchCourses,
+  subscribeToCourse,
+  unsubscribeFromCourse,
+} from "../utils/api";
+import {
+  Box,
+  Card,
+  CardActions,
+  CardContent,
+  Typography,
+  Button,
+  Grid,
+  IconButton,
+  Tooltip,
+} from "@mui/material";
 import { SlClock } from "react-icons/sl";
 import { useCart } from "../context/CartContext";
 
@@ -10,57 +24,42 @@ const CourseList = () => {
   const learnerId = localStorage.getItem("learnerId");
 
   useEffect(() => {
-    const fetchCourses = async () => {
-      const baseUrl = import.meta.env.VITE_API_BASE_URL;
-      const fullUrl = `${baseUrl}/api/courses`;
+    const getCourses = async () => {
       try {
-        console.log("🚀 ~ fetchCourses ~ fullUrl:", fullUrl)
-        const response = await fetch(fullUrl);
-
-        if (!response.ok) {
-          throw new Error("Failed to fetch courses");
-        }
-
-        const data = await response.json();
+        const data = await fetchCourses();
         setCourses(data);
       } catch (error) {
         console.error("Error fetching courses:", error);
       }
     };
 
-    fetchCourses();
+    getCourses();
   }, []);
 
   const handleSubscribe = async (course) => {
-    const baseUrl = import.meta.env.VITE_API_BASE_URL;
-    const fullUrl = `${baseUrl}/api/subscribe`;
     try {
-      const response = await axios.post(fullUrl, {
-        learnerId: learnerId,
-        courseId: course._id,
-        subscriptionDate: new Date().toISOString(),
-      });
+      const newSubscription = await subscribeToCourse(learnerId, course._id);
 
-      const newSubscription = {
-        ...response.data,
-        courseId: {
-          _id: course._id,
-          title: course.title,
+      updateSubscribedCourses((prev) => [
+        ...prev,
+        {
+          ...newSubscription,
+          courseId: {
+            _id: course._id,
+            title: course.title,
+          },
         },
-      };
-
-      updateSubscribedCourses((prev) => [...prev, newSubscription]);
+      ]);
     } catch (error) {
       console.error("Error subscribing to course:", error);
     }
   };
 
   const handleUnsubscribe = async (subscriptionId) => {
-    const baseUrl = import.meta.env.VITE_API_BASE_URL;
-    const fullUrl = `${baseUrl}/api/unsubscribe/${subscriptionId}`;
     try {
-      await axios.delete(fullUrl);
+      await unsubscribeFromCourse(subscriptionId);
 
+      // Remove the unsubscribed course from the UI
       updateSubscribedCourses((prev) =>
         prev.filter((sub) => sub._id !== subscriptionId)
       );

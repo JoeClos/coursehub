@@ -1,12 +1,14 @@
 import { useState } from "react";
-import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import NotificationModal from "../components/NotificationModal";
 import PasswordInput from "../components/PasswordInput";
+import { registerUser } from "../utils/api";
 
 import { Button, TextField, Container, Typography, Box } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 
 const Register = () => {
+  const navigate = useNavigate();
   const [modalOpen, setModalOpen] = useState(false);
   const [modalType, setModalType] = useState("error");
   const [message, setMessage] = useState("");
@@ -28,23 +30,15 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const baseUrl = import.meta.env.VITE_API_BASE_URL;
-    console.log("🚀 ~ handleSubmit ~ baseUrl:", baseUrl);
-    const fullUrl = `${baseUrl}/api/register`;
-
     try {
-      // Send the request and await the response
-      const res = await axios.post(fullUrl, formData);
-      console.log("Full API URL", fullUrl);
-
-      
-      console.log("🚀 ~ handleSubmit ~ baseUrl:", baseUrl)
+      const response = await registerUser(formData);
 
       // Check if the response status is 201 (Created)
-      if (res.status === 201) {
+      if (response.status === 201) {
         setMessage("Registration successful!");
         setModalType("success");
         setModalOpen(true);
+
         setFormData({
           firstName: "",
           lastName: "",
@@ -62,13 +56,6 @@ const Register = () => {
         error.response ? error.response.data : error.message
       );
 
-      // Check if the error response contains a specific message
-      // if (error.response?.data?.message) {
-      //   setError(error.response.data.message);
-      // } else {
-      //   setError("Registration failed. Please try again.");
-      // }
-
       // Handle error message
       setMessage(error.response?.data?.message || "Registration failed.");
       setModalType("error");
@@ -78,6 +65,9 @@ const Register = () => {
 
   const closeModal = () => {
     setModalOpen(false);
+    if (modalType === "success") {
+      navigate("/login");
+    }
   };
 
   return (
@@ -86,7 +76,6 @@ const Register = () => {
         <Typography variant="h4" gutterBottom>
           Register
         </Typography>
-        {/* {error && <Typography color="error">{error}</Typography>} */}
         <form onSubmit={handleSubmit}>
           <Grid container spacing={2}>
             <Grid size={12}>

@@ -1,6 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useEffect } from "react";
-import axios from "axios";
 import CourseList from "./components/CourseList";
 import Navbar from "./components/Navbar";
 import MyCourses from "./components/MyCourses";
@@ -9,24 +8,26 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import Dashboard from "./components/Dashboard";
 import Register from "./components/Register";
 import { useCart } from "./context/CartContext";
+import { fetchSubscribedCourses } from "./utils/api";
 
 function App() {
-  const { updateSubscribedCourses } = useCart(); 
+  const { updateSubscribedCourses } = useCart();
 
   useEffect(() => {
-    const fetchSubscribedCourses = async () => {
-      const baseUrl = import.meta.env.VITE_API_BASE_URL;
-      const learnerId = localStorage.getItem("learnerId");
+    const learnerId = localStorage.getItem("learnerId");
+    if (!learnerId) return;
+
+    const loadSubscribedCourses = async () => {
       try {
-        const response = await axios.get(`${baseUrl}/subscriptions/${learnerId}`);
-        updateSubscribedCourses(response.data);
-        console.log("🚀 ~ fetchSubscribedCourses ~ response.data:", response.data);
+        const courses = await fetchSubscribedCourses(learnerId);
+        updateSubscribedCourses(courses);
       } catch (error) {
-        console.error("Error fetching subscribed courses:", error);
+        console.error("Failed to load subscribed courses:", error);
       }
     };
-    fetchSubscribedCourses();
-  }, []); 
+
+    loadSubscribedCourses();
+  }, []);
 
   return (
     <Router>
