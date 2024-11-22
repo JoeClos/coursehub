@@ -8,11 +8,11 @@ import { AuthProvider } from "./context/AuthContext";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <AuthProvider>
-      <CartProvider>
+    <CartProvider>
+      <AuthProvider>
         <CssBaseline />
         <App />
-      </CartProvider>
-    </AuthProvider>
+      </AuthProvider>
+    </CartProvider>
   </StrictMode>
 );

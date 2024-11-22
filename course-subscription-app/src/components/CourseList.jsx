@@ -3,6 +3,7 @@ import {
   fetchCourses,
   subscribeToCourse,
   unsubscribeFromCourse,
+  fetchSubscribedCourses
 } from "../utils/api";
 import {
   Box,
@@ -20,8 +21,26 @@ import { useCart } from "../context/CartContext";
 
 const CourseList = () => {
   const [courses, setCourses] = useState([]);
-  const { subscribedCourses, updateSubscribedCourses } = useCart();
+  const { subscribedCourses, updateSubscribedCourses, clearSubscribedCourses} = useCart();
   const learnerId = localStorage.getItem("learnerId");
+
+  useEffect(() => {
+    const getSubscriptions = async () => {
+      try {
+        if (!learnerId) {
+          clearSubscribedCourses(); // Clear subscriptions if no learner is logged in
+          return;
+        }
+
+        const subscriptions = await fetchSubscribedCourses(learnerId); // Fetch subscriptions for the new user
+        updateSubscribedCourses(subscriptions);
+      } catch (error) {
+        console.error("Error fetching subscriptions:", error);
+      }
+    };
+
+    getSubscriptions();
+  }, [learnerId]);
 
   useEffect(() => {
     const getCourses = async () => {

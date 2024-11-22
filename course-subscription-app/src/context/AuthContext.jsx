@@ -1,5 +1,7 @@
 import { createContext, useState, useEffect } from "react";
 import PropTypes from "prop-types";
+import { useCart } from './CartContext';
+import { fetchSubscribedCourses } from "../utils/api";
 
 // Create the Auth context
 export const AuthContext = createContext();
@@ -7,6 +9,7 @@ export const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const { clearSubscribedCourses, updateSubscribedCourses } = useCart();
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -18,6 +21,29 @@ export const AuthProvider = ({ children }) => {
     }
     setLoading(false);
   }, []);
+
+  const getSubscriptions = async (learnerId) => {
+    if (!learnerId) {
+      console.warn("Learner ID is not available.");
+      return;
+    }
+
+    try {
+      const subscriptionsData = await fetchSubscribedCourses(learnerId);
+
+      if (subscriptionsData.length === 0) {
+        console.log("No subscriptions found.");
+      } else {
+        const subscriptions = subscriptionsData.map((sub) => ({
+          subscriptionId: sub._id,
+          courseId: { _id: sub.courseId._id, title: sub.courseId.title },
+        }));
+        updateSubscribedCourses(subscriptions);
+      }
+    } catch (error) {
+      console.error("Error fetching subscribed courses:", error);
+    }
+  };
 
   const login = (userData) => {
     setUser(userData);
@@ -32,6 +58,7 @@ export const AuthProvider = ({ children }) => {
     const learnerId = userData.id;
     localStorage.setItem("learnerId", learnerId);
     console.log("🚀 ~ login ~ LearnerId:", learnerId)
+    getSubscriptions(learnerId);
 
   };
 
@@ -41,6 +68,7 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem("firstName");
     localStorage.removeItem("user");
     localStorage.removeItem("learnerId");
+    clearSubscribedCourses();
   };
 
   return (
