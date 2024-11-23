@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { AuthContext } from "../context/AuthContext";
+import { AuthContext } from "../store/AuthContext";
 import { Link, useNavigate } from "react-router-dom";
 import {
   AppBar,
@@ -8,7 +8,7 @@ import {
   Typography,
   Badge,
 } from "@mui/material";
-import { useCart } from "../context/CartContext";
+import { useCart } from "../store/CartContext";
 import { ShoppingCart } from "@mui/icons-material";
 
 const Navbar = () => {

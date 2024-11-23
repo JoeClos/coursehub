@@ -17,7 +17,7 @@ import {
   Tooltip,
 } from "@mui/material";
 import { SlClock } from "react-icons/sl";
-import { useCart } from "../context/CartContext";
+import { useCart } from "../store/CartContext";
 
 const CourseList = () => {
   const [courses, setCourses] = useState([]);
