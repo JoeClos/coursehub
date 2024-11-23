@@ -1,13 +1,13 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useEffect } from "react";
-import CourseList from "./components/CourseList";
+import CourseList from "./pages/CourseList";
 import Navbar from "./components/Navbar";
-import MyCourses from "./components/MyCourses";
-import Login from "./components/Login";
+import MyCourses from "./pages/MyCourses";
+import Login from "./pages/Login";
 import ProtectedRoute from "./components/ProtectedRoute";
-import Dashboard from "./components/Dashboard";
-import Register from "./components/Register";
-import { useCart } from "./context/CartContext";
+import Dashboard from "./pages/Dashboard";
+import Register from "./pages/Register";
+import { useCart } from "./store/CartContext";
 import { fetchSubscribedCourses } from "./utils/api";
 
 function App() {

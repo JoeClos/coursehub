@@ -3,8 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { Button, TextField, Container, Typography, Box } from "@mui/material";
 import Grid from "@mui/material/Grid2";
-import AuthContext from "../context/AuthContext";
-import PasswordInput from "./PasswordInput";
+import AuthContext from "../store/AuthContext";
+import PasswordInput from "../components/PasswordInput";
 import { loginUser } from "../utils/api";
 
 const Login = () => {
@@ -86,7 +86,8 @@ const Login = () => {
             </Grid>
           </Grid>
           <Typography>
-            <Link to="/forgot-password">Forgot Password?</Link>
+            <Link to="#">Forgot Password?</Link>
+            {/* <Link to="/forgot-password">Forgot Password?</Link> */}
           </Typography>
         </form>
       </Box>
