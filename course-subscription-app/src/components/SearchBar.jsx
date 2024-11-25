@@ -8,16 +8,17 @@ const SearchBar = ({ onSearch }) => {
 
   const handleSearchChange = (e) => {
     setQuery(e.target.value);
-    onSearch(e.target.value);  // Pass the search query to parent component
+    onSearch(e.target.value);  
   };
 
   return (
-    <Box sx={{ display: "flex", alignItems: "center", backgroundColor: "rgba(255, 255, 255, 0.15)", borderRadius: "4px", padding: "0 8px" }}>
+    <Box sx={{ display: "flex", alignItems: "center", backgroundColor: "rgba(255, 255, 255, 0.15)", borderRadius: "4px", padding: "0 8px", marginRight: "15px" }}>
       <InputBase
-        sx={{ color: "white", paddingLeft: "8px", width: "200px" }}
+        sx={{ color: "white", paddingLeft: "8px", maxWidth: "600px", width: "100%", margin: "0 auto"}}
         placeholder="Search Courses"
         value={query}
         onChange={handleSearchChange}
+        
       />
       <IconButton type="button" sx={{ padding: "10px" }} onClick={() => onSearch(query)}>
         <SearchIcon sx={{ color: "white" }} />
