@@ -5,14 +5,17 @@ import "./index.css";
 import CssBaseline from "@mui/material/CssBaseline";
 import { CartProvider } from "./store/CartContext";
 import { AuthProvider } from "./store/AuthContext";
+import ErrorBoundary from "./components/ErrorBoundary.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <CartProvider>
-      <AuthProvider>
-        <CssBaseline />
-        <App />
-      </AuthProvider>
-    </CartProvider>
+    <ErrorBoundary>
+      <CartProvider>
+        <AuthProvider>
+          <CssBaseline />
+          <App />
+        </AuthProvider>
+      </CartProvider>
+    </ErrorBoundary>
   </StrictMode>
 );
