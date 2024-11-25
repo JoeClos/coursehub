@@ -3,7 +3,7 @@ import {
   fetchCourses,
   subscribeToCourse,
   unsubscribeFromCourse,
-  fetchSubscribedCourses
+  fetchSubscribedCourses,
 } from "../utils/api";
 import {
   Box,
@@ -18,10 +18,12 @@ import {
 } from "@mui/material";
 import { SlClock } from "react-icons/sl";
 import { useCart } from "../store/CartContext";
+import PropTypes from "prop-types";
 
-const CourseList = () => {
+const CourseList = ({ searchQuery }) => {
   const [courses, setCourses] = useState([]);
-  const { subscribedCourses, updateSubscribedCourses, clearSubscribedCourses} = useCart();
+  const { subscribedCourses, updateSubscribedCourses, clearSubscribedCourses } =
+    useCart();
   const learnerId = localStorage.getItem("learnerId");
 
   useEffect(() => {
@@ -54,6 +56,28 @@ const CourseList = () => {
 
     getCourses();
   }, []);
+
+  // Filter courses based on search query
+  const filteredCourses = courses.filter(
+    (course) =>
+      course.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      course.description.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  // Function to highlight the search term within a string
+  const highlightText = (text) => {
+    if (!searchQuery) return text; // If no search term, return text as it is
+    const regex = new RegExp(`(${searchQuery})`, "gi"); // Create a case-insensitive regex
+    return text.split(regex).map((part, index) =>
+      part.toLowerCase() === searchQuery.toLowerCase() ? (
+        <span key={index} style={{ backgroundColor: "yellow" }}>
+          {part}
+        </span>
+      ) : (
+        part
+      )
+    );
+  };
 
   const handleSubscribe = async (course) => {
     try {
@@ -100,7 +124,7 @@ const CourseList = () => {
         Available Courses
       </Typography>
       <Grid container spacing={3}>
-        {courses.map((course) => (
+        {filteredCourses.map((course) => (
           <Grid item xs={12} sm={6} md={4} xl={3} key={course._id}>
             <Card
               sx={{
@@ -111,10 +135,10 @@ const CourseList = () => {
             >
               <CardContent sx={{ flexGrow: 1 }}>
                 <Typography variant="h5" gutterBottom>
-                  {course.title}
+                  {highlightText(course.title)}
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                  {course.description}
+                  {highlightText(course.description)}
                 </Typography>
                 <Box
                   sx={{
@@ -155,6 +179,11 @@ const CourseList = () => {
       </Grid>
     </Box>
   );
+};
+
+CourseList.propTypes = {
+  searchQuery: PropTypes.string.isRequired,
+  onSearch: PropTypes.func.isRequired,
 };
 
 export default CourseList;

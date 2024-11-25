@@ -21,8 +21,10 @@ import { useCart } from "../store/CartContext";
 import { ShoppingCart, ExitToApp } from "@mui/icons-material";
 import MenuIcon from "@mui/icons-material/Menu";
 import { deepOrange } from "@mui/material/colors";
+import SearchBar from "./SearchBar";
+import PropTypes from 'prop-types'; 
 
-const Navbar = () => {
+const Navbar = ({ onSearch }) => {
   const { user, logout } = useContext(AuthContext);
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
@@ -320,6 +322,8 @@ const Navbar = () => {
           >
             Course Hub
           </Typography>
+
+          <SearchBar onSearch={onSearch} />
           <Box
             sx={{
               display: { xs: "none", sm: "flex" }, 
@@ -399,6 +403,10 @@ const Navbar = () => {
       </nav>
     </Box>
   );
+};
+
+Navbar.propTypes = {
+  onSearch: PropTypes.func.isRequired,
 };
 
 export default Navbar;

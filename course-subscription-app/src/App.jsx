@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import CourseList from "./pages/CourseList";
 import Navbar from "./components/Navbar";
 import MyCourses from "./pages/MyCourses";
@@ -9,9 +9,15 @@ import Dashboard from "./pages/Dashboard";
 import Register from "./pages/Register";
 import { useCart } from "./store/CartContext";
 import { fetchSubscribedCourses } from "./utils/api";
+import PropTypes from "prop-types"; 
 
 function App() {
   const { updateSubscribedCourses } = useCart();
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const handleSearch = (query) => {
+    setSearchQuery(query);
+  };
 
   useEffect(() => {
     const learnerId = localStorage.getItem("learnerId");
@@ -31,7 +37,7 @@ function App() {
 
   return (
     <Router>
-      <Navbar />
+      <Navbar onSearch={handleSearch}/>
       <Routes>
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
@@ -43,11 +49,17 @@ function App() {
             </ProtectedRoute>
           }
         />
-        <Route path="/" element={<CourseList />} />
+        <Route path="/" element={<CourseList searchQuery={searchQuery} />} />
         <Route path="/my-courses" element={<MyCourses />} />
       </Routes>
     </Router>
   );
 }
+
+CourseList.propTypes = {
+      searchQuery: PropTypes.string.isRequired,  
+
+  onSearch: PropTypes.func.isRequired,  // Ensure onSearch is a function
+};
 
 export default App;
