@@ -31,6 +31,7 @@ const Login = () => {
         email: user.email,
         role: user.role,
         firstName: user.firstName,
+        lastName: user.lastName,
         id: user._id,
       }); // Update AuthContext with user data
       if (user.role === "admin") {
