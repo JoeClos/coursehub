@@ -9,7 +9,6 @@ import Dashboard from "./pages/Dashboard";
 import Register from "./pages/Register";
 import { useCart } from "./store/CartContext";
 import { fetchSubscribedCourses } from "./utils/api";
-import PropTypes from "prop-types"; 
 
 function App() {
   const { updateSubscribedCourses } = useCart();
@@ -37,7 +36,7 @@ function App() {
 
   return (
     <Router>
-      <Navbar onSearch={handleSearch}/>
+      <Navbar onSearch={handleSearch} />
       <Routes>
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
@@ -49,17 +48,12 @@ function App() {
             </ProtectedRoute>
           }
         />
+        {/* Pass searchQuery to the CourseList component */}
         <Route path="/" element={<CourseList searchQuery={searchQuery} />} />
         <Route path="/my-courses" element={<MyCourses />} />
       </Routes>
     </Router>
   );
 }
-
-CourseList.propTypes = {
-      searchQuery: PropTypes.string.isRequired,  
-
-  onSearch: PropTypes.func.isRequired,  // Ensure onSearch is a function
-};
 
 export default App;
