@@ -2,7 +2,14 @@ import { Grid } from "@mui/material";
 import PropTypes from "prop-types";
 import CourseCard from "./CourseCard";
 
-const CardList = ({ courses, highlightText, getSubscriptionForCourse, handleSubscribe, handleUnsubscribe }) => {
+const CardList = ({
+  courses,
+  highlightText,
+  getSubscriptionForCourse,
+  handleSubscribe,
+  handleUnsubscribe,
+  handleOpen,
+}) => {
   return (
     <Grid container spacing={3}>
       {courses.map((course) => {
@@ -15,6 +22,7 @@ const CardList = ({ courses, highlightText, getSubscriptionForCourse, handleSubs
               isSubscribed={!!subscriptionId}
               onSubscribe={() => handleSubscribe(course)}
               onUnsubscribe={() => handleUnsubscribe(subscriptionId)}
+              onOpen={() => handleOpen(course)}
             />
           </Grid>
         );
@@ -29,6 +37,7 @@ CardList.propTypes = {
   getSubscriptionForCourse: PropTypes.func.isRequired,
   handleSubscribe: PropTypes.func.isRequired,
   handleUnsubscribe: PropTypes.func.isRequired,
+  handleOpen: PropTypes.func.isRequired,
 };
 
 export default CardList;

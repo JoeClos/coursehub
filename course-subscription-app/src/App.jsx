@@ -35,24 +35,26 @@ function App() {
   }, []);
 
   return (
-    <Router>
-      <Navbar onSearch={handleSearch} />
-      <Routes>
-        <Route path="/register" element={<Register />} />
-        <Route path="/login" element={<Login />} />
-        <Route
-          path="/dashboard"
-          element={
-            <ProtectedRoute requiredRole="admin">
-              <Dashboard />
-            </ProtectedRoute>
-          }
-        />
-        {/* Pass searchQuery to the CourseList component */}
-        <Route path="/" element={<CourseList searchQuery={searchQuery} />} />
-        <Route path="/my-courses" element={<MyCourses />} />
-      </Routes>
-    </Router>
+    <div className="main">
+      <Router>
+        <Navbar onSearch={handleSearch} />
+        <Routes>
+          <Route path="/register" element={<Register />} />
+          <Route path="/login" element={<Login />} />
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute requiredRole="admin">
+                <Dashboard />
+              </ProtectedRoute>
+            }
+          />
+          {/* Pass searchQuery to the CourseList component */}
+          <Route path="/" element={<CourseList searchQuery={searchQuery} />} />
+          <Route path="/my-courses" element={<MyCourses />} />
+        </Routes>
+      </Router>
+    </div>
   );
 }
 

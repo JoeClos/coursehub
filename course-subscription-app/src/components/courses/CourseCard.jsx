@@ -7,6 +7,7 @@ import {
   Box,
   Tooltip,
   IconButton,
+  Divider,
 } from "@mui/material";
 import { SlClock } from "react-icons/sl";
 import PropTypes from "prop-types";
@@ -17,20 +18,25 @@ const CourseCard = ({
   isSubscribed,
   onSubscribe,
   onUnsubscribe,
+  onOpen,
 }) => {
   return (
-    <Card
-      sx={{
-        minHeight: 300,
-        display: "flex",
-        flexDirection: "column",
-      }}
-    >
-      <CardContent sx={{ flexGrow: 1 }}>
-        <Typography variant="h5" gutterBottom>
+    <Card style={{ cursor: "pointer", padding: "16px", borderRadius: "8px" }}>
+      <CardContent onClick={onOpen} style={{ padding: "16px" }}>
+        <Typography
+          variant="h5"
+          component="div"
+          style={{ marginBottom: "12px" }}
+        >
           {highlightText(course.title)}
         </Typography>
-        <Typography variant="body2" color="text.secondary">
+        <Divider style={{ marginBottom: "12px" }} />
+
+        <Typography
+          variant="body2"
+          color="text.secondary"
+          style={{ marginBottom: "12px" }}
+        >
           {highlightText(course.description)}
         </Typography>
         <Box
@@ -50,13 +56,34 @@ const CourseCard = ({
           </Typography>
         </Box>
       </CardContent>
-      <CardActions>
+      <CardActions style={{ justifyContent: "space-between", padding: "16px" }}>
+        <Button
+          size="small"
+          onClick={(e) => {
+            e.stopPropagation();
+            onOpen();
+          }}
+        >
+          View Details
+        </Button>
         {isSubscribed ? (
-          <Button size="small" onClick={() => onUnsubscribe()}>
+          <Button
+            size="small"
+            onClick={(e) => {
+              e.stopPropagation();
+              onUnsubscribe();
+            }}
+          >
             Unsubscribe
           </Button>
         ) : (
-          <Button size="small" onClick={() => onSubscribe()}>
+          <Button
+            size="small"
+            onClick={(e) => {
+              e.stopPropagation();
+              onSubscribe();
+            }}
+          >
             Subscribe
           </Button>
         )}
@@ -71,6 +98,7 @@ CourseCard.propTypes = {
   isSubscribed: PropTypes.bool.isRequired,
   onSubscribe: PropTypes.func.isRequired,
   onUnsubscribe: PropTypes.func.isRequired,
+  onOpen: PropTypes.func.isRequired,
 };
 
 export default CourseCard;

@@ -11,6 +11,24 @@ const getAllCourses = async (req, res) => {
   }
 };
 
+// Get a course by ID
+const getCourseById = async (req, res) => {
+  try {
+    const { id } = req.params; // Extract the course ID from the URL parameters
+    const course = await Course.findById(id);
+
+    if (!course) {
+      return res.status(404).json({ message: "Course not found" });
+    }
+
+    res.status(200).json(course);
+  } catch (error) {
+    console.error("Error fetching course by ID:", error);
+    res.status(500).json({ message: "Failed to fetch course" });
+  }
+};
+
+
 // Create a new course
 const createCourse = async (req, res) => {
   try {
@@ -48,5 +66,6 @@ const createCourse = async (req, res) => {
 
 module.exports = {
   getAllCourses,
+  getCourseById,
   createCourse,
 };
