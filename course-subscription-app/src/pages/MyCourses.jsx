@@ -65,7 +65,7 @@ const MyCourses = () => {
     try {
       const courseData = await fetchCourseById(courseId._id);
       console.log("🚀 ~ handleOpen ~ courseData:", courseData);
-
+      setSelectedCourse(courseData);
       setOpen(true); // Open the modal
     } catch (error) {
       console.error("Error fetching course details:", error);
@@ -127,7 +127,7 @@ const MyCourses = () => {
                         padding: { xs: "8px 10px" },
                         marginBottom: "1rem",
                       }}
-                      onClick={() => handleOpen(sub.courseId)} // Pass course data to modal
+                      onClick={() => handleOpen(sub.courseId)} 
                     >
                       View Course
                     </Button>
