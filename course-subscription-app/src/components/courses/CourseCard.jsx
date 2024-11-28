@@ -63,6 +63,7 @@ const CourseCard = ({
             e.stopPropagation();
             onOpen();
           }}
+          variant="outlined"
         >
           View Details
         </Button>
@@ -73,7 +74,7 @@ const CourseCard = ({
               e.stopPropagation();
               onUnsubscribe();
             }}
-          >
+            variant="contained" color="primary"          >
             Unsubscribe
           </Button>
         ) : (
@@ -83,6 +84,7 @@ const CourseCard = ({
               e.stopPropagation();
               onSubscribe();
             }}
+            variant="outlined"
           >
             Subscribe
           </Button>

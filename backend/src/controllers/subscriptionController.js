@@ -40,7 +40,7 @@ const getSubscriptions = async (req, res) => {
       path: "courseId",
       select: "title", // Include only the course title
     });
-    console.log("Subscriptions with populated courseId:", subscriptions);
+    // console.log("Subscriptions with populated courseId:", subscriptions);
     // If no subscriptions found, return an empty array
     if (!subscriptions.length) {
       return res.status(200).json([]); // Return an empty array with 200 status

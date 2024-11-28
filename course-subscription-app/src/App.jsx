@@ -8,7 +8,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import Dashboard from "./pages/Dashboard";
 import Register from "./pages/Register";
 import { useCart } from "./store/CartContext";
-import { fetchSubscribedCourses } from "./utils/api";
+import { fetchSubscribedCourses, unsubscribeFromCourse } from "./utils/api";
 
 function App() {
   const { updateSubscribedCourses } = useCart();
@@ -51,7 +51,7 @@ function App() {
           />
           {/* Pass searchQuery to the CourseList component */}
           <Route path="/" element={<CourseList searchQuery={searchQuery} />} />
-          <Route path="/my-courses" element={<MyCourses />} />
+          <Route path="/my-courses" element={<MyCourses unsubscribeFromCourse={unsubscribeFromCourse} />} />
         </Routes>
       </Router>
     </div>
