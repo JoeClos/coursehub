@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
   Box,
   Typography,
@@ -9,13 +9,17 @@ import {
   CardActions,
   Button,
 } from "@mui/material";
-import { fetchSubscribedCourses } from "../utils/api";
+import { fetchSubscribedCourses, fetchCourseById } from "../utils/api";
 import { useCart } from "../store/CartContext";
+import CourseModalDescription from "../components/CourseModalDescription";
 
 const MyCourses = () => {
   const { subscribedCourses, updateSubscribedCourses, unsubscribeFromCourse } =
     useCart();
   const learnerId = localStorage.getItem("learnerId");
+  const [selectedCourse, setSelectedCourse] = useState(null);
+  console.log("🚀 ~ MyCourses ~ selectedCourse:", selectedCourse);
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     const getSubscriptions = async () => {
@@ -26,13 +30,21 @@ const MyCourses = () => {
 
       try {
         const subscriptionData = await fetchSubscribedCourses(learnerId);
+        console.log(
+          "🚀 ~ getSubscriptions ~ subscriptionData:",
+          subscriptionData
+        );
 
         if (subscriptionData.length === 0) {
           console.log("No subscriptions found.");
         } else {
           const subscriptions = subscriptionData.map((sub) => ({
             _id: sub._id,
-            courseId: { _id: sub.courseId._id, title: sub.courseId.title },
+            courseId: {
+              _id: sub.courseId._id,
+              title: sub.courseId.title,
+              description: sub.courseId.description,
+            },
           }));
 
           updateSubscribedCourses(subscriptions);
@@ -47,6 +59,22 @@ const MyCourses = () => {
 
   const handleUnsubscribe = async (subscriptionId) => {
     await unsubscribeFromCourse(subscriptionId);
+  };
+
+  const handleOpen = async (courseId) => {
+    try {
+      const courseData = await fetchCourseById(courseId._id);
+      console.log("🚀 ~ handleOpen ~ courseData:", courseData);
+
+      setOpen(true); // Open the modal
+    } catch (error) {
+      console.error("Error fetching course details:", error);
+    }
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+    setSelectedCourse(null);
   };
 
   return (
@@ -90,17 +118,16 @@ const MyCourses = () => {
                       {sub.courseId.title}
                     </Typography>
                   </CardContent>
-                  <CardActions sx={{justifyContent: "space-around"}}>
+                  <CardActions sx={{ justifyContent: "space-around" }}>
                     <Button
                       size="small"
                       variant="outlined"
                       sx={{
                         fontSize: { xs: "10px", sm: "12px", md: "13px" },
-                        padding: {
-                          xs: "8px 10px",
-                        },
-                        marginBottom: "1rem"
+                        padding: { xs: "8px 10px" },
+                        marginBottom: "1rem",
                       }}
+                      onClick={() => handleOpen(sub.courseId)} // Pass course data to modal
                     >
                       View Course
                     </Button>
@@ -111,10 +138,8 @@ const MyCourses = () => {
                       color="primary"
                       sx={{
                         fontSize: { xs: "10px", sm: "12px", md: "13px" },
-                        padding: {
-                          xs: "8px 10px",
-                        },
-                        marginBottom: "1rem"
+                        padding: { xs: "8px 10px" },
+                        marginBottom: "1rem",
                       }}
                     >
                       Unsubscribe
@@ -125,6 +150,11 @@ const MyCourses = () => {
             ))}
           </Grid>
         )}
+        <CourseModalDescription
+          open={open}
+          handleClose={handleClose}
+          course={selectedCourse}
+        />
       </Box>
     </Container>
   );
