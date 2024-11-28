@@ -20,6 +20,23 @@ export const fetchCourses = async () => {
   }
 };
 
+// Fetch course by Id
+export const fetchCourseById = async (courseId) => {
+  const endpoint = buildUrl(baseUrl, `/api/courses/${courseId}`);
+
+  try {
+    const response = await fetch(endpoint);
+    if (!response.ok) {
+      throw new Error("Failed to fetch course data");
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error fetching course:", error);
+    throw error;
+  }
+};
+
 // Subscribe to a course
 export const subscribeToCourse = async (learnerId, courseId) => {
   const endpoint = buildUrl(baseUrl, "/api/subscribe");

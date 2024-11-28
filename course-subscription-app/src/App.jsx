@@ -8,8 +8,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import Dashboard from "./pages/Dashboard";
 import Register from "./pages/Register";
 import { useCart } from "./store/CartContext";
-import { fetchSubscribedCourses } from "./utils/api";
-import PropTypes from "prop-types"; 
+import { fetchSubscribedCourses, unsubscribeFromCourse } from "./utils/api";
 
 function App() {
   const { updateSubscribedCourses } = useCart();
@@ -33,33 +32,30 @@ function App() {
     };
 
     loadSubscribedCourses();
-  }, []);
+  }, [updateSubscribedCourses]);
 
   return (
-    <Router>
-      <Navbar onSearch={handleSearch}/>
-      <Routes>
-        <Route path="/register" element={<Register />} />
-        <Route path="/login" element={<Login />} />
-        <Route
-          path="/dashboard"
-          element={
-            <ProtectedRoute requiredRole="admin">
-              <Dashboard />
-            </ProtectedRoute>
-          }
-        />
-        <Route path="/" element={<CourseList searchQuery={searchQuery} />} />
-        <Route path="/my-courses" element={<MyCourses />} />
-      </Routes>
-    </Router>
+    <div className="main">
+      <Router>
+        <Navbar onSearch={handleSearch} />
+        <Routes>
+          <Route path="/register" element={<Register />} />
+          <Route path="/login" element={<Login />} />
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute requiredRole="admin">
+                <Dashboard />
+              </ProtectedRoute>
+            }
+          />
+          {/* Pass searchQuery to the CourseList component */}
+          <Route path="/" element={<CourseList searchQuery={searchQuery} />} />
+          <Route path="/my-courses" element={<MyCourses unsubscribeFromCourse={unsubscribeFromCourse} />} />
+        </Routes>
+      </Router>
+    </div>
   );
 }
-
-CourseList.propTypes = {
-      searchQuery: PropTypes.string.isRequired,  
-
-  onSearch: PropTypes.func.isRequired,  // Ensure onSearch is a function
-};
 
 export default App;
