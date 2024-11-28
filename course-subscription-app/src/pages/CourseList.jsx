@@ -89,7 +89,7 @@ const CourseList = ({ searchQuery }) => {
         <Typography
           variant="h4"
           gutterBottom
-          style={{ fontWeight: "bold", color: "#333" }}
+          style={{ fontWeight: "bold", color: "#333",  fontSize: { xs: "1.3rem", sm: "1.5rem", md: "2rem" }, }}
         >
           Available Courses
         </Typography>

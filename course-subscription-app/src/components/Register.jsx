@@ -73,7 +73,15 @@ const Register = () => {
   return (
     <Container maxWidth="sm">
       <Box mt={5}>
-        <Typography variant="h4" gutterBottom>
+        <Typography
+          variant="h4"
+          gutterBottom
+          sx={{
+            fontWeight: "bold",
+            color: "#333",
+            fontSize: { xs: "1.3rem", sm: "1.5rem", md: "2rem" },
+          }}
+        >
           Register
         </Typography>
         <form onSubmit={handleSubmit}>

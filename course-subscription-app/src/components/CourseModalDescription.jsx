@@ -1,5 +1,12 @@
 import PropTypes from "prop-types";
-import { Modal, Paper, Box, Typography, Divider, IconButton } from "@mui/material";
+import {
+  Modal,
+  Paper,
+  Box,
+  Typography,
+  Divider,
+  IconButton,
+} from "@mui/material";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 
 const CourseModalDescription = ({ open, handleClose, course }) => {
@@ -34,8 +41,12 @@ const CourseModalDescription = ({ open, handleClose, course }) => {
         >
           <Typography
             id="course-modal-title"
-            variant="h5"
-            style={{ fontWeight: "bold" }}
+            variant="h4"
+            sx={{
+              fontWeight: "bold",
+              color: "#333",
+              fontSize: { xs: "1.3rem", sm: "1.5rem", md: "2rem" },
+            }}
           >
             {course?.title || "Course Details"}
           </Typography>
@@ -48,7 +59,7 @@ const CourseModalDescription = ({ open, handleClose, course }) => {
           id="course-modal-description"
           variant="body1"
           component="p"
-          style={{ marginTop: "15px" }}
+          sx={{ fontSize: { xs: "14px", sm: "16px" }, marginTop: "15px" }}
         >
           {course?.description || "No description available."}
         </Typography>
@@ -59,10 +70,12 @@ const CourseModalDescription = ({ open, handleClose, course }) => {
             paddingTop: "18px",
           }}
         >
-          <Typography>
+          <Typography sx={{ fontSize: { xs: "14px", sm: "16px" } }}>
             Duration: {course?.duration?.hours || "N/A"} hours
           </Typography>
-          <Typography>{course?.courseType || "N/A"}</Typography>
+          <Typography sx={{ fontSize: { xs: "14px", sm: "16px" } }}>
+            {course?.courseType || "N/A"}
+          </Typography>
         </Box>
       </Paper>
     </Modal>

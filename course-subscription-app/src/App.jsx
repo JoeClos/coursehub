@@ -32,7 +32,7 @@ function App() {
     };
 
     loadSubscribedCourses();
-  }, []);
+  }, [updateSubscribedCourses]);
 
   return (
     <div className="main">

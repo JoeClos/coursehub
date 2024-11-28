@@ -297,7 +297,7 @@ const Navbar = ({ onSearch }) => {
   );
 
   return (
-    <Box sx={{ display: "flex" }}>
+    <Box className="navbar">
       <CssBaseline />
       <AppBar
         position="static"

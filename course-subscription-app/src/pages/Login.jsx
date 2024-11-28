@@ -6,6 +6,7 @@ import Grid from "@mui/material/Grid2";
 import AuthContext from "../store/AuthContext";
 import PasswordInput from "../components/PasswordInput";
 import { loginUser } from "../utils/api";
+// import { Padding } from "@mui/icons-material";
 
 const Login = () => {
   const [credentials, setCredentials] = useState({
@@ -23,9 +24,9 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(""); // Clear previous errors
+    setError(""); 
     try {
-      const { token, user } = await loginUser(credentials); 
+      const { token, user } = await loginUser(credentials);
       login.login({
         token,
         email: user.email,
@@ -40,7 +41,7 @@ const Login = () => {
         navigate("/");
       }
     } catch (err) {
-      console.log(err)
+      console.log(err);
       setError("Invalid credentials or server error.");
     }
   };
@@ -48,7 +49,15 @@ const Login = () => {
   return (
     <Container maxWidth="sm">
       <Box mt={5}>
-        <Typography variant="h4" gutterBottom>
+        <Typography
+          variant="h4"
+          gutterBottom
+          sx={{
+            fontWeight: "bold",
+            color: "#333",
+            fontSize: { xs: "1.3rem", sm: "1.5rem", md: "2rem" },
+          }}
+        >
           Login
         </Typography>
         {error && <Typography color="error">{error}</Typography>}
@@ -86,10 +95,17 @@ const Login = () => {
               </Button>
             </Grid>
           </Grid>
-          <Typography>
-            <Link to="#">Forgot Password?</Link>
+            <Link to="#">
+              <Typography
+                className="forgot-password"
+                variant="body1"
+                component="p"
+                sx={{ paddingTop: "14px", color: "black", textDecoration: "none" }}
+              >
+                Forgot Password?
+              </Typography>
+            </Link>
             {/* <Link to="/forgot-password">Forgot Password?</Link> */}
-          </Typography>
         </form>
       </Box>
     </Container>

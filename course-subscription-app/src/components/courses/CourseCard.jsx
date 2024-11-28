@@ -26,7 +26,11 @@ const CourseCard = ({
         <Typography
           variant="h5"
           component="div"
-          style={{ marginBottom: "12px" }}
+          sx={{
+            fontWeight: "bold",
+            fontSize: { xs: "1rem", sm: "1.25rem", md: "1.50rem" },
+            marginBottom: "12px",
+          }}
         >
           {highlightText(course.title)}
         </Typography>
@@ -35,7 +39,7 @@ const CourseCard = ({
         <Typography
           variant="body2"
           color="text.secondary"
-          style={{ marginBottom: "12px" }}
+          sx={{ fontSize: { xs: "14px", sm: "16px" }, marginBottom: "12px" }}
         >
           {highlightText(course.description)}
         </Typography>
@@ -51,40 +55,64 @@ const CourseCard = ({
               <SlClock />
             </IconButton>
           </Tooltip>
-          <Typography variant="body2" color="text.secondary">
+          <Typography
+            variant="body2"
+            color="text.secondary"
+            sx={{ fontSize: { xs: "14px", sm: "16px" } }}
+          >
             {course.duration.hours} hours
           </Typography>
         </Box>
       </CardContent>
-      <CardActions style={{ justifyContent: "space-between", padding: "16px" }}>
+      <CardActions style={{ justifyContent: "space-between", padding: "0 16px" }}>
         <Button
           size="small"
+          variant="outlined"
           onClick={(e) => {
             e.stopPropagation();
             onOpen();
           }}
-          variant="outlined"
+          sx={{
+            fontSize: { xs: "10px", sm: "12px", md: "13px" },
+            padding: {
+              xs: "8px 10px",
+            },
+          }}
         >
           View Details
         </Button>
         {isSubscribed ? (
           <Button
             size="small"
+            variant="contained"
+            color="primary"
             onClick={(e) => {
               e.stopPropagation();
               onUnsubscribe();
             }}
-            variant="contained" color="primary"          >
+            sx={{
+              fontSize: { xs: "10px", sm: "12px", md: "13px" },
+              padding: {
+                xs: "8px 10px",
+              },
+            }}
+          >
             Unsubscribe
           </Button>
         ) : (
           <Button
             size="small"
+            variant="outlined"
             onClick={(e) => {
               e.stopPropagation();
               onSubscribe();
             }}
-            variant="outlined"
+            sx={{
+              fontSize: { xs: "10px", sm: "12px", md: "13px" },
+              padding: {
+                xs: "8px 10px",
+              },
+            }}
           >
             Subscribe
           </Button>

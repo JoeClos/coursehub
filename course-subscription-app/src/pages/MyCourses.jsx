@@ -61,9 +61,14 @@ const MyCourses = () => {
         <Typography
           variant="h4"
           gutterBottom
-          sx={{ fontWeight: "bold", color: "#333" }}
+          sx={{
+            fontWeight: "bold",
+            color: "#333",
+            fontSize: { xs: "1.3rem", sm: "1.5rem", md: "2rem" },
+            padding: "15px 0",
+          }}
         >
-          My Subscribed Courses
+          Subscriptions
         </Typography>
         {subscribedCourses.length === 0 ? (
           <Typography variant="body1" sx={{ color: "#555" }}>
@@ -75,17 +80,42 @@ const MyCourses = () => {
               <Grid item xs={12} sm={6} md={4} key={sub._id}>
                 <Card sx={{ borderRadius: "10px" }}>
                   <CardContent>
-                    <Typography variant="h5" sx={{ fontWeight: "bold" }}>
+                    <Typography
+                      variant="h5"
+                      sx={{
+                        fontWeight: "bold",
+                        fontSize: { xs: "1rem", sm: "1.25rem", md: "1.50rem" },
+                      }}
+                    >
                       {sub.courseId.title}
                     </Typography>
                   </CardContent>
-                  <CardActions>
-                    <Button variant="outlined">View Course</Button>
+                  <CardActions sx={{justifyContent: "space-around"}}>
+                    <Button
+                      size="small"
+                      variant="outlined"
+                      sx={{
+                        fontSize: { xs: "10px", sm: "12px", md: "13px" },
+                        padding: {
+                          xs: "8px 10px",
+                        },
+                        marginBottom: "1rem"
+                      }}
+                    >
+                      View Course
+                    </Button>
                     <Button
                       size="small"
                       onClick={() => handleUnsubscribe(sub._id)}
                       variant="contained"
                       color="primary"
+                      sx={{
+                        fontSize: { xs: "10px", sm: "12px", md: "13px" },
+                        padding: {
+                          xs: "8px 10px",
+                        },
+                        marginBottom: "1rem"
+                      }}
                     >
                       Unsubscribe
                     </Button>
