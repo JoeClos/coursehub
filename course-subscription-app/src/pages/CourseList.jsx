@@ -83,7 +83,7 @@ const CourseList = ({ searchQuery }) => {
   return (
     <Container
       maxWidth="xl"
-      style={{ paddingTop: "30px", paddingBottom: "50px" }}
+      style={{ paddingTop: "30px", paddingBottom: "50px"}}
     >
       <Box style={{ padding: "10px" }}>
         <Typography

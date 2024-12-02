@@ -3,7 +3,7 @@ import { TextField, InputAdornment, IconButton } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import PropTypes from "prop-types";
 
-const PasswordInput = ({ value, onChange, label }) => {
+const PasswordInput = ({ value, onChange, label, sx }) => {
   const [showPassword, setShowPassword] = useState(false);
 
   const handleClickShowPassword = () => {
@@ -18,6 +18,7 @@ const PasswordInput = ({ value, onChange, label }) => {
       onChange={onChange}
       variant="outlined"
       fullWidth
+      sx={sx}
       required
       slotProps={{
         input: {
@@ -38,6 +39,7 @@ PasswordInput.propTypes = {
   value: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
   label: PropTypes.string.isRequired,
+  sx: PropTypes.string.isRequired,
 };
 
 export default PasswordInput;
