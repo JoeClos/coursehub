@@ -68,6 +68,7 @@ const Login = () => {
                 label="Email Address"
                 name="email"
                 type="email"
+                sx={{backgroundColor: "white"}}
                 fullWidth
                 required
                 value={credentials.email}
@@ -78,6 +79,7 @@ const Login = () => {
               <PasswordInput
                 label="Password"
                 name="password"
+                sx={{ backgroundColor: "white" }}
                 value={credentials.password}
                 onChange={(e) =>
                   setCredentials({ ...credentials, password: e.target.value })
@@ -95,12 +97,12 @@ const Login = () => {
               </Button>
             </Grid>
           </Grid>
-            <Link to="#">
+            <Link to="#" style={{ textDecoration: "none" }}>
               <Typography
                 className="forgot-password"
                 variant="body1"
                 component="p"
-                sx={{ paddingTop: "14px", color: "black", textDecoration: "none" }}
+                sx={{ paddingTop: "14px", color: "black"}}
               >
                 Forgot Password?
               </Typography>
