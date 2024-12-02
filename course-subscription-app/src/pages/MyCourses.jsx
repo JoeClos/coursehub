@@ -82,8 +82,6 @@ const MyCourses = () => {
       <Box
         sx={{
           padding: "20px",
-          borderRadius: "10px",
-          backgroundColor: "#f9f9f9",
         }}
       >
         <Typography
@@ -127,7 +125,7 @@ const MyCourses = () => {
                         padding: { xs: "8px 10px" },
                         marginBottom: "1rem",
                       }}
-                      onClick={() => handleOpen(sub.courseId)} 
+                      onClick={() => handleOpen(sub.courseId)}
                     >
                       View Course
                     </Button>
