@@ -145,7 +145,7 @@ const CourseList = ({ searchQuery }) => {
             <Button
               onClick={() => setFilter("All")}
               sx={{
-                backgroundColor: filter === "All" ? "#201F40" : "#6f73d2",
+                backgroundColor: filter === "All" ? "#201F40" : " #757AD5",
               }}
             >
               All
@@ -153,7 +153,7 @@ const CourseList = ({ searchQuery }) => {
             <Button
               onClick={() => setFilter("Online")}
               sx={{
-                backgroundColor: filter === "Online" ? "#201F40" : "#6f73d2",
+                backgroundColor: filter === "Online" ? "#201F40" : " #757AD5",
               }}
             >
               Online
@@ -161,7 +161,7 @@ const CourseList = ({ searchQuery }) => {
             <Button
               onClick={() => setFilter("Offline")}
               sx={{
-                backgroundColor: filter === "Offline" ? "#201F40" : "#6f73d2",
+                backgroundColor: filter === "Offline" ? "#201F40" : " #757AD5",
               }}
             >
               Offline
@@ -169,7 +169,7 @@ const CourseList = ({ searchQuery }) => {
             <Button
               onClick={() => setFilter("Hybrid")}
               sx={{
-                backgroundColor: filter === "Hybrid" ? "#201F40" : "#6f73d2",
+                backgroundColor: filter === "Hybrid" ? "#201F40" : " #757AD5",
               }}
             >
               Hybrid

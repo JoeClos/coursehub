@@ -5,7 +5,11 @@ import Navbar from "./components/Navbar";
 import MyCourses from "./pages/MyCourses";
 import Login from "./pages/Login";
 import ProtectedRoute from "./components/ProtectedRoute";
-import Dashboard from "./pages/Dashboard";
+import Dashboard from "./pages/admin/Dashboard";
+import ManageUsers from "./pages/admin/ManageUsers";
+import ManageSubscriptions from "./pages/admin/ManageSubscriptions";
+import ManageCourses from "./pages/admin/ManageCourses";
+import Analytics from "./pages/admin/Analytics";
 import Register from "./pages/Register";
 import { useCart } from "./store/CartContext";
 import { fetchSubscribedCourses, unsubscribeFromCourse } from "./utils/api";
@@ -50,8 +54,48 @@ function App() {
                 </ProtectedRoute>
               }
             />
-            <Route path="/" element={<CourseList searchQuery={searchQuery} />} />
-            <Route path="/my-courses" element={<MyCourses unsubscribeFromCourse={unsubscribeFromCourse} />} />
+            <Route
+              path="/dashboard/users"
+              element={
+                <ProtectedRoute requiredRole="admin">
+                  <ManageUsers />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/dashboard/subscriptions"
+              element={
+                <ProtectedRoute requiredRole="admin">
+                  <ManageSubscriptions />
+                </ProtectedRoute>
+              }
+            />{" "}
+            <Route
+              path="/dashboard/courses"
+              element={
+                <ProtectedRoute requiredRole="admin">
+                  <ManageCourses />
+                </ProtectedRoute>
+              }
+            />{" "}
+            <Route
+              path="/dashboard/analytics"
+              element={
+                <ProtectedRoute requiredRole="admin">
+                  <Analytics />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/"
+              element={<CourseList searchQuery={searchQuery} />}
+            />
+            <Route
+              path="/my-courses"
+              element={
+                <MyCourses unsubscribeFromCourse={unsubscribeFromCourse} />
+              }
+            />
           </Routes>
         </div>
       </Router>
@@ -60,4 +104,3 @@ function App() {
 }
 
 export default App;
-

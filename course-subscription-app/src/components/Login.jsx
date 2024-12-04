@@ -3,10 +3,9 @@ import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { Button, TextField, Container, Typography, Box } from "@mui/material";
 import Grid from "@mui/material/Grid2";
-import AuthContext from "../store/AuthContext";
-import PasswordInput from "../components/PasswordInput";
+import AuthContext from "../context/AuthContext";
+import PasswordInput from "./PasswordInput";
 import { loginUser } from "../utils/api";
-// import { Padding } from "@mui/icons-material";
 
 const Login = () => {
   const [credentials, setCredentials] = useState({
@@ -24,7 +23,7 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(""); 
+    setError(""); // Clear previous errors
     try {
       const { token, user } = await loginUser(credentials);
       login.login({
@@ -32,7 +31,6 @@ const Login = () => {
         email: user.email,
         role: user.role,
         firstName: user.firstName,
-        lastName: user.lastName,
         id: user._id,
       }); // Update AuthContext with user data
       if (user.role === "admin") {
@@ -46,20 +44,27 @@ const Login = () => {
     }
   };
 
+  console.log("Rendering Login Component");
   return (
     <Container maxWidth="sm">
       <Box mt={5}>
-        <Typography
-          variant="h4"
-          gutterBottom
-          sx={{
-            fontWeight: "bold",
-            color: "#333",
-            fontSize: { xs: "1.3rem", sm: "1.5rem", md: "2rem" },
-          }}
-        >
+        <Box mb={2}>
+          <Typography variant="h4" style={{ color: "red" }}>
+            Login 1
+          </Typography>
+        </Box>
+        <Box>
+          <Typography variant="h4" style={{ color: "blue" }}>
+            Login 2
+          </Typography>
+        </Box>
+
+        {/* <Typography variant="h4" gutterBottom  style={{ color: "red" }}>
           Login
         </Typography>
+        <Typography variant="h4" gutterBottom  style={{ color: "blue" }}>
+          Login
+        </Typography> */}
         {error && <Typography color="error">{error}</Typography>}
         <form onSubmit={handleSubmit}>
           <Grid container spacing={2}>
@@ -68,7 +73,6 @@ const Login = () => {
                 label="Email Address"
                 name="email"
                 type="email"
-                sx={{backgroundColor: "white"}}
                 fullWidth
                 required
                 value={credentials.email}
@@ -79,7 +83,6 @@ const Login = () => {
               <PasswordInput
                 label="Password"
                 name="password"
-                sx={{ backgroundColor: "white" }}
                 value={credentials.password}
                 onChange={(e) =>
                   setCredentials({ ...credentials, password: e.target.value })
@@ -90,26 +93,16 @@ const Login = () => {
               <Button
                 type="submit"
                 variant="contained"
-                // color="primary"
+                color="primary"
                 fullWidth
-                sx={{backgroundColor: "#757AD5"}}
-
               >
                 Login
               </Button>
             </Grid>
           </Grid>
-            <Link to="#" style={{ textDecoration: "none" }}>
-              <Typography
-                className="forgot-password"
-                variant="body1"
-                component="p"
-                sx={{ paddingTop: "14px", color: "black"}}
-              >
-                Forgot Password?
-              </Typography>
-            </Link>
-            {/* <Link to="/forgot-password">Forgot Password?</Link> */}
+          <Typography>
+            <Link to="/forgot-password">Forgot Password?</Link>
+          </Typography>
         </form>
       </Box>
     </Container>

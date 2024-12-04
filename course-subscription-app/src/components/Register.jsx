@@ -70,8 +70,9 @@ const Register = () => {
     }
   };
 
+  
   return (
-    <Container maxWidth="sm">
+    <Container>
       <Box mt={5}>
         <Typography
           variant="h4"
@@ -84,13 +85,15 @@ const Register = () => {
         >
           Register
         </Typography>
+        <Typography variant="h4" gutterBottom>
+          Login
+        </Typography>
         <form onSubmit={handleSubmit}>
           <Grid container spacing={2}>
             <Grid size={12}>
               <TextField
                 label="First Name"
                 name="firstName"
-                sx={{backgroundColor: "white"}}
                 fullWidth
                 required
                 value={formData.firstName}
@@ -101,7 +104,6 @@ const Register = () => {
               <TextField
                 label="Last Name"
                 name="lastName"
-                sx={{backgroundColor: "white"}}
                 fullWidth
                 required
                 value={formData.lastName}
@@ -113,7 +115,6 @@ const Register = () => {
                 label="Email"
                 name="email"
                 type="email"
-                sx={{backgroundColor: "white"}}
                 fullWidth
                 required
                 value={formData.email}
@@ -124,7 +125,6 @@ const Register = () => {
               <PasswordInput
                 label="Password"
                 name="password"
-                sx={{backgroundColor: "white"}}
                 value={formData.password}
                 onChange={(e) =>
                   setFormData({ ...formData, password: e.target.value })
@@ -135,8 +135,8 @@ const Register = () => {
               <Button
                 type="submit"
                 variant="contained"
+                color="primary"
                 fullWidth
-                sx={{backgroundColor: "#757AD5"}}
               >
                 Register
               </Button>
