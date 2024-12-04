@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Box, Typography, Container } from "@mui/material";
+import { Box, Typography, Container, ButtonGroup, Button } from "@mui/material";
 import { fetchCourses, fetchSubscribedCourses } from "../utils/api";
 import { useCart } from "../store/CartContext";
 import CardList from "../components/courses/CardList";
@@ -8,6 +8,7 @@ import CourseModalDescription from "../components/CourseModalDescription";
 
 const CourseList = ({ searchQuery }) => {
   const [courses, setCourses] = useState([]);
+  const [filter, setFilter] = useState("All");
   const {
     subscribedCourses,
     subscribeToCourse,
@@ -51,11 +52,14 @@ const CourseList = ({ searchQuery }) => {
     getCourses();
   }, []);
 
-  const filteredCourses = courses.filter(
-    (course) =>
+  // Filtered Courses based on the search query and filter
+  const filteredCourses = courses.filter((course) => {
+    const matchesSearchQuery =
       course.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      course.description.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+      course.description.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesFilter = filter === "All" || course.courseType === filter;
+    return matchesSearchQuery && matchesFilter;
+  });
 
   const highlightText = (text) => {
     if (!searchQuery) return text;
@@ -129,27 +133,65 @@ const CourseList = ({ searchQuery }) => {
           to stay informed about the latest offerings and enhance your learning
           journey.
         </Typography>
-
-        {/* Triangle Shape */}
-        <div className="triangle-shape" />
+        <Box className="triangle-shape" />
       </Box>
 
-      <Box
-        style={{
-          marginTop: "80px",
-          animation: "slideUp 1s ease-in-out",
-        }}
-      >
-        <CardList
-          courses={filteredCourses}
-          highlightText={highlightText}
-          getSubscriptionForCourse={getSubscriptionForCourse}
-          handleSubscribe={(course) => subscribeToCourse(learnerId, course)}
-          handleUnsubscribe={unsubscribeFromCourse}
-          handleOpen={handleOpen}
-        />
+      <Box>
+        {/* Filter Buttons */}{" "}
+        <Box sx={{ textAlign: "center", marginTop: "40px" }}>
+          {" "}
+          <ButtonGroup variant="contained">
+            {" "}
+            <Button
+              onClick={() => setFilter("All")}
+              sx={{
+                backgroundColor: filter === "All" ? "#201F40" : "#6f73d2",
+              }}
+            >
+              All
+            </Button>{" "}
+            <Button
+              onClick={() => setFilter("Online")}
+              sx={{
+                backgroundColor: filter === "Online" ? "#201F40" : "#6f73d2",
+              }}
+            >
+              Online
+            </Button>{" "}
+            <Button
+              onClick={() => setFilter("Offline")}
+              sx={{
+                backgroundColor: filter === "Offline" ? "#201F40" : "#6f73d2",
+              }}
+            >
+              Offline
+            </Button>{" "}
+            <Button
+              onClick={() => setFilter("Hybrid")}
+              sx={{
+                backgroundColor: filter === "Hybrid" ? "#201F40" : "#6f73d2",
+              }}
+            >
+              Hybrid
+            </Button>{" "}
+          </ButtonGroup>{" "}
+        </Box>
+        <Box
+          style={{
+            marginTop: "40px",
+            animation: "slideUp 1s ease-in-out",
+          }}
+        >
+          <CardList
+            courses={filteredCourses}
+            highlightText={highlightText}
+            getSubscriptionForCourse={getSubscriptionForCourse}
+            handleSubscribe={(course) => subscribeToCourse(learnerId, course)}
+            handleUnsubscribe={unsubscribeFromCourse}
+            handleOpen={handleOpen}
+          />
+        </Box>
       </Box>
-
       <CourseModalDescription
         open={open}
         handleClose={handleClose}
