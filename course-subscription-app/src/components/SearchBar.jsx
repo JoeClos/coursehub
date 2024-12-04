@@ -15,7 +15,7 @@ const SearchBar = ({ onSearch }) => {
     <Box sx={{ display: "flex", alignItems: "center", backgroundColor: "rgba(255, 255, 255, 0.15)", borderRadius: "4px", padding: "0 8px", marginRight: "15px" }}>
       <InputBase
         sx={{ color: "white", paddingLeft: "8px", maxWidth: "600px", width: "100%", margin: "0 auto"}}
-        placeholder="Search Courses"
+        placeholder="Search Course"
         value={query}
         onChange={handleSearchChange}
         

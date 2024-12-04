@@ -27,8 +27,8 @@ const CourseCard = ({
           variant="h5"
           component="div"
           sx={{
-            fontWeight: "bold",
-            fontSize: { xs: "1rem", sm: "1.25rem", md: "1.50rem" },
+            // fontWeight: "bold",
+            fontSize: { xs: "1rem", sm: "1.25rem", md: "1.40rem" },
             marginBottom: "12px",
           }}
         >
