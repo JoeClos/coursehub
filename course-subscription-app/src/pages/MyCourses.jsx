@@ -124,6 +124,8 @@ const MyCourses = () => {
                         fontSize: { xs: "10px", sm: "12px", md: "13px" },
                         padding: { xs: "8px 10px" },
                         marginBottom: "1rem",
+                        borderColor: "#757AD5",
+                        color: "#757AD5",
                       }}
                       onClick={() => handleOpen(sub.courseId)}
                     >
@@ -133,8 +135,10 @@ const MyCourses = () => {
                       size="small"
                       onClick={() => handleUnsubscribe(sub._id)}
                       variant="contained"
-                      color="primary"
+                      // color="primary"
                       sx={{
+                        backgroundColor: "#757AD5",
+                        borderColor: "#757AD5",
                         fontSize: { xs: "10px", sm: "12px", md: "13px" },
                         padding: { xs: "8px 10px" },
                         marginBottom: "1rem",

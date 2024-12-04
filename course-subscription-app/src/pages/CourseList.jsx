@@ -82,7 +82,7 @@ const CourseList = ({ searchQuery }) => {
 
   return (
     <Container
-      maxWidth="xl"
+      maxWidth="x"
       style={{
         paddingTop: "30px",
         paddingBottom: "50px",
@@ -91,22 +91,25 @@ const CourseList = ({ searchQuery }) => {
       }}
     >
       <Box
-        style={{
-          padding: "20px",
+        sx={{
+          padding: { xs: "15px", sm: "20px" },
           borderRadius: "12px",
           background: "linear-gradient(135deg, #6f73d2 0%, #c2d5f5 100%)",
           color: "#fff",
           textAlign: "center",
           position: "relative",
           animation: "slideUp 1s ease-in-out",
+          maxWidth: { xs: "100%", sm: "80%", md: "70%", lg: "60%" },
+          margin: "0 auto",
         }}
       >
         <Typography
           variant="h3"
           gutterBottom
-          style={{
+          sx={{
+            color: "#201F40",
             fontWeight: "bold",
-            fontSize: "2rem",
+            fontSize: { xs: "1.5rem", sm: "2rem" },
             letterSpacing: "1.5px",
           }}
         >
@@ -115,10 +118,11 @@ const CourseList = ({ searchQuery }) => {
         <Typography
           variant="h6"
           component="p"
-          style={{
-            fontSize: "1.2rem",
+          sx={{
+            color: "#201F40",
+            fontSize: { xs: "1rem", sm: "1.2rem" },
             margin: "10px 0",
-            fontWeight: "300",
+            fontWeight: "400",
           }}
         >
           Explore a variety of courses tailored to your interests. Subscribe now
@@ -127,24 +131,12 @@ const CourseList = ({ searchQuery }) => {
         </Typography>
 
         {/* Triangle Shape */}
-        <div
-          style={{
-            position: "absolute",
-            bottom: "-20px",
-            left: "50%",
-            transform: "translateX(-50%)",
-            width: "0",
-            height: "0",
-            borderLeft: "20px solid transparent",
-            borderRight: "20px solid transparent",
-            borderTop: "20px solid #6f73d2", // Matches background
-          }}
-        />
+        <div className="triangle-shape" />
       </Box>
 
       <Box
         style={{
-          marginTop: "30px",
+          marginTop: "80px",
           animation: "slideUp 1s ease-in-out",
         }}
       >
