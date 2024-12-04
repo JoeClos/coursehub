@@ -113,7 +113,7 @@ const CourseList = ({ searchQuery }) => {
             letterSpacing: "1.5px",
           }}
         >
-          Available Courses
+          Discover Our Courses
         </Typography>
         <Typography
           variant="h6"
