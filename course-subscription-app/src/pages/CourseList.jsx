@@ -82,25 +82,64 @@ const CourseList = ({ searchQuery }) => {
 
   return (
     <Container
-      maxWidth="xl"
-      style={{ paddingTop: "30px", paddingBottom: "50px"}}
+      maxWidth="x"
+      style={{
+        paddingTop: "30px",
+        paddingBottom: "50px",
+        position: "relative",
+        overflow: "hidden",
+      }}
     >
-      <Box style={{ padding: "10px" }}>
+      <Box
+        sx={{
+          padding: { xs: "15px", sm: "20px" },
+          borderRadius: "12px",
+          background: "linear-gradient(135deg, #6f73d2 0%, #c2d5f5 100%)",
+          color: "#fff",
+          textAlign: "center",
+          position: "relative",
+          animation: "slideUp 1s ease-in-out",
+          maxWidth: { xs: "100%", sm: "80%", md: "70%", lg: "60%" },
+          margin: "0 auto",
+        }}
+      >
         <Typography
-          variant="h4"
+          variant="h3"
           gutterBottom
-          style={{ fontWeight: "bold", color: "#333",  fontSize: { xs: "1.3rem", sm: "1.5rem", md: "2rem" }, }}
+          sx={{
+            color: "#201F40",
+            fontWeight: "bold",
+            fontSize: { xs: "1.5rem", sm: "2rem" },
+            letterSpacing: "1.5px",
+          }}
         >
           Available Courses
         </Typography>
         <Typography
-          variant="body1"
+          variant="h6"
           component="p"
-          style={{ color: "#555", marginBottom: "20px" }}
+          sx={{
+            color: "#201F40",
+            fontSize: { xs: "1rem", sm: "1.2rem" },
+            margin: "10px 0",
+            fontWeight: "400",
+          }}
         >
-          Browse and subscribe to the courses that interest you. Stay updated
-          with the latest offerings.
+          Explore a variety of courses tailored to your interests. Subscribe now
+          to stay informed about the latest offerings and enhance your learning
+          journey.
         </Typography>
+
+        {/* Triangle Shape */}
+        <div className="triangle-shape" />
+      </Box>
+
+      <Box
+        style={{
+          marginTop: "80px",
+          animation: "slideUp 1s ease-in-out",
+        }}
+      >
         <CardList
           courses={filteredCourses}
           highlightText={highlightText}
@@ -109,12 +148,13 @@ const CourseList = ({ searchQuery }) => {
           handleUnsubscribe={unsubscribeFromCourse}
           handleOpen={handleOpen}
         />
-        <CourseModalDescription
-          open={open}
-          handleClose={handleClose}
-          course={selectedCourse}
-        />
       </Box>
+
+      <CourseModalDescription
+        open={open}
+        handleClose={handleClose}
+        course={selectedCourse}
+      />
     </Container>
   );
 };

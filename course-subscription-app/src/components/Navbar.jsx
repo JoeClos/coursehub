@@ -22,7 +22,7 @@ import { ShoppingCart, ExitToApp } from "@mui/icons-material";
 import MenuIcon from "@mui/icons-material/Menu";
 import { deepOrange } from "@mui/material/colors";
 import SearchBar from "./SearchBar";
-import PropTypes from 'prop-types'; 
+import PropTypes from "prop-types";
 
 const Navbar = ({ onSearch }) => {
   const { user, logout } = useContext(AuthContext);
@@ -111,8 +111,7 @@ const Navbar = ({ onSearch }) => {
           alignItems: "center",
           justifyContent: "center",
           gap: 2,
-          // backgroundColor: "background.paper",
-          paddingX: 8, // Adds horizontal padding
+          paddingX: 8,
           paddingTop: 8,
         }}
       >
@@ -125,16 +124,15 @@ const Navbar = ({ onSearch }) => {
               sx={{
                 display: "flex",
                 alignItems: "center",
-                justifyContent: "flex-start", // Aligns text/icons to the left
+                justifyContent: "flex-start",
                 gap: 1,
-                width: "100%", // Ensures the button spans the full width
+                width: "100%",
               }}
             >
               <ListItemText
                 primary="Home"
                 sx={{ margin: 0, textAlign: "left" }}
               />
-              {/* <Home fontSize="small" /> */}
             </ListItemButton>
             <ListItemButton
               component={Link}
@@ -255,7 +253,6 @@ const Navbar = ({ onSearch }) => {
                 primary="Home"
                 sx={{ margin: 0, textAlign: "left" }}
               />
-              {/* <Home fontSize="small" /> */}
             </ListItemButton>
             <ListItemButton
               component={Link}
@@ -299,12 +296,7 @@ const Navbar = ({ onSearch }) => {
   return (
     <Box className="navbar">
       <CssBaseline />
-      <AppBar
-        position="static"
-        sx={{
-          backgroundColor: "#201F40",
-        }}
-      >
+      <AppBar id="nav-appbar">
         <Toolbar>
           <IconButton
             color="inherit"
@@ -326,10 +318,10 @@ const Navbar = ({ onSearch }) => {
           <SearchBar onSearch={onSearch} />
           <Box
             sx={{
-              display: { xs: "none", sm: "flex" }, 
-              alignItems: "center", 
-              justifyContent: "flex-end", 
-              gap: 3, 
+              display: { xs: "none", sm: "flex" },
+              alignItems: "center",
+              justifyContent: "flex-end",
+              gap: 3,
               pr: 1,
             }}
           >
@@ -339,8 +331,8 @@ const Navbar = ({ onSearch }) => {
                   key={index}
                   sx={{
                     display: "flex",
-                    alignItems: "center", // Vertically center the Avatar and Button
-                    gap: 2, // Space between the Avatar and the Button
+                    alignItems: "center", 
+                    gap: 2, 
                   }}
                 >
                   {user && user.role !== "admin" && (
@@ -350,7 +342,7 @@ const Navbar = ({ onSearch }) => {
                         width: 28,
                         height: 28,
                         fontSize: 16,
-                        fontWeight: 500
+                        fontWeight: 500,
                       }}
                     >
                       {user?.firstName?.[0]}
@@ -370,8 +362,8 @@ const Navbar = ({ onSearch }) => {
                   to={item.link}
                   sx={{
                     display: "flex",
-                    alignItems: "center", 
-                    justifyContent: "center", 
+                    alignItems: "center",
+                    justifyContent: "center",
                   }}
                 >
                   {item.label}
@@ -388,7 +380,7 @@ const Navbar = ({ onSearch }) => {
           open={mobileOpen}
           onClose={handleDrawerToggle}
           ModalProps={{
-            keepMounted: true, // Better open performance on mobile.
+            keepMounted: true,
           }}
           sx={{
             display: { xs: "block", sm: "none" },

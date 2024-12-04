@@ -24,11 +24,11 @@ const CourseCard = ({
     <Card style={{ cursor: "pointer", padding: "16px", borderRadius: "8px" }}>
       <CardContent onClick={onOpen} style={{ padding: "16px" }}>
         <Typography
-          variant="h5"
+          // variant="h5"
           component="div"
           sx={{
-            fontWeight: "bold",
-            fontSize: { xs: "1rem", sm: "1.25rem", md: "1.50rem" },
+            // fontWeight: "bold",
+            fontSize: { xs: "1rem", sm: "1.25rem", md: "1.40rem" },
             marginBottom: "12px",
           }}
         >
@@ -64,7 +64,9 @@ const CourseCard = ({
           </Typography>
         </Box>
       </CardContent>
-      <CardActions style={{ justifyContent: "space-between", padding: "0 16px" }}>
+      <CardActions
+        style={{ justifyContent: "space-between", padding: "0 16px" }}
+      >
         <Button
           size="small"
           variant="outlined"
@@ -77,6 +79,8 @@ const CourseCard = ({
             padding: {
               xs: "8px 10px",
             },
+            borderColor: "#757AD5",
+            color: "#757AD5",
           }}
         >
           View Details
@@ -85,12 +89,14 @@ const CourseCard = ({
           <Button
             size="small"
             variant="contained"
-            color="primary"
+            // color="primary"
             onClick={(e) => {
               e.stopPropagation();
               onUnsubscribe();
             }}
             sx={{
+              backgroundColor: "#757AD5",
+              borderColor: "#757AD5",
               fontSize: { xs: "10px", sm: "12px", md: "13px" },
               padding: {
                 xs: "8px 10px",
@@ -112,6 +118,8 @@ const CourseCard = ({
               padding: {
                 xs: "8px 10px",
               },
+              borderColor: "#757AD5",
+              color: "#757AD5",
             }}
           >
             Subscribe
