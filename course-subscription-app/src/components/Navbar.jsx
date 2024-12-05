@@ -189,7 +189,6 @@ const Navbar = ({ onSearch }) => {
                 primary="Home"
                 sx={{ margin: 0, textAlign: "left" }}
               />
-              {/* <Home fontSize="small" /> */}
             </ListItemButton>
             <ListItemButton
               component={Link}
@@ -236,7 +235,7 @@ const Navbar = ({ onSearch }) => {
         )}
 
         {/* For admin users */}
-        {user?.role === "admin" && (
+        {/* {user?.role === "admin" && (
           <>
             <ListItemButton
               component={Link}
@@ -269,7 +268,6 @@ const Navbar = ({ onSearch }) => {
                 primary="Dashboard"
                 sx={{ margin: 0, textAlign: "left" }}
               />
-              {/* <Home fontSize="small" /> */}
             </ListItemButton>
             <ListItemButton
               onClick={handleLogout}
@@ -288,10 +286,12 @@ const Navbar = ({ onSearch }) => {
               <ExitToApp fontSize="small" />
             </ListItemButton>
           </>
-        )}
+        )} */}
       </List>
     </Box>
   );
+
+  if (user?.role === "admin") return null;
 
   return (
     <Box className="navbar">

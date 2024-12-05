@@ -6,7 +6,6 @@ import Grid from "@mui/material/Grid2";
 import AuthContext from "../store/AuthContext";
 import PasswordInput from "../components/PasswordInput";
 import { loginUser } from "../utils/api";
-// import { Padding } from "@mui/icons-material";
 
 const Login = () => {
   const [credentials, setCredentials] = useState({
@@ -24,7 +23,7 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(""); 
+    setError("");
     try {
       const { token, user } = await loginUser(credentials);
       login.login({
@@ -68,7 +67,7 @@ const Login = () => {
                 label="Email Address"
                 name="email"
                 type="email"
-                sx={{backgroundColor: "white"}}
+                sx={{ backgroundColor: "white" }}
                 fullWidth
                 required
                 value={credentials.email}
@@ -84,6 +83,7 @@ const Login = () => {
                 onChange={(e) =>
                   setCredentials({ ...credentials, password: e.target.value })
                 }
+                autocomplete="off"
               />
             </Grid>
             <Grid size={12}>
@@ -92,24 +92,23 @@ const Login = () => {
                 variant="contained"
                 // color="primary"
                 fullWidth
-                sx={{backgroundColor: "#757AD5"}}
-
+                sx={{ backgroundColor: "#757AD5" }}
               >
                 Login
               </Button>
             </Grid>
           </Grid>
-            <Link to="#" style={{ textDecoration: "none" }}>
-              <Typography
-                className="forgot-password"
-                variant="body1"
-                component="p"
-                sx={{ paddingTop: "14px", color: "black"}}
-              >
-                Forgot Password?
-              </Typography>
-            </Link>
-            {/* <Link to="/forgot-password">Forgot Password?</Link> */}
+          <Link to="#" style={{ textDecoration: "none" }}>
+            <Typography
+              className="forgot-password"
+              variant="body1"
+              component="p"
+              sx={{ paddingTop: "14px", color: "black" }}
+            >
+              Forgot Password?
+            </Typography>
+          </Link>
+          {/* <Link to="/forgot-password">Forgot Password?</Link> */}
         </form>
       </Box>
     </Container>
