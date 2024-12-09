@@ -1,37 +1,38 @@
 import { useEffect, useState } from "react";
 import {
+  Box,
+  Card,
+  CardContent,
+  Divider,
+  Typography,
+  CircularProgress,
+  Paper,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
   TableRow,
-  Paper,
-  Button,
-  Typography,
-  CircularProgress,
-  Box,
-  TablePagination,
+  useMediaQuery,
 } from "@mui/material";
 import { fetchUsers } from "../../utils/api";
+import Pagination from "../../components/Pagination";
+import ScrollToTopButton from "../../components/ScrollToTopButton"; // Import ScrollToTopButton
 
 const ManageUsers = () => {
   const [users, setUsers] = useState([]);
-  console.log("🚀 ~ ManageUsers ~ users:", users);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [page, setPage] = useState(1);
+  const [rowsPerPage, setRowsPerPage] = useState(6);
+
+  const isMobile = useMediaQuery((theme) => theme.breakpoints.down("sm"));
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
 
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  };
-
+  // Fetch users from API
   useEffect(() => {
     const getUsers = async () => {
       try {
@@ -45,6 +46,9 @@ const ManageUsers = () => {
     };
     getUsers();
   }, []);
+
+  const totalPages = Math.ceil(users.length / rowsPerPage);
+  const showPagination = users.length > 0 && totalPages > 1;
 
   if (loading) {
     return (
@@ -74,56 +78,92 @@ const ManageUsers = () => {
     );
   }
 
+  const paginatedUsers = users.slice(
+    (page - 1) * rowsPerPage,
+    page * rowsPerPage
+  );
+
   return (
     <Box>
-      <Typography variant="h4" gutterBottom>
-        Manage Users
+      <Typography variant="h4" gutterBottom mt={8}>
+        Total Users: {users.length}
       </Typography>
-      <TablePagination
-        rowsPerPageOptions={[5, 10, 25]}
-        component="div"
-        count={users.length}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onPageChange={handleChangePage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-      />
 
-      <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="user table">
-          <TableHead>
-            <TableRow>
-              <TableCell>Name</TableCell>
-              <TableCell>Email</TableCell>
-              <TableCell>Role</TableCell>
-              <TableCell>Actions</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {users
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((user) => (
+      {isMobile ? (
+        // Mobile View - Cards
+        <Box display="flex" flexDirection="column" gap={2} p={2}>
+          {users.map((user) => (
+            <Card key={user._id} variant="outlined">
+              <CardContent>
+                <Typography variant="h6">
+                  {user.firstName} {user.lastName}
+                </Typography>
+                <Divider />
+                <Typography
+                  variant="body2"
+                  color="textSecondary"
+                  sx={{ mt: "15px" }}
+                >
+                  Email: {user.email}
+                </Typography>
+                <Typography variant="body2" color="textSecondary">
+                  Role: {user.role}
+                </Typography>
+              </CardContent>
+            </Card>
+          ))}
+        </Box>
+      ) : (
+        // Desktop View - Table
+        <TableContainer component={Paper}>
+          <Table sx={{ minWidth: 650 }} aria-label="user table">
+            <TableHead>
+              <TableRow>
+                <TableCell sx={{ fontWeight: "bold", fontSize: "16px" }}>
+                  User
+                </TableCell>
+                <TableCell sx={{ fontWeight: "bold", fontSize: "16px" }}>
+                  Email
+                </TableCell>
+                <TableCell sx={{ fontWeight: "bold", fontSize: "16px" }}>
+                  Role
+                </TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {paginatedUsers.map((user) => (
                 <TableRow key={user._id}>
-                  <TableCell>{user.firstName} {user.lastName}</TableCell>
+                  <TableCell>
+                    {user.firstName} {user.lastName}
+                  </TableCell>
                   <TableCell>{user.email}</TableCell>
                   <TableCell>{user.role}</TableCell>
-                  <TableCell>
-                    <Button variant="contained" color="primary">
-                      Edit
-                    </Button>
-                    <Button
-                      variant="contained"
-                      color="secondary"
-                      sx={{ marginLeft: 1 }}
-                    >
-                      Delete
-                    </Button>
-                  </TableCell>
                 </TableRow>
               ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+            </TableBody>
+          </Table>
+        </TableContainer>
+      )}
+
+      {showPagination && !isMobile && (
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            padding: "10px",
+            marginTop: "10px",
+          }}
+        >
+          <Pagination
+            count={totalPages}
+            page={page}
+            onChange={handleChangePage}
+          />
+        </Box>
+      )}
+
+      {/* Add the ScrollToTopButton component */}
+      <ScrollToTopButton />
     </Box>
   );
 };
