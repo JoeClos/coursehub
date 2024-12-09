@@ -39,7 +39,7 @@ PasswordInput.propTypes = {
   value: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
   label: PropTypes.string.isRequired,
-  sx: PropTypes.string.isRequired,
+  sx: PropTypes.object,
 };
 
 export default PasswordInput;

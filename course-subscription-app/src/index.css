@@ -78,3 +78,5 @@ body {
   }
   
 }
+
+@media (max-width: 600px) { .MuiDrawer-paper { width: 100%; } }

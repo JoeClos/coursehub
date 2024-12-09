@@ -11,11 +11,21 @@ export const CartProvider = ({ children }) => {
   const [subscribedCourses, setSubscribedCourses] = useState([]);
 
   const updateSubscribedCourses = useCallback((courses) => {
-    setSubscribedCourses(courses);
+    // setSubscribedCourses(courses);
+
+    setSubscribedCourses((prev) => {
+      if (JSON.stringify(prev) !== JSON.stringify(courses)) {
+        return courses;
+      }
+      return prev;
+    });
   }, []);
 
   const clearSubscribedCourses = () => {
-    setSubscribedCourses([]);
+    if (subscribedCourses.length > 0) {
+      setSubscribedCourses([]);
+    }
+    // setSubscribedCourses([]);
   };
 
   const subscribeToCourse = useCallback(async (learnerId, course) => {

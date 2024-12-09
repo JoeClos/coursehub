@@ -106,3 +106,18 @@ export const loginUser = async (credentials) => {
     throw error;
   }
 };
+
+// Fetch all users
+export const fetchUsers = async () => {
+  const endpoint = buildUrl(baseUrl, "/api/users");
+
+  try {
+    const response = await axios.get(endpoint);
+    return response;
+    console.log("🚀 ~ fetchUsers ~ response.data:", response)
+
+  } catch (error) {
+    console.error("Error fetching users:", error);
+    throw error;
+  }
+};
