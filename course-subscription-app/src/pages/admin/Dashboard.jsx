@@ -1,5 +1,5 @@
-import { useContext, useState } from "react";
-import PropTypes from "prop-types";
+import { useContext} from "react";
+// import PropTypes from "prop-types";
 import {
   AppBar,
   Box,
@@ -14,7 +14,6 @@ import {
   Toolbar,
   Typography,
 } from "@mui/material";
-import { Menu as MenuIcon } from "@mui/icons-material";
 import { Link, Outlet, useLocation } from "react-router-dom";
 import LogoutIcon from "@mui/icons-material/Logout";
 import GroupIcon from "@mui/icons-material/Group";
@@ -25,7 +24,7 @@ import AuthContext from "../../store/AuthContext";
 
 const drawerWidth = 240;
 
-const Dashboard = (props) => {
+const Dashboard = () => {
   // const [mobileOpen, setMobileOpen] = useState(false);
   const { logout } = useContext(AuthContext);
   const location = useLocation(); // Get current route
@@ -219,6 +218,6 @@ const Dashboard = (props) => {
   );
 };
 
-Dashboard.propTypes = { window: PropTypes.func };
+// Dashboard.propTypes = { window: PropTypes.func };
 
 export default Dashboard;

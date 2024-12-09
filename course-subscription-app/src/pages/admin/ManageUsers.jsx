@@ -24,7 +24,7 @@ const ManageUsers = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [page, setPage] = useState(1);
-  const [rowsPerPage, setRowsPerPage] = useState(6);
+  const [rowsPerPage] = useState(6);
 
   const isMobile = useMediaQuery((theme) => theme.breakpoints.down("sm"));
 
@@ -40,7 +40,7 @@ const ManageUsers = () => {
         setUsers(response.data);
         setLoading(false);
       } catch (err) {
-        setError("Error fetching users");
+        setError("Error fetching users", err);
         setLoading(false);
       }
     };

@@ -22,7 +22,7 @@ import AuthContext from "./store/AuthContext";
 
 function App() {
   const { updateSubscribedCourses } = useCart();
-  const { user, isAdmin, learnerId } = useContext(AuthContext);
+  const { isAdmin, learnerId } = useContext(AuthContext);
   const [searchQuery, setSearchQuery] = useState("");
 
   const handleSearch = (query) => {
