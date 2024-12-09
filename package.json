@@ -15,7 +15,8 @@
   },
   "dependencies": {
     "coursehub": "file:",
-    "rollup": "^4.28.1"
+    "rollup": "^4.28.1",
+    "vite": "^6.0.3"
   },
   "devDependencies": {
     "concurrently": "^9.1.0"
