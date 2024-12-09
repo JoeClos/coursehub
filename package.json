@@ -14,7 +14,8 @@
     "start:backend": "npm --workspace backend run dev"
   },
   "dependencies": {
-    "coursehub": "file:"
+    "coursehub": "file:",
+    "rollup": "^4.28.1"
   },
   "devDependencies": {
     "concurrently": "^9.1.0"
