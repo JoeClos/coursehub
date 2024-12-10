@@ -2,6 +2,26 @@
 
 **CourseHub** is a dynamic application designed for seamless course subscription management. It enables learners to browse available courses, subscribe/unsubscribe with a single click, and manage personalized course lists. Initially built with the ServiceNow platform, the app is now transitioning to a Node.js backend for enhanced functionality and scalability.
 
+---
+## Screenshots:
+
+### Desktop View:
+<div style="display: flex; gap: 10px;">
+  <img src="https://github.com/user-attachments/assets/e1795b6f-4c0b-4426-9869-57619bc795f6" alt="Landing Page" width="300">
+  <img src="https://github.com/user-attachments/assets/0963a029-9a92-457d-bc1e-dd690e81bcec" alt="Logged User" width="300">
+  <img src="https://github.com/user-attachments/assets/e8c0bc55-31bd-4e71-aa3e-d0b2fecd8ba1" alt="Analytics" width="300">
+</div>
+
+### Mobile View:
+<div style="display: flex; gap: 10px;">
+  <img src="https://github.com/user-attachments/assets/1ba243a9-b770-4f14-82f1-ee479da672b2" alt="Mobile Landing Page" width="150">
+  <img src="https://github.com/user-attachments/assets/38ddcb74-4c20-4b74-bb24-f05a86bdd47e" alt="Mobile Logged User" width="150">
+</div>
+
+
+
+---
+
 ## Table of Contents
 
 - [Features](#features)
@@ -19,6 +39,7 @@
 - **Personalized Course Management**: Subscribed courses are displayed in the user's cart, making it easy to track and manage their learning.
 - **Filtered Courses**: All users (logged-in or guest) can filter existing courses by type (online, offline, or hybrid).
 - **Search Courses** - All users (logged-in or guest) can search for courses using the search bar.
+- **Responsive Design**: The application is fully responsive, ensuring an optimal user experience across various devices, including desktops, tablets, and mobile phones.
 
 
 
