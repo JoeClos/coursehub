@@ -12,7 +12,7 @@
 
    
 <a name="features"></a>
-## Features
+### Features
 - **Browse Available Courses:**: Users can explore a catalog of courses, each containing essential details like title, description, type, and duration.
 - **User Authentication**: Role-based authentication, ensuring that admin can manage courses, and users can only view their own subscriptions.
 - **Subscribe/Unsubscribe:**: Logged-in users can easily subscribe to courses or remove them from their course cart with a single click.
@@ -23,7 +23,7 @@
 
 
 <a name="technologies"></a>
-## Technologies
+### Technologies
 CourseHub uses a modern tech stack to provide a responsive and efficient experience for both learners and admin:
 - Frontend:
   - React.js
@@ -43,15 +43,15 @@ CourseHub uses a modern tech stack to provide a responsive and efficient experie
 
 
 <a name="installation"></a>
-## Installation
+### Installation
 To get started with CourseHub, follow these steps to set up the development environment:
 
-### 1. Prerequisites
+#### 1. Prerequisites
 - Node.js (>= 18.0.0)
 - MongoDB (or a cloud service like MongoDB Atlas)
 - Docker and Docker Compose (optional, for containerization)
 
-### 2. Steps
+#### 2. Steps
 1. Clone the repository:
    
        # Clone repository
@@ -90,13 +90,13 @@ To get started with CourseHub, follow these steps to set up the development envi
     - Backend: http://localhost:5000.
 
 <a name="usage"></a>
-## Usage 
+### Usage 
 Once the application is running locally, you can perform the following actions:
  1. *Browse Courses*: The home page allows you to view a list of courses.
  2. *Subscribe/Unsubscribe*: Logged-in users can subscribe to or unsubscribe from courses using the "Subscribe" or "Unsubscribe" button.
  3. *View Subscribed Courses*: The cart page displays a personalized list of subscribed courses.
  4. *Register*: Users can register to subscribe to courses. Guests can still browse and search for courses without registration.
-    
-### Admin Features (WIP)
+
+#### Admin Features (WIP)
  - Admin can log in to manage courses (create, update, delete).
  - Admin can view and manage all users and their subscriptions.
