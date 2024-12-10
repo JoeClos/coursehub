@@ -101,3 +101,12 @@ Once the application is running locally, you can perform the following actions:
 #### Admin Features (WIP)
  - Admin can log in to manage courses (create, update, delete).
  - Admin can view and manage all users and their subscriptions.
+
+## Closing Notes
+CourseHub aims to redefine the course subscription experience by providing an intuitive platform for learners and administrators alike. Whether you're a learner exploring new opportunities or an admin managing the platform, CourseHub is built with your needs in mind.
+
+I am excited to continue evolving this application, integrating user feedback, and adding innovative features to make learning accessible to everyone.
+
+Thank you for checking out CourseHub! 🚀
+
+
