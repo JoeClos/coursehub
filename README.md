@@ -58,13 +58,14 @@ To get started with CourseHub, follow these steps to set up the development envi
          git clone https://github.com/JoeClos/coursehub.git 
       
 2. Install Dependencies:
+   
        # cd coursehub
       
        # Install all dependencies simultaneously for the front-end, back-end, and root
          npm install
 
    
-3. Set up environment variables:
+4. Set up environment variables:
    - Backend (backend/.env):
 
          MONGO_URI=mongodb://localhost:27017/coursehub
@@ -75,7 +76,7 @@ To get started with CourseHub, follow these steps to set up the development envi
      
          VITE_API_BASE_URL=http://localhost:5000
      
-4. (Optional) Use Docker:
+5. (Optional) Use Docker:
    If you want to use Docker, run the following command:
    
        docker-compose --env-file ./backend/.env up --build
