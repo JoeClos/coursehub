@@ -68,7 +68,7 @@ To get started with CourseHub, follow these steps to set up the development envi
 4. Set up environment variables:
    - Backend (backend/.env):
 
-         MONGO_URI=mongodb://localhost:27017/coursehub
+         MONGO_URI=mongodb+srv://<username>:<password>@<cluster-url>/<database-name>?retryWrites=true&w=majority
          JWT_SECRET=your_jwt_secret_key
          PORT=5000
 
