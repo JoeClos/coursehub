@@ -1,0 +1,30 @@
+services:
+  frontend:
+    build:
+      context: ./course-subscription-app
+    ports:
+      - "3000:80" # Maps Nginx's port 80 to host's port 3000
+    depends_on:
+      - backend
+
+  backend:
+    build:
+      context: ./backend
+    ports:
+      - "5000:5000"
+    # env_file:
+    #   - ./backend/.env
+    environment:
+      - MONGO_URI=${MONGO_URI}
+    depends_on:
+      - mongo
+
+  mongo:
+    image: mongo:6.0
+    ports:
+      - "27017:27017" 
+    volumes:
+      - mongo-data:/data/db
+
+volumes:
+  mongo-data:
