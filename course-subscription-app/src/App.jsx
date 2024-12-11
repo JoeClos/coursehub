@@ -51,7 +51,7 @@ function App() {
 
   return (
     <div className="main">
-      <Router>
+      <Router future={{ v7_relativeSplatPath: true, v7_startTransition: true }}>
         <Navbar onSearch={handleSearch} />
         <div className="content">
           <Routes>

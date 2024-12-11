@@ -40,7 +40,7 @@ const CourseList = () => {
     };
 
     getSubscriptions();
-  }, [learnerId]);
+  }, [learnerId, clearSubscribedCourses, updateSubscribedCourses]);
 
   useEffect(() => {
     const getCourses = async () => {

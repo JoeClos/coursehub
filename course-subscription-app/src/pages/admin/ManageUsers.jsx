@@ -158,6 +158,7 @@ const ManageUsers = () => {
             count={totalPages}
             page={page}
             onChange={handleChangePage}
+            sx={{ backgroundColor: "#757AD5" }}
           />
         </Box>
       )}
