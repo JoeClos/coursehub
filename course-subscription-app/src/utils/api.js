@@ -33,6 +33,20 @@ export const deleteCourse = async (courseId) => {
   }
 };
 
+// Update a course by id
+export const updateCourse = async (courseId, updatedCourseData) => {
+  const endpoint = buildUrl(baseUrl, `/api/courses/${courseId}`);
+  try {
+    const response = await axios.put(endpoint, updatedCourseData);
+    return response.data;
+  } catch (error) {
+    console.error("Error updating new course:", error);
+    throw error;
+  }
+
+}
+
+
 // Fetch all courses
 export const fetchCourses = async () => {
   const endpoint = buildUrl(baseUrl, "/api/courses");
@@ -47,7 +61,7 @@ export const fetchCourses = async () => {
 };
 
 // Fetch course by Id
-export const fetchCourseById = async (courseId) => {
+export const fetchCourse = async (courseId) => {
   const endpoint = buildUrl(baseUrl, `/api/courses/${courseId}`);
 
   try {
@@ -56,12 +70,14 @@ export const fetchCourseById = async (courseId) => {
       throw new Error("Failed to fetch course data");
     }
     const data = await response.json();
+    console.log("🚀 ~ fetchCourse ~ data:", data)
     return data;
   } catch (error) {
     console.error("Error fetching course:", error);
     throw error;
   }
 };
+
 
 // Subscribe to a course
 export const subscribeToCourse = async (learnerId, courseId) => {

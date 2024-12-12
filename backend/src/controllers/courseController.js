@@ -84,9 +84,32 @@ const deleteCourse = async (req, res) => {
   }
 };
 
+// Update course 
+const updateCourse = async (req, res) => {
+  try {
+    const { id } = req.params; 
+    const courseData = req.body;
+
+    // Check if the course exists
+    const course = await Course.findById(id);
+    if (!course) {
+      return res.status(404).json({ message: "Course not found" });
+    }
+
+    // Update the course
+    const updatedCourse = await Course.findByIdAndUpdate(id, courseData, {new: true});
+
+    res.status(200).json({ message: "Course updated successfully", course: updatedCourse });
+  } catch (error) {
+    console.error("Error updating course:", error);
+    res.status(500).json({ message: "Failed to update course" });
+  }
+};
+
 module.exports = {
   getAllCourses,
   getCourseById,
   createCourse,
   deleteCourse,
+  updateCourse
 };

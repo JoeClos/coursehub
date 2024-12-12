@@ -55,24 +55,10 @@ const ManageCourses = () => {
     }
   };
 
-  //   try {
-  //     const response = await deleteCourseById(courseId); // Call the delete function from context
-  //     console.log("Course deleted successfully:", response);
-  //     setMessage({ type: "success", text: "Course deleted successfully!" });
-  //     setOpenSnackbar(true);
-  //   } catch (error) {
-  //     setError("Failed to delete course. Please try again.");
-  //     setMessage({
-  //       type: "error",
-  //       text: "Failed to delete course. Please try again.",
-  //       error,
-  //     });
-  //     setOpenSnackbar(true);
-  //   }
-  // };
+  // Update course by Id
   // const handleUpdate = async (updatedCourse) => {
   //   try {
-  //     await updateCourse(updatedCourse);
+  //     await updateCourseById(updatedCourse);
   //     setCourses((prevCourses) =>
   //       prevCourses.map((course) =>
   //         course._id === updatedCourse._id ? updatedCourse : course
@@ -85,10 +71,38 @@ const ManageCourses = () => {
   //     setMessage({
   //       type: "error",
   //       text: "Failed to update course. Please try again.",
+  //       err,
   //     });
   //     setOpenSnackbar(true);
   //   }
   // };
+
+  // const handleUpdate = async (updatedCourse) => {
+  //   try {
+  //     await updateCourseById(updatedCourse._id, updatedCourse);  // Send updated course object
+  
+  //     // Update the courses state on the frontend
+  //     setCourses((prevCourses) =>
+  //       prevCourses.map((course) =>
+  //         course._id === updatedCourse._id ? updatedCourse : course
+  //       )
+  //     );
+  
+  //     // Set success message for Snackbar
+  //     setMessage({ type: "success", text: "Course updated successfully!" });
+  //     setOpenSnackbar(true);
+  //   } catch (err) {
+  //     // Set error message for Snackbar
+  //     setError("Failed to update course. Please try again.");
+  //     setMessage({
+  //       type: "error",
+  //       text: "Failed to update course. Please try again.",
+  //       err,
+  //     });
+  //     setOpenSnackbar(true);
+  //   }
+  // };
+  
 
   const formatDuration = (duration) => {
     if (!duration) return "No duration available";
@@ -188,34 +202,10 @@ const ManageCourses = () => {
                     </IconButton>
                   </TableCell>
 
-                  <TableCell>
-                    {formatDuration(course.duration)}
-                    {/* {course.duration
-                      ? `${
-                          course.duration.days
-                            ? `${course.duration.days} days`
-                            : ""
-                        }${
-                          course.duration.days &&
-                          (course.duration.hours || course.duration.minutes)
-                            ? ", "
-                            : ""
-                        }${
-                          course.duration.hours
-                            ? `${course.duration.hours} hours`
-                            : ""
-                        }${
-                          course.duration.hours && course.duration.minutes
-                            ? ", "
-                            : ""
-                        }${
-                          course.duration.minutes
-                            ? `${course.duration.minutes} minutes`
-                            : ""
-                        }`
-                      : "No duration available"} */}
-                  </TableCell>
-                  <TableCell>
+                  <TableCell>{formatDuration(course.duration)}</TableCell>
+                  <TableCell
+                    sx={{ display: "flex", justifyContent: "space-around" }}
+                  >
                     <Button
                       size="small"
                       variant="contained"
@@ -237,6 +227,10 @@ const ManageCourses = () => {
                         marginLeft: 2,
                       }}
                       startIcon={<UpdateIcon />}
+                      component={Link}
+                      to={`/dashboard/courses/update/${course._id}`}
+                      // onClick={() => handleUpdate(course._id)}
+                      // onClick={() => setSelectedCourse(course)} 
                     >
                       Update
                     </Button>

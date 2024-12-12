@@ -9,7 +9,7 @@ import {
   CardActions,
   Button,
 } from "@mui/material";
-import { fetchSubscribedCourses, fetchCourseById } from "../utils/api";
+import { fetchSubscribedCourses, fetchCourse } from "../utils/api";
 import { useCart } from "../store/CartContext";
 import CourseModalDescription from "../components/CourseModalDescription";
 
@@ -101,7 +101,7 @@ const MyCourses = () => {
 
   const handleOpen = async (courseId) => {
     try {
-      const courseData = await fetchCourseById(courseId._id);
+      const courseData = await fetchCourse(courseId._id);
       console.log("🚀 ~ handleOpen ~ courseData:", courseData);
       setSelectedCourse(courseData);
       setOpen(true); // Open the modal
