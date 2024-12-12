@@ -19,6 +19,7 @@ import Register from "./pages/Register";
 import { useCart } from "./store/CartContext";
 import { fetchSubscribedCourses, unsubscribeFromCourse } from "./utils/api";
 import AuthContext from "./store/AuthContext";
+import AddCourse from "./pages/admin/AddCourse";
 
 function App() {
   const { updateSubscribedCourses } = useCart();
@@ -50,7 +51,7 @@ function App() {
   }, [learnerId, updateSubscribedCourses]);
 
   return (
-    <div className="main">
+    <div className="main" id="root">
       <Router future={{ v7_relativeSplatPath: true, v7_startTransition: true }}>
         <Navbar onSearch={handleSearch} />
         <div className="content">
@@ -68,6 +69,7 @@ function App() {
               <Route path="users" element={<ManageUsers />} />
               <Route path="subscriptions" element={<ManageSubscriptions />} />
               <Route path="courses" element={<ManageCourses />} />
+              <Route path="courses/add" element={<AddCourse />} />
               <Route path="analytics" element={<Analytics />} />
             </Route>
             <Route path="/" element={getHomePageElement()} />

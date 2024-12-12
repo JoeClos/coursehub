@@ -1,5 +1,5 @@
 import { useState, useEffect, Fragment } from "react";
-import { fetchCourses } from "../../utils/api";
+import { Link } from "react-router-dom";
 import {
   Typography,
   Box,
@@ -13,52 +13,130 @@ import {
   IconButton,
   Collapse,
   Button,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import UpdateIcon from "@mui/icons-material/Update";
 import DeleteIcon from "@mui/icons-material/Delete";
-import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import { green } from "@mui/material/colors";
+import { useCourses } from "../../store/CourseContext";
 
 const ManageCourses = () => {
-  const [courses, setCourses] = useState([]);
-  const [error, setError] = useState(null);
+  const { courses, getCourses, deleteCourseById } = useCourses();
+  // const [error, setError] = useState(null);
   const [openRow, setOpenRow] = useState(null);
+  const [message, setMessage] = useState({ type: "", text: "" });
+  const [openSnackbar, setOpenSnackbar] = useState(false);
 
   useEffect(() => {
-    const getCourses = async () => {
-      try {
-        const response = await fetchCourses();
-        setCourses(response);
-        // console.log("🚀 ~ getCourses ~ response:", response);
-      } catch (error) {
-        setError("Error fetching users", error);
-      }
-    };
     getCourses();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  if (error) {
-    return (
-      <Box
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
-        minHeight="100vh"
-      >
-        <Typography variant="h6" color="error">
-          {error}
-        </Typography>
-      </Box>
+  // Delete course by id
+  const handleDeleteCourse = async (courseId) => {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this course?"
     );
-  }
+    if (!confirmDelete) return;
+    try {
+      await deleteCourseById(courseId);
+      setMessage({ type: "success", text: "Course deleted successfully!" });
+    } catch (error) {
+      setMessage(
+        { type: "error", text: "Failed to delete course. Please try again." },
+        error
+      );
+    } finally {
+      setOpenSnackbar(true);
+    }
+  };
+
+  //   try {
+  //     const response = await deleteCourseById(courseId); // Call the delete function from context
+  //     console.log("Course deleted successfully:", response);
+  //     setMessage({ type: "success", text: "Course deleted successfully!" });
+  //     setOpenSnackbar(true);
+  //   } catch (error) {
+  //     setError("Failed to delete course. Please try again.");
+  //     setMessage({
+  //       type: "error",
+  //       text: "Failed to delete course. Please try again.",
+  //       error,
+  //     });
+  //     setOpenSnackbar(true);
+  //   }
+  // };
+  // const handleUpdate = async (updatedCourse) => {
+  //   try {
+  //     await updateCourse(updatedCourse);
+  //     setCourses((prevCourses) =>
+  //       prevCourses.map((course) =>
+  //         course._id === updatedCourse._id ? updatedCourse : course
+  //       )
+  //     );
+  //     setMessage({ type: "success", text: "Course updated successfully!" });
+  //     setOpenSnackbar(true);
+  //   } catch (err) {
+  //     setError("Failed to update course. Please try again.");
+  //     setMessage({
+  //       type: "error",
+  //       text: "Failed to update course. Please try again.",
+  //     });
+  //     setOpenSnackbar(true);
+  //   }
+  // };
+
+  const formatDuration = (duration) => {
+    if (!duration) return "No duration available";
+    const { days, hours, minutes } = duration;
+    return `${days ? `${days} days` : ""}${
+      days && (hours || minutes) ? ", " : ""
+    }${hours ? `${hours} hours` : ""}${hours && minutes ? ", " : ""}${
+      minutes ? `${minutes} minutes` : ""
+    }`;
+  };
+
+  // if (error) {
+  //   return (
+  //     <Box
+  //       display="flex"
+  //       justifyContent="center"
+  //       alignItems="center"
+  //       minHeight="100vh"
+  //     >
+  //       <Typography variant="h6" color="error">
+  //         {error}
+  //       </Typography>
+  //     </Box>
+  //   );
+  // }
 
   return (
     <Box>
-      <Typography variant="h4" gutterBottom mt={8}>
-        Total Courses: {courses.length}
-      </Typography>
+      <Box sx={{ display: "flex", alignItems: "baseline" }}>
+        <Typography variant="h4" gutterBottom mt={8}>
+          Total Courses: {courses.length}
+        </Typography>
+        <Button
+          variant="contained"
+          sx={{
+            bgcolor: green[500],
+            borderColor: "#757AD5",
+            marginLeft: 2,
+          }}
+          startIcon={<AddCircleOutlineIcon />}
+          // onClick={() => setIsAdding(true)}
+          component={Link}
+          to="add"
+        >
+          Add Course
+        </Button>
+      </Box>
+
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label="collapsible table">
           <TableHead sx={{ backgroundColor: "#201F40" }}>
@@ -111,7 +189,8 @@ const ManageCourses = () => {
                   </TableCell>
 
                   <TableCell>
-                    {course.duration
+                    {formatDuration(course.duration)}
+                    {/* {course.duration
                       ? `${
                           course.duration.days
                             ? `${course.duration.days} days`
@@ -119,7 +198,7 @@ const ManageCourses = () => {
                         }${
                           course.duration.days &&
                           (course.duration.hours || course.duration.minutes)
-                            ? " and "
+                            ? ", "
                             : ""
                         }${
                           course.duration.hours
@@ -127,14 +206,14 @@ const ManageCourses = () => {
                             : ""
                         }${
                           course.duration.hours && course.duration.minutes
-                            ? " and "
+                            ? ", "
                             : ""
                         }${
                           course.duration.minutes
                             ? `${course.duration.minutes} minutes`
                             : ""
                         }`
-                      : "No duration available"}
+                      : "No duration available"} */}
                   </TableCell>
                   <TableCell>
                     <Button
@@ -145,6 +224,7 @@ const ManageCourses = () => {
                         borderColor: "#AB221D",
                       }}
                       startIcon={<DeleteIcon />}
+                      onClick={() => handleDeleteCourse(course._id)}
                     >
                       Delete
                     </Button>
@@ -159,18 +239,6 @@ const ManageCourses = () => {
                       startIcon={<UpdateIcon />}
                     >
                       Update
-                    </Button>
-                    <Button
-                      size="small"
-                      variant="contained"
-                      sx={{
-                        bgcolor: green[500],
-                        borderColor: "#757AD5",
-                        marginLeft: 2,
-                      }}
-                      startIcon={<AddCircleOutlineIcon />}
-                    >
-                      Add
                     </Button>
                   </TableCell>
                 </TableRow>
@@ -202,6 +270,23 @@ const ManageCourses = () => {
           </TableBody>
         </Table>
       </TableContainer>
+
+      {message.type && (
+        <Snackbar
+          anchorOrigin={{ vertical: "top", horizontal: "center" }}
+          open={openSnackbar}
+          autoHideDuration={4000}
+          onClose={() => setOpenSnackbar(false)}
+        >
+          <Alert
+            onClose={() => setOpenSnackbar(false)}
+            severity={message.type}
+            sx={{ width: "100%" }}
+          >
+            {message.text}
+          </Alert>
+        </Snackbar>
+      )}
     </Box>
   );
 };

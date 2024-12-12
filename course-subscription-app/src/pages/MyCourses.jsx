@@ -20,7 +20,6 @@ const MyCourses = () => {
   const [selectedCourse, setSelectedCourse] = useState(null);
   console.log("🚀 ~ MyCourses ~ selectedCourse:", selectedCourse);
   const [open, setOpen] = useState(false);
-
   useEffect(() => {
     const getSubscriptions = async () => {
       if (!learnerId) {
@@ -30,22 +29,25 @@ const MyCourses = () => {
 
       try {
         const subscriptionData = await fetchSubscribedCourses(learnerId);
-        console.log(
-          "🚀 ~ getSubscriptions ~ subscriptionData:",
-          subscriptionData
-        );
+        console.log("🚀 ~ getSubscriptions ~ subscriptionData:", subscriptionData);
 
         if (subscriptionData.length === 0) {
           console.log("No subscriptions found.");
         } else {
-          const subscriptions = subscriptionData.map((sub) => ({
-            _id: sub._id,
-            courseId: {
-              _id: sub.courseId._id,
-              title: sub.courseId.title,
-              description: sub.courseId.description,
-            },
-          }));
+          const subscriptions = subscriptionData.map((sub) => {
+            // Ensure courseId exists before extracting properties
+            if (sub.courseId) {
+              return {
+                _id: sub._id,
+                courseId: {
+                  _id: sub.courseId._id,
+                  title: sub.courseId.title,
+                  description: sub.courseId.description,
+                },
+              };
+            }
+            return null; // Handle null courseId
+          }).filter(sub => sub !== null); // Filter out null values
 
           updateSubscribedCourses(subscriptions);
         }
@@ -56,6 +58,42 @@ const MyCourses = () => {
 
     getSubscriptions();
   }, [learnerId, updateSubscribedCourses]);
+
+  // useEffect(() => {
+  //   const getSubscriptions = async () => {
+  //     if (!learnerId) {
+  //       console.warn("Learner ID is not available.");
+  //       return;
+  //     }
+
+  //     try {
+  //       const subscriptionData = await fetchSubscribedCourses(learnerId);
+  //       console.log(
+  //         "🚀 ~ getSubscriptions ~ subscriptionData:",
+  //         subscriptionData
+  //       );
+
+  //       if (subscriptionData.length === 0) {
+  //         console.log("No subscriptions found.");
+  //       } else {
+  //         const subscriptions = subscriptionData.map((sub) => ({
+  //           _id: sub._id,
+  //           courseId: {
+  //             _id: sub.courseId._id,
+  //             title: sub.courseId.title,
+  //             description: sub.courseId.description,
+  //           },
+  //         }));
+
+  //         updateSubscribedCourses(subscriptions);
+  //       }
+  //     } catch (error) {
+  //       console.error("Error fetching subscribed courses:", error);
+  //     }
+  //   };
+
+  //   getSubscriptions();
+  // }, [learnerId, updateSubscribedCourses]);
 
   const handleUnsubscribe = async (subscriptionId) => {
     await unsubscribeFromCourse(subscriptionId);
@@ -103,6 +141,7 @@ const MyCourses = () => {
         ) : (
           <Grid container spacing={4}>
             {subscribedCourses.map((sub) => (
+               sub.courseId ? (
               <Grid item xs={12} sm={6} md={4} key={sub._id}>
                 <Card sx={{ borderRadius: "10px" }}>
                   <CardContent>
@@ -149,6 +188,7 @@ const MyCourses = () => {
                   </CardActions>
                 </Card>
               </Grid>
+               ): null
             ))}
           </Grid>
         )}

@@ -5,7 +5,7 @@ import {
   unsubscribeFromCourse as apiUnsubscribeFromCourse,
 } from "../utils/api";
 
-const CartContext = createContext();
+export const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
   const [subscribedCourses, setSubscribedCourses] = useState([]);

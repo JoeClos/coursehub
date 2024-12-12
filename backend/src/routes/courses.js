@@ -4,6 +4,7 @@ const {
   getAllCourses,
   getCourseById,
   createCourse,
+  deleteCourse,
 } = require("../controllers/courseController");
 
 // Route to get all courses
@@ -14,5 +15,8 @@ router.get("/courses/:id", getCourseById);
 
 // Route to create a new course
 router.post("/courses", createCourse);
+
+// Delete a course by Id
+router.delete("/courses/:id", deleteCourse);
 
 module.exports = router;
