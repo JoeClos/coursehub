@@ -3,6 +3,9 @@ import { Link } from "react-router-dom";
 import {
   Typography,
   Box,
+  Card,
+  CardContent,
+  Divider,
   TableContainer,
   Table,
   TableHead,
@@ -15,6 +18,7 @@ import {
   Button,
   Snackbar,
   Alert,
+  useMediaQuery,
 } from "@mui/material";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
@@ -35,6 +39,7 @@ const ManageCourses = () => {
   const [rowsPerPage] = useState(6);
   const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
   const [selectedCourseId, setSelectedCourseId] = useState(null); // Holds the ID of the course to delete
+  const isMobile = useMediaQuery((theme) => theme.breakpoints.down("sm"));
 
   const totalPages = Math.ceil(courses.length / rowsPerPage);
   const showPagination = courses.length > 0 && totalPages > 1;
@@ -111,8 +116,18 @@ const ManageCourses = () => {
 
   return (
     <Box>
-      <Box sx={{ display: "flex", alignItems: "baseline" }}>
-        <Typography variant="h4" gutterBottom mt={8}>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: { xs: "column", sm: "row" },
+          alignItems: { sx: "center", md: "baseline" },
+          justifyContent: "space-between",
+          width: "100%",
+          mt: 6,
+          padding: "0 16px"
+        }}
+      >
+        <Typography variant="h4" gutterBottom>
           Total Courses: {courses.length}
         </Typography>
         <Button
@@ -120,7 +135,8 @@ const ManageCourses = () => {
           sx={{
             bgcolor: green[500],
             borderColor: "#757AD5",
-            marginLeft: 2,
+            marginLeft: { sm: 2 },
+            width: { xs: "100%", sm: "auto" },
           }}
           startIcon={<AddCircleOutlineIcon />}
           component={Link}
@@ -130,115 +146,182 @@ const ManageCourses = () => {
         </Button>
       </Box>
 
-      <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="collapsible table">
-          <TableHead sx={{ backgroundColor: "#201F40" }}>
-            <TableRow hover>
-              <TableCell sx={{ fontSize: "16px", color: "#FFFFFF" }}>
-                #
-              </TableCell>
-              <TableCell sx={{ fontSize: "16px", color: "#FFFFFF" }}>
-                Title
-              </TableCell>
-              <TableCell sx={{ fontSize: "16px", color: "#FFFFFF" }}>
-                Type
-              </TableCell>
-              <TableCell sx={{ fontSize: "16px", color: "#FFFFFF" }}>
-                Description
-              </TableCell>
-              <TableCell sx={{ fontSize: "16px", color: "#FFFFFF" }}>
-                Duration (DD:HH:MM)
-              </TableCell>
-              <TableCell />
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {paginatedCourses.map((course, index) => (
-              <Fragment key={course._id}>
-                <TableRow
+      {isMobile ? (
+        // Mobile View - Cards
+        <Box display="flex" flexDirection="column" gap={2} p={2}>
+          {courses.map((c) => (
+            <Card key={c._id} variant="outlined">
+              <CardContent>
+                <Typography variant="h6">{c.title}</Typography>
+                <Divider />
+                <Typography
+                  variant="body2"
+                  color="textSecondary"
+                  sx={{ mt: "15px" }}
+                >
+                  {c.description}
+                </Typography>
+                <Box
                   sx={{
-                    borderBottom: "hidden",
-                    backgroundColor:
-                      openRow === course._id ? "#f5f5f5" : "transparent",
+                    display: "flex",
+                    justifyContent: "space-around",
+                    gap: 3,
+                    mt: 2,
                   }}
                 >
-                  <TableCell>{(page - 1) * rowsPerPage + index + 1}</TableCell>
-                  <TableCell>{course.title}</TableCell>
-                  <TableCell>{course.courseType}</TableCell>
-                  <TableCell>
-                    <IconButton
-                      aria-label="expand row"
-                      size="small"
-                      onClick={() =>
-                        setOpenRow(openRow === course._id ? null : course._id)
-                      }
-                    >
-                      {openRow === course._id ? (
-                        <KeyboardArrowUpIcon />
-                      ) : (
-                        <KeyboardArrowDownIcon />
-                      )}
-                    </IconButton>
-                  </TableCell>
-                  <TableCell>{formatDuration(course.duration)}</TableCell>
-                  <TableCell
-                    sx={{ display: "flex", justifyContent: "space-around" }}
-                  >
-                    <Button
-                      size="small"
-                      variant="contained"
-                      color="error"
-                      startIcon={<DeleteIcon />}
-                      onClick={() => handleOpenConfirmDialog(course._id)}
-                    >
-                      Delete
-                    </Button>
-                    <Button
-                      size="small"
-                      variant="contained"
-                      sx={{
-                        backgroundColor: "#757AD5",
-                        borderColor: "#757AD5",
-                        marginLeft: 2,
-                      }}
-                      startIcon={<UpdateIcon />}
-                      component={Link}
-                      to={`/dashboard/courses/update/${course._id}`}
-                    >
-                      Update
-                    </Button>
-                  </TableCell>
-                </TableRow>
-                <TableRow
-                  sx={{ borderTop: "hidden", backgroundColor: "#f5f5f5" }}
+                  <Typography variant="body2" color="textSecondary">
+                    {c.courseType}
+                  </Typography>
+                  <Typography variant="body2" color="textSecondary">
+                    {formatDuration(c.duration)}
+                  </Typography>
+                </Box>
+                <Box
+                  mt={2}
+                  sx={{ display: "flex", justifyContent: "space-between" }}
                 >
-                  <TableCell
-                    style={{ paddingBottom: 0, paddingTop: 0 }}
-                    colSpan={6}
+                  <Button
+                    size="small"
+                    variant="contained"
+                    color="error"
+                    startIcon={<DeleteIcon />}
+                    onClick={() => handleOpenConfirmDialog(c._id)}
                   >
-                    <Collapse
-                      in={openRow === course._id}
-                      timeout="auto"
-                      unmountOnExit
+                    Delete
+                  </Button>
+                  <Button
+                    size="small"
+                    variant="contained"
+                    sx={{
+                      backgroundColor: "#757AD5",
+                      borderColor: "#757AD5",
+                      marginLeft: 2,
+                    }}
+                    startIcon={<UpdateIcon />}
+                    component={Link}
+                    to={`/dashboard/courses/update/${c._id}`}
+                  >
+                    Update
+                  </Button>
+                </Box>
+              </CardContent>
+            </Card>
+          ))}
+        </Box>
+      ) : (
+        // Desktop View - Table
+        <TableContainer component={Paper}>
+          <Table sx={{ minWidth: 650 }} aria-label="collapsible table">
+            <TableHead sx={{ backgroundColor: "#201F40" }}>
+              <TableRow hover>
+                <TableCell sx={{ fontSize: "16px", color: "#FFFFFF" }}>
+                  #
+                </TableCell>
+                <TableCell sx={{ fontSize: "16px", color: "#FFFFFF" }}>
+                  Title
+                </TableCell>
+                <TableCell sx={{ fontSize: "16px", color: "#FFFFFF" }}>
+                  Type
+                </TableCell>
+                <TableCell sx={{ fontSize: "16px", color: "#FFFFFF" }}>
+                  Description
+                </TableCell>
+                <TableCell sx={{ fontSize: "16px", color: "#FFFFFF" }}>
+                  Duration (DD:HH:MM)
+                </TableCell>
+                <TableCell />
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {paginatedCourses.map((course, index) => (
+                <Fragment key={course._id}>
+                  <TableRow
+                    sx={{
+                      borderBottom: "hidden",
+                      backgroundColor:
+                        openRow === course._id ? "#f5f5f5" : "transparent",
+                    }}
+                  >
+                    <TableCell>
+                      {(page - 1) * rowsPerPage + index + 1}
+                    </TableCell>
+                    <TableCell>{course.title}</TableCell>
+                    <TableCell>{course.courseType}</TableCell>
+                    <TableCell>
+                      <IconButton
+                        aria-label="expand row"
+                        size="small"
+                        onClick={() =>
+                          setOpenRow(openRow === course._id ? null : course._id)
+                        }
+                      >
+                        {openRow === course._id ? (
+                          <KeyboardArrowUpIcon />
+                        ) : (
+                          <KeyboardArrowDownIcon />
+                        )}
+                      </IconButton>
+                    </TableCell>
+                    <TableCell>{formatDuration(course.duration)}</TableCell>
+                    <TableCell
+                      sx={{ display: "flex", justifyContent: "space-around" }}
                     >
-                      <Box sx={{ margin: 1 }}>
-                        <Typography
-                          sx={{ fontWeight: "bold", marginBottom: 1 }}
-                        >
-                          Description
-                        </Typography>
-                        <Typography>{course.description}</Typography>
-                      </Box>
-                    </Collapse>
-                  </TableCell>
-                </TableRow>
-              </Fragment>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+                      <Button
+                        size="small"
+                        variant="contained"
+                        color="error"
+                        startIcon={<DeleteIcon />}
+                        onClick={() => handleOpenConfirmDialog(course._id)}
+                      >
+                        Delete
+                      </Button>
+                      <Button
+                        size="small"
+                        variant="contained"
+                        sx={{
+                          backgroundColor: "#757AD5",
+                          borderColor: "#757AD5",
+                          marginLeft: 2,
+                        }}
+                        startIcon={<UpdateIcon />}
+                        component={Link}
+                        to={`/dashboard/courses/update/${course._id}`}
+                      >
+                        Update
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                  <TableRow
+                    sx={{ borderTop: "hidden", backgroundColor: "#f5f5f5" }}
+                  >
+                    <TableCell
+                      style={{ paddingBottom: 0, paddingTop: 0 }}
+                      colSpan={6}
+                    >
+                      <Collapse
+                        in={openRow === course._id}
+                        timeout="auto"
+                        unmountOnExit
+                      >
+                        <Box sx={{ margin: 1 }}>
+                          <Typography
+                            sx={{ fontWeight: "bold", marginBottom: 1 }}
+                          >
+                            Description
+                          </Typography>
+                          <Typography>{course.description}</Typography>
+                        </Box>
+                      </Collapse>
+                    </TableCell>
+                  </TableRow>
+                </Fragment>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      )}
 
-      {message.type && (
+      {message.type && !isMobile && (
         <Snackbar
           anchorOrigin={{ vertical: "top", horizontal: "center" }}
           open={openSnackbar}
