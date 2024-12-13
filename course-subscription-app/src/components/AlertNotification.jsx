@@ -21,6 +21,7 @@ const AlertNotification = ({
   cancelColor = "",
   confirmStyle = {},
   cancelStyle = {},
+  icon = <CheckIcon />,
 }) => {
   return (
     <Dialog open={open} onClose={onClose}>
@@ -43,7 +44,7 @@ const AlertNotification = ({
             onClick={onConfirm}
             color={confirmColor}
             variant="contained"
-            startIcon={<CheckIcon />}
+            startIcon={icon}
             style={confirmStyle}
           >
             {confirmText}
@@ -66,6 +67,7 @@ AlertNotification.propTypes = {
   cancelColor: PropTypes.string,
   confirmStyle: PropTypes.object,
   cancelStyle: PropTypes.object,
+  icon: PropTypes.node
 };
 
 export default AlertNotification;

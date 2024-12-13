@@ -23,13 +23,30 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import { green } from "@mui/material/colors";
 import { useCourses } from "../../store/CourseContext";
+import Pagination from "../../components/Pagination";
+import AlertNotification from "../../components/AlertNotification";
 
 const ManageCourses = () => {
-  const { courses, getCourses, deleteCourseById } = useCourses();
-  // const [error, setError] = useState(null);
+  const { courses, getCourses, deleteCourseById, setCourses } = useCourses();
   const [openRow, setOpenRow] = useState(null);
   const [message, setMessage] = useState({ type: "", text: "" });
   const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [page, setPage] = useState(1);
+  const [rowsPerPage] = useState(6);
+  const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
+  const [selectedCourseId, setSelectedCourseId] = useState(null); // Holds the ID of the course to delete
+
+  const totalPages = Math.ceil(courses.length / rowsPerPage);
+  const showPagination = courses.length > 0 && totalPages > 1;
+
+  const paginatedCourses = courses.slice(
+    (page - 1) * rowsPerPage,
+    page * rowsPerPage
+  );
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
 
   useEffect(() => {
     getCourses();
@@ -37,22 +54,49 @@ const ManageCourses = () => {
   }, []);
 
   // Delete course by id
-  const handleDeleteCourse = async (courseId) => {
-    const confirmDelete = window.confirm(
-      "Are you sure you want to delete this course?"
-    );
-    if (!confirmDelete) return;
+  const handleDeleteCourse = async () => {
+    if (!selectedCourseId) return;
+
     try {
-      await deleteCourseById(courseId);
+      await deleteCourseById(selectedCourseId);
+
+      const updatedCourses = courses.filter(
+        (course) => course._id !== selectedCourseId
+      );
+      setCourses(updatedCourses);
+
       setMessage({ type: "success", text: "Course deleted successfully!" });
+
+      const totalPagesAfterDeletion = Math.ceil(
+        updatedCourses.length / rowsPerPage
+      );
+      if (page > totalPagesAfterDeletion) {
+        setPage(totalPagesAfterDeletion);
+      } else if (totalPagesAfterDeletion === 0 && page !== 1) {
+        setPage(1);
+      }
     } catch (error) {
       setMessage(
-        { type: "error", text: "Failed to delete course. Please try again." },
+        {
+          type: "error",
+          text: "Failed to delete course. Please try again.",
+        },
         error
       );
     } finally {
       setOpenSnackbar(true);
+      setConfirmDialogOpen(false);
     }
+  };
+
+  const handleOpenConfirmDialog = (courseId) => {
+    setSelectedCourseId(courseId); // Set the course ID to delete
+    setConfirmDialogOpen(true); // Open the confirmation dialog
+  };
+
+  const handleCancel = () => {
+    setConfirmDialogOpen(false);
+    setSelectedCourseId(null); // Clear the selected course ID
   };
 
   const formatDuration = (duration) => {
@@ -64,21 +108,6 @@ const ManageCourses = () => {
       minutes ? `${minutes} minutes` : ""
     }`;
   };
-
-  // if (error) {
-  //   return (
-  //     <Box
-  //       display="flex"
-  //       justifyContent="center"
-  //       alignItems="center"
-  //       minHeight="100vh"
-  //     >
-  //       <Typography variant="h6" color="error">
-  //         {error}
-  //       </Typography>
-  //     </Box>
-  //   );
-  // }
 
   return (
     <Box>
@@ -94,7 +123,6 @@ const ManageCourses = () => {
             marginLeft: 2,
           }}
           startIcon={<AddCircleOutlineIcon />}
-          // onClick={() => setIsAdding(true)}
           component={Link}
           to="add"
         >
@@ -125,7 +153,7 @@ const ManageCourses = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {courses.map((course, index) => (
+            {paginatedCourses.map((course, index) => (
               <Fragment key={course._id}>
                 <TableRow
                   sx={{
@@ -134,7 +162,7 @@ const ManageCourses = () => {
                       openRow === course._id ? "#f5f5f5" : "transparent",
                   }}
                 >
-                  <TableCell>{index + 1}</TableCell>
+                  <TableCell>{(page - 1) * rowsPerPage + index + 1}</TableCell>
                   <TableCell>{course.title}</TableCell>
                   <TableCell>{course.courseType}</TableCell>
                   <TableCell>
@@ -152,7 +180,6 @@ const ManageCourses = () => {
                       )}
                     </IconButton>
                   </TableCell>
-
                   <TableCell>{formatDuration(course.duration)}</TableCell>
                   <TableCell
                     sx={{ display: "flex", justifyContent: "space-around" }}
@@ -160,12 +187,9 @@ const ManageCourses = () => {
                     <Button
                       size="small"
                       variant="contained"
-                      sx={{
-                        backgroundColor: "#AB221D",
-                        borderColor: "#AB221D",
-                      }}
+                      color="error"
                       startIcon={<DeleteIcon />}
-                      onClick={() => handleDeleteCourse(course._id)}
+                      onClick={() => handleOpenConfirmDialog(course._id)}
                     >
                       Delete
                     </Button>
@@ -180,8 +204,6 @@ const ManageCourses = () => {
                       startIcon={<UpdateIcon />}
                       component={Link}
                       to={`/dashboard/courses/update/${course._id}`}
-                      // onClick={() => handleUpdate(course._id)}
-                      // onClick={() => setSelectedCourse(course)}
                     >
                       Update
                     </Button>
@@ -232,6 +254,39 @@ const ManageCourses = () => {
           </Alert>
         </Snackbar>
       )}
+
+      {/* Pagination */}
+      {showPagination && (
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            padding: "10px",
+            marginTop: "10px",
+          }}
+        >
+          <Pagination
+            count={totalPages}
+            page={page}
+            onChange={handleChangePage}
+            sx={{ backgroundColor: "#757AD5" }}
+          />
+        </Box>
+      )}
+
+      {/* Confirmation Dialog */}
+      <AlertNotification
+        open={confirmDialogOpen}
+        onClose={handleCancel}
+        onConfirm={handleDeleteCourse}
+        title="Confirm Deletion"
+        content="Are you sure you want to delete this course?"
+        confirmText="Delete"
+        cancelText="Cancel"
+        confirmColor="error"
+        cancelStyle={{ backgroundColor: "#FEDB30", color: "#FFFFFF" }}
+        icon={<DeleteIcon />}
+      />
     </Box>
   );
 };

@@ -55,14 +55,14 @@ const UpdateCourse = () => {
     }
   }, [course]);
 
-    // Function to check if any form field has changed
-    const isFormChanged = () => {
-      if (!newInfo) return false;
-  
-      return Object.keys(newInfo).some(
-        (key) => newInfo[key] !== course[key] && newInfo[key] !== undefined
-      );
-    };
+  // Function to check if any form field has changed
+  const isFormChanged = () => {
+    if (!newInfo) return false;
+
+    return Object.keys(newInfo).some(
+      (key) => newInfo[key] !== course[key] && newInfo[key] !== undefined
+    );
+  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;

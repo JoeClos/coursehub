@@ -49,28 +49,62 @@ const AddCourse = () => {
     e.preventDefault();
     setLoading(true);
     setError(null);
-
+  
+    // Set default values for duration fields
+    const courseWithDefaultDuration = {
+      ...newCourse,
+      duration: {
+        days: newCourse.duration.days || 0,
+        hours: newCourse.duration.hours || 0,
+        minutes: newCourse.duration.minutes || 0,
+      },
+    };
+  
     try {
-      await addNewCourse(newCourse);
+      await addNewCourse(courseWithDefaultDuration);
       setSuccess(true);
-      setCourses(newCourse);
+      setCourses((prevCourses) => [...prevCourses, courseWithDefaultDuration]);
       setNewCourse({
         title: "",
         description: "",
-        courseType: "",
-        duration: {
-          days: "",
-          hours: "",
-          minutes: "",
-        },
+        courseType: "Online",
+        duration: { days: "", hours: "", minutes: "" },
       });
-      // navigate("/dashboard/courses");
     } catch (err) {
       setError("Failed to add course. Please try again.", err);
     } finally {
       setLoading(false);
     }
   };
+  
+
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   setLoading(true);
+  //   setError(null);
+    
+
+  //   try {
+  //     await addNewCourse(newCourse);
+  //     setSuccess(true);
+  //     setCourses(newCourse);
+  //     setNewCourse({
+  //       title: "",
+  //       description: "",
+  //       courseType: "",
+  //       duration: {
+  //         days: "",
+  //         hours: "",
+  //         minutes: "",
+  //       },
+  //     });
+  //     // navigate("/dashboard/courses");
+  //   } catch (err) {
+  //     setError("Failed to add course. Please try again.", err);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
   const handleCancel = () => {
     setNewCourse({
