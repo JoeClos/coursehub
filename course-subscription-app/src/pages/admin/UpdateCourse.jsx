@@ -9,6 +9,7 @@ import {
   Alert,
   Grid,
   CircularProgress,
+  MenuItem,
 } from "@mui/material";
 import { useCourses } from "../../store/CourseContext";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
@@ -140,10 +141,16 @@ const UpdateCourse = () => {
             fullWidth
             label="Course Type"
             name="courseType"
+            select
             value={newInfo.courseType}
             onChange={handleInputChange}
             variant="outlined"
-          />
+          >
+            {/* Define the select options */}
+            <MenuItem value="Online">Online</MenuItem>
+            <MenuItem value="Offline">Offline</MenuItem>
+            <MenuItem value="Hybrid">Hybrid</MenuItem>
+          </TextField>
         </Grid>
 
         <Grid item xs={12}>

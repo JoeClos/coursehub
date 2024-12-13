@@ -7,6 +7,7 @@ import {
   Button,
 } from "@mui/material";
 import CancelIcon from "@mui/icons-material/Cancel";
+import CheckIcon from '@mui/icons-material/Check';
 
 const AlertNotification = ({
   open,
@@ -16,8 +17,8 @@ const AlertNotification = ({
   content,
   confirmText,
   cancelText,
-  confirmColor = "primary",
-  cancelColor = "#FEDB30",
+  confirmColor = "",
+  cancelColor = "",
   confirmStyle = {},
   cancelStyle = {},
 }) => {
@@ -25,11 +26,12 @@ const AlertNotification = ({
     <Dialog open={open} onClose={onClose}>
       <DialogTitle>{title}</DialogTitle>
       <DialogContent>{content}</DialogContent>
-      <DialogActions>
+      <DialogActions sx={{ padding: 2}}>
         {cancelText && (
           <Button
             onClick={onClose}
             color={cancelColor}
+            variant="contained"
             startIcon={<CancelIcon />}
             style={cancelStyle}
           >
@@ -41,6 +43,7 @@ const AlertNotification = ({
             onClick={onConfirm}
             color={confirmColor}
             variant="contained"
+            startIcon={<CheckIcon />}
             style={confirmStyle}
           >
             {confirmText}
