@@ -55,55 +55,6 @@ const ManageCourses = () => {
     }
   };
 
-  // Update course by Id
-  // const handleUpdate = async (updatedCourse) => {
-  //   try {
-  //     await updateCourseById(updatedCourse);
-  //     setCourses((prevCourses) =>
-  //       prevCourses.map((course) =>
-  //         course._id === updatedCourse._id ? updatedCourse : course
-  //       )
-  //     );
-  //     setMessage({ type: "success", text: "Course updated successfully!" });
-  //     setOpenSnackbar(true);
-  //   } catch (err) {
-  //     setError("Failed to update course. Please try again.");
-  //     setMessage({
-  //       type: "error",
-  //       text: "Failed to update course. Please try again.",
-  //       err,
-  //     });
-  //     setOpenSnackbar(true);
-  //   }
-  // };
-
-  // const handleUpdate = async (updatedCourse) => {
-  //   try {
-  //     await updateCourseById(updatedCourse._id, updatedCourse);  // Send updated course object
-  
-  //     // Update the courses state on the frontend
-  //     setCourses((prevCourses) =>
-  //       prevCourses.map((course) =>
-  //         course._id === updatedCourse._id ? updatedCourse : course
-  //       )
-  //     );
-  
-  //     // Set success message for Snackbar
-  //     setMessage({ type: "success", text: "Course updated successfully!" });
-  //     setOpenSnackbar(true);
-  //   } catch (err) {
-  //     // Set error message for Snackbar
-  //     setError("Failed to update course. Please try again.");
-  //     setMessage({
-  //       type: "error",
-  //       text: "Failed to update course. Please try again.",
-  //       err,
-  //     });
-  //     setOpenSnackbar(true);
-  //   }
-  // };
-  
-
   const formatDuration = (duration) => {
     if (!duration) return "No duration available";
     const { days, hours, minutes } = duration;
@@ -230,7 +181,7 @@ const ManageCourses = () => {
                       component={Link}
                       to={`/dashboard/courses/update/${course._id}`}
                       // onClick={() => handleUpdate(course._id)}
-                      // onClick={() => setSelectedCourse(course)} 
+                      // onClick={() => setSelectedCourse(course)}
                     >
                       Update
                     </Button>

@@ -1,197 +1,3 @@
-// import { useState, useEffect } from "react";
-// import { useNavigate, useParams } from "react-router-dom";
-// import {
-//   TextField,
-//   Button,
-//   Typography,
-//   Box,
-//   Snackbar,
-//   Alert,
-//   Grid,
-//   CircularProgress,
-// } from "@mui/material";
-// import { useCourses } from "../../store/CourseContext";
-// import { green } from "@mui/material/colors";
-
-// const UpdateCourse = () => {
-//   const { updateCourseById, getCourseById, course } = useCourses();
-//   //   console.log("🚀 ~ UpdateCourse ~ course:", course);
-//   const { courseId } = useParams();
-//   const [coursee, setCoursee] = useState({
-//     title: "",
-//     courseType: "",
-//     description: "",
-//     duration: { days: "", hours: "", minutes: "" },
-//   });
-//   const [message, setMessage] = useState({ type: "", text: "" });
-//   const [openSnackbar, setOpenSnackbar] = useState(false);
-//   const navigate = useNavigate();
-
-//   // Fetch course details by id to pre-fill the form
-//   useEffect(() => {
-//     if (courseId) {
-//       getCourseById(courseId);
-//     }
-//   }, [courseId, getCourseById]);
-//   if (!course) {
-//     return (
-//       <Box
-//         display="flex"
-//         justifyContent="center"
-//         alignItems="center"
-//         minHeight="100vh"
-//       >
-//         {" "}
-//         <CircularProgress />{" "}
-//       </Box>
-//     );
-//   }
-
-//   const handleInputChange = (e) => {
-//     const { name, value } = e.target;
-//     setCoursee((prevCourse) => ({
-//       ...prevCourse,
-//       [name]: value,
-//     }));
-//   };
-
-//   const handleDurationChange = (e) => {
-//     const { name, value } = e.target;
-//     setCoursee((prevCourse) => ({
-//       ...prevCourse,
-//       duration: { ...prevCourse.duration, [name]: value },
-//     }));
-//   };
-
-//   const handleUpdate = async () => {
-//     try {
-//       await updateCourseById(course._id, course);
-//       setMessage({ type: "success", text: "Course updated successfully!" });
-//       setOpenSnackbar(true);
-//       navigate("/manage-courses");
-//     } catch (err) {
-//       setMessage(
-//         { type: "error", text: "Failed to update course. Please try again." },
-//         err
-//       );
-//       setOpenSnackbar(true);
-//     }
-//   };
-
-//   return (
-//     <Box sx={{ margin: 2 }}>
-//       <Typography variant="h4" gutterBottom>
-//         Update Course
-//       </Typography>
-
-//       <Grid container spacing={2}>
-//         <Grid item xs={12} sm={6}>
-//           <TextField
-//             fullWidth
-//             label="Course Title"
-//             name="title"
-//             value={course.title}
-//             onChange={handleInputChange}
-//             variant="outlined"
-//           />
-//         </Grid>
-
-//         <Grid item xs={12} sm={6}>
-//           <TextField
-//             fullWidth
-//             label="Course Type"
-//             name="courseType"
-//             value={course.courseType}
-//             onChange={handleInputChange}
-//             variant="outlined"
-//           />
-//         </Grid>
-
-//         <Grid item xs={12}>
-//           <TextField
-//             fullWidth
-//             label="Description"
-//             name="description"
-//             value={course.description}
-//             onChange={handleInputChange}
-//             variant="outlined"
-//             multiline
-//             rows={4}
-//           />
-//         </Grid>
-
-//         <Grid item xs={12} sm={4}>
-//           <TextField
-//             fullWidth
-//             label="Duration (Days)"
-//             name="days"
-//             value={course.duration.days}
-//             onChange={handleDurationChange}
-//             variant="outlined"
-//             type="number"
-//           />
-//         </Grid>
-
-//         <Grid item xs={12} sm={4}>
-//           <TextField
-//             fullWidth
-//             label="Duration (Hours)"
-//             name="hours"
-//             value={course.duration.hours}
-//             onChange={handleDurationChange}
-//             variant="outlined"
-//             type="number"
-//           />
-//         </Grid>
-
-//         <Grid item xs={12} sm={4}>
-//           <TextField
-//             fullWidth
-//             label="Duration (Minutes)"
-//             name="minutes"
-//             value={course.duration.minutes}
-//             onChange={handleDurationChange}
-//             variant="outlined"
-//             type="number"
-//           />
-//         </Grid>
-
-//         <Grid item xs={12}>
-//           <Button
-//             variant="contained"
-//             sx={{
-//               bgcolor: green[500],
-//               borderColor: "#757AD5",
-//               marginTop: 2,
-//             }}
-//             onClick={handleUpdate}
-//           >
-//             Update Course
-//           </Button>
-//         </Grid>
-//       </Grid>
-
-//       {message.type && (
-//         <Snackbar
-//           anchorOrigin={{ vertical: "top", horizontal: "center" }}
-//           open={openSnackbar}
-//           autoHideDuration={4000}
-//           onClose={() => setOpenSnackbar(false)}
-//         >
-//           <Alert
-//             onClose={() => setOpenSnackbar(false)}
-//             severity={message.type}
-//             sx={{ width: "100%" }}
-//           >
-//             {message.text}
-//           </Alert>
-//         </Snackbar>
-//       )}
-//     </Box>
-//   );
-// };
-
-// export default UpdateCourse;
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import {
@@ -205,22 +11,41 @@ import {
   CircularProgress,
 } from "@mui/material";
 import { useCourses } from "../../store/CourseContext";
-import { green } from "@mui/material/colors";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import UpdateIcon from "@mui/icons-material/Update";
+import AlertNotification from "../../components/AlertNotification";
 
 const UpdateCourse = () => {
   const { updateCourseById, getCourseById, course } = useCourses();
   const { courseId } = useParams();
-  const [newInfo, setNewInfo] = useState("");
-  const [message, setMessage] = useState({ type: "", text: "" });
+  const [newInfo, setNewInfo] = useState(null);
+  const [notification, setNotification] = useState({ type: "", text: "" });
   const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
   const navigate = useNavigate();
 
   // Fetch course details by id to pre-fill the form
   useEffect(() => {
+    const fetchCourse = async () => {
+      setLoading(true);
+      try {
+        await getCourseById(courseId);
+      } catch (err) {
+        console.log("🚀 ~ fetchCourse ~ err:", err);
+        setNotification({
+          type: "error",
+          text: "Failed to fetch course details.",
+        });
+      } finally {
+        setLoading(false);
+      }
+    };
+
     if (courseId) {
-      getCourseById(courseId);
+      fetchCourse();
     }
-  }, []);
+  }, [courseId]);
 
   // Set course data in the form once fetched
   useEffect(() => {
@@ -228,19 +53,6 @@ const UpdateCourse = () => {
       setNewInfo(course);
     }
   }, [course]);
-
-  if (!newInfo) {
-    return (
-      <Box
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
-        minHeight="100vh"
-      >
-        <CircularProgress />
-      </Box>
-    );
-  }
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -261,18 +73,49 @@ const UpdateCourse = () => {
   const handleUpdate = async () => {
     try {
       await updateCourseById(courseId, newInfo);
-      setMessage({ type: "success", text: "Course updated successfully!" });
+      setNotification({
+        type: "success",
+        text: "Course updated successfully!",
+      });
       setOpenSnackbar(true);
       setTimeout(() => navigate("/dashboard/courses"), 2000);
     } catch (err) {
-      setMessage({
+      console.error("Error updating course:", err);
+      setNotification({
         type: "error",
         text: "Failed to update course. Please try again.",
-        err,
       });
       setOpenSnackbar(true);
     }
+    setConfirmDialogOpen(false);
   };
+
+  const handleCancel = () => {
+    setNewInfo(course);
+  };
+
+  const handleOpenConfirmDialog = () => {
+    setConfirmDialogOpen(true);
+  };
+
+  const handleBackButton = () => {
+    // Navigate back to the course list or dashboard
+    navigate("/dashboard/courses");
+  };
+
+  // Show loading spinner if the course is still being fetched
+  if (loading || !newInfo) {
+    return (
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        minHeight="100vh"
+      >
+        <CircularProgress />
+      </Box>
+    );
+  }
 
   return (
     <Box sx={{ margin: 2 }}>
@@ -287,13 +130,7 @@ const UpdateCourse = () => {
             label="Course Title"
             name="title"
             value={newInfo.title}
-            // onChange={handleInputChange}
-            onChange={(e) => {
-              setNewInfo((prevState) => ({
-                ...prevState,
-                title: e.target.value,
-              }));
-            }}
+            onChange={handleInputChange}
             variant="outlined"
           />
         </Grid>
@@ -361,34 +198,60 @@ const UpdateCourse = () => {
         <Grid item xs={12}>
           <Button
             variant="contained"
+            color="primary"
+            startIcon={<ArrowBackIcon />}
+            onClick={handleBackButton}
+            sx={{ marginTop: 2 }}
+          >
+            Back to courses
+          </Button>
+          <Button
+            variant="contained"
+            startIcon={<UpdateIcon />}
             sx={{
-              bgcolor: green[500],
+              bgcolor: "#757AD5",
               borderColor: "#757AD5",
               marginTop: 2,
+              marginLeft: 2,
             }}
-            onClick={handleUpdate}
+            // onClick={handleUpdate}
+            onClick={handleOpenConfirmDialog}
+            disabled={loading}
           >
-            Update Course
+            {loading ? "Updating..." : "Update Course"}
           </Button>
         </Grid>
       </Grid>
 
-      {message.type && (
-        <Snackbar
-          anchorOrigin={{ vertical: "top", horizontal: "center" }}
-          open={openSnackbar}
-          autoHideDuration={4000}
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={4000}
+        onClose={() => setOpenSnackbar(false)}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert
           onClose={() => setOpenSnackbar(false)}
+          severity={notification.type}
+          sx={{ width: "100%" }}
         >
-          <Alert
-            onClose={() => setOpenSnackbar(false)}
-            severity={message.type}
-            sx={{ width: "100%" }}
-          >
-            {message.text}
-          </Alert>
-        </Snackbar>
-      )}
+          {notification.text}
+        </Alert>
+      </Snackbar>
+
+      <AlertNotification
+        open={confirmDialogOpen}
+        onClose={() => {
+          setConfirmDialogOpen(false);
+          handleCancel();
+        }}
+        onConfirm={handleUpdate}
+        title="Confirm Update"
+        content="Are you sure you want to update this course?"
+        confirmText="Proceed"
+        cancelText="Cancel"
+        confirmColor="warning"
+        cancelStyle={{ backgroundColor: "#FEDB30", color: "#FFFFFF" }}
+      />
     </Box>
   );
 };

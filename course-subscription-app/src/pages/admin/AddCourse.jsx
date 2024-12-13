@@ -17,7 +17,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import { green } from "@mui/material/colors";
 
 const AddCourse = () => {
-  const { addNewCourse, setCourses} = useCourses();
+  const { addNewCourse, setCourses } = useCourses();
   const navigate = useNavigate();
   const [newCourse, setNewCourse] = useState({
     title: "",
@@ -29,7 +29,6 @@ const AddCourse = () => {
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(null);
 
-  
   const handleChange = (e) => {
     const { name, value } = e.target;
     if (["days", "hours", "minutes"].includes(name)) {
@@ -45,19 +44,6 @@ const AddCourse = () => {
       }));
     }
   };
-
-  // const handleChange = (e) => {
-  //   const { name, value } = e.target;
-  //   if (["days", "hours", "minutes"].includes(name)) {
-  //     // Update nested duration field
-  //     setCourses((prev) => ({
-  //       ...prev,
-  //       duration: { ...prev.duration, [name]: value },
-  //     }));
-  //   } else {
-  //     setCourses({ ...courses, [name]: value });
-  //   }
-  // };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -95,12 +81,14 @@ const AddCourse = () => {
     });
   };
 
-  {loading && (
-    <Box display="flex" justifyContent="center" alignItems="center">
-      <CircularProgress />
-    </Box>
-  )}
-  
+  {
+    loading && (
+      <Box display="flex" justifyContent="center" alignItems="center">
+        <CircularProgress />
+      </Box>
+    );
+  }
+
   return (
     <Box
       sx={{
@@ -180,35 +168,16 @@ const AddCourse = () => {
             required
           />
         </Box>
-        {/* <TextField
-          fullWidth
-          label="Duration (hours)"
-          name="duration"
-          type="number"
-          value={courseData.duration}
-          onChange={handleChange}
-          margin="normal"
-          required
-        /> */}
         <Box mt={2} display="flex" justifyContent="space-between">
           <Button
-            // size="small"
             variant="contained"
             color="primary"
             startIcon={<ArrowBackIcon />}
             onClick={() => navigate("/dashboard/courses")}
           >
-            Back
+            Back to courses
           </Button>
-          <Button
-            // size="small"
-            variant="contained"
-            color="error"
-            startIcon={<CancelIcon />}
-            onClick={handleCancel}
-          >
-            Cancel
-          </Button>
+
           <Button
             type="submit"
             variant="contained"
@@ -217,10 +186,18 @@ const AddCourse = () => {
             sx={{
               bgcolor: green[500],
               borderColor: "#757AD5",
-              marginLeft: 2,
             }}
           >
             {loading ? "Adding..." : "Add Course"}
+          </Button>
+
+          <Button
+            variant="contained"
+            sx={{ color: "#FFFFFF", backgroundColor: "#FEDB30" }}
+            startIcon={<CancelIcon />}
+            onClick={handleCancel}
+          >
+            Cancel
           </Button>
         </Box>
       </form>
