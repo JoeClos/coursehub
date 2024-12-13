@@ -26,7 +26,7 @@ const AlertNotification = ({
     <Dialog open={open} onClose={onClose}>
       <DialogTitle>{title}</DialogTitle>
       <DialogContent>{content}</DialogContent>
-      <DialogActions sx={{ padding: 2}}>
+      <DialogActions sx={{ display: "flex", justifyContent: "space-around"}}>
         {cancelText && (
           <Button
             onClick={onClose}

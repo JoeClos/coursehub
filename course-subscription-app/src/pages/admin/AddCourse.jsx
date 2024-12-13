@@ -140,32 +140,35 @@ const AddCourse = () => {
           <MenuItem value="Hybrid">Hybrid</MenuItem>
         </TextField>
         <Typography variant="subtitle1" mt={2} mb={1}>
-          Duration
+          Duration ()
         </Typography>
         <Box display="flex" gap={2}>
           <TextField
             label="Days"
             name="days"
             type="number"
-            value={newCourse.duration.days || ""}
+            value={newCourse.duration.days || 0}
             onChange={handleChange}
             required
+            helperText="Leave empty for 0" 
           />
           <TextField
             label="Hours"
             name="hours"
             type="number"
-            value={newCourse.duration.hours || ""}
+            value={newCourse.duration.hours || 0}
             onChange={handleChange}
             required
+            helperText="Leave empty for 0" 
           />
           <TextField
             label="Minutes"
             name="minutes"
             type="number"
-            value={newCourse.duration.minutes || ""}
+            value={newCourse.duration.minutes || 0}
             onChange={handleChange}
             required
+            helperText="Leave empty for 0" 
           />
         </Box>
         <Box mt={2} display="flex" justifyContent="space-between">

@@ -55,6 +55,15 @@ const UpdateCourse = () => {
     }
   }, [course]);
 
+    // Function to check if any form field has changed
+    const isFormChanged = () => {
+      if (!newInfo) return false;
+  
+      return Object.keys(newInfo).some(
+        (key) => newInfo[key] !== course[key] && newInfo[key] !== undefined
+      );
+    };
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setNewInfo((prevCourse) => ({
@@ -120,8 +129,20 @@ const UpdateCourse = () => {
 
   return (
     <Box sx={{ margin: 2 }}>
-      <Typography variant="h4" gutterBottom>
-        Update Course
+      <Typography variant="h4" gutterBottom mb={4}>
+        Update{" "}
+        <Typography
+          component="span"
+          variant="h4"
+          sx={{
+            fontWeight: "bold",
+            color: "#1E88E5",
+            borderBottom: "4px solid #FF8E53",
+            paddingBottom: "5px",
+          }}
+        >
+          {course.title}
+        </Typography>{" "}
       </Typography>
 
       <Grid container spacing={2}>
@@ -221,9 +242,8 @@ const UpdateCourse = () => {
               marginTop: 2,
               marginLeft: 2,
             }}
-            // onClick={handleUpdate}
             onClick={handleOpenConfirmDialog}
-            disabled={loading}
+            disabled={loading || !isFormChanged()}
           >
             {loading ? "Updating..." : "Update Course"}
           </Button>
