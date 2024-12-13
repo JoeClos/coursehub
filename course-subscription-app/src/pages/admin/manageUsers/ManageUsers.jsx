@@ -15,9 +15,10 @@ import {
   TableRow,
   useMediaQuery,
 } from "@mui/material";
-import { fetchUsers } from "../../utils/api";
-import Pagination from "../../components/Pagination";
-import ScrollToTopButton from "../../components/ScrollToTopButton"; // Import ScrollToTopButton
+import { fetchUsers } from "../../../utils/api";
+import Pagination from "../../../components/Pagination";
+import ScrollToTopButton from "../../../components/ScrollToTopButton"; // Import ScrollToTopButton
+import "./manageUsers.css";
 
 const ManageUsers = () => {
   const [users, setUsers] = useState([]);
@@ -85,13 +86,13 @@ const ManageUsers = () => {
 
   return (
     <Box>
-      <Typography variant="h4" gutterBottom mt={8}>
+      <Typography variant="h4" gutterBottom mt={6} sx={{ padding: "0 16px" }}>
         Total Users: {users.length}
       </Typography>
 
       {isMobile ? (
         // Mobile View - Cards
-        <Box display="flex" flexDirection="column" gap={2} p={2}>
+        <Box display="flex" flexDirection="column" gap={2}>
           {users.map((user) => (
             <Card key={user._id} variant="outlined">
               <CardContent>
@@ -115,24 +116,20 @@ const ManageUsers = () => {
         </Box>
       ) : (
         // Desktop View - Table
-        <TableContainer component={Paper}>
-          <Table sx={{ minWidth: 650 }} aria-label="user table">
-            <TableHead>
+        <TableContainer component={Paper} className="table-style">
+          <Table sx={{ minWidth: 650 }} aria-label="collapsible table">
+            <TableHead sx={{ backgroundColor: "#201F40" }}>
               <TableRow>
-                <TableCell sx={{ fontWeight: "bold", fontSize: "16px" }}>
-                  User
-                </TableCell>
-                <TableCell sx={{ fontWeight: "bold", fontSize: "16px" }}>
-                  Email
-                </TableCell>
-                <TableCell sx={{ fontWeight: "bold", fontSize: "16px" }}>
-                  Role
-                </TableCell>
+                <TableCell className="table-cell-style">#</TableCell>
+                <TableCell className="table-cell-style">User</TableCell>
+                <TableCell className="table-cell-style">Email</TableCell>
+                <TableCell className="table-cell-style">Role</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {paginatedUsers.map((user) => (
+              {paginatedUsers.map((user, index) => (
                 <TableRow key={user._id}>
+                  <TableCell>{(page - 1) * rowsPerPage + index + 1}</TableCell>
                   <TableCell>
                     {user.firstName} {user.lastName}
                   </TableCell>

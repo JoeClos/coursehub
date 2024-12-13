@@ -26,9 +26,10 @@ import UpdateIcon from "@mui/icons-material/Update";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import { green } from "@mui/material/colors";
-import { useCourses } from "../../store/CourseContext";
-import Pagination from "../../components/Pagination";
-import AlertNotification from "../../components/AlertNotification";
+import { useCourses } from "../../../store/CourseContext";
+import Pagination from "../../../components/Pagination";
+import AlertNotification from "../../../components/AlertNotification";
+import "./manageCourses.css";
 
 const ManageCourses = () => {
   const { courses, getCourses, deleteCourseById, setCourses } = useCourses();
@@ -124,7 +125,7 @@ const ManageCourses = () => {
           justifyContent: "space-between",
           width: "100%",
           mt: 6,
-          padding: "0 16px"
+          padding: "0 16px",
         }}
       >
         <Typography variant="h4" gutterBottom>
@@ -148,7 +149,7 @@ const ManageCourses = () => {
 
       {isMobile ? (
         // Mobile View - Cards
-        <Box display="flex" flexDirection="column" gap={2} p={2}>
+        <Box display="flex" flexDirection="column" gap={2} py={2}>
           {courses.map((c) => (
             <Card key={c._id} variant="outlined">
               <CardContent>
@@ -210,23 +211,15 @@ const ManageCourses = () => {
         </Box>
       ) : (
         // Desktop View - Table
-        <TableContainer component={Paper}>
+        <TableContainer component={Paper} className="table-style">
           <Table sx={{ minWidth: 650 }} aria-label="collapsible table">
             <TableHead sx={{ backgroundColor: "#201F40" }}>
               <TableRow hover>
-                <TableCell sx={{ fontSize: "16px", color: "#FFFFFF" }}>
-                  #
-                </TableCell>
-                <TableCell sx={{ fontSize: "16px", color: "#FFFFFF" }}>
-                  Title
-                </TableCell>
-                <TableCell sx={{ fontSize: "16px", color: "#FFFFFF" }}>
-                  Type
-                </TableCell>
-                <TableCell sx={{ fontSize: "16px", color: "#FFFFFF" }}>
-                  Description
-                </TableCell>
-                <TableCell sx={{ fontSize: "16px", color: "#FFFFFF" }}>
+                <TableCell className="table-cell-style">#</TableCell>
+                <TableCell className="table-cell-style">Title</TableCell>
+                <TableCell className="table-cell-style">Type</TableCell>
+                <TableCell className="table-cell-style">Description</TableCell>
+                <TableCell className="table-cell-style">
                   Duration (DD:HH:MM)
                 </TableCell>
                 <TableCell />
@@ -264,7 +257,11 @@ const ManageCourses = () => {
                     </TableCell>
                     <TableCell>{formatDuration(course.duration)}</TableCell>
                     <TableCell
-                      sx={{ display: "flex", justifyContent: "space-around" }}
+                      sx={{
+                        display: "flex",
+                        justifyContent: "space-around",
+                        borderBottom: "hidden",
+                      }}
                     >
                       <Button
                         size="small"
