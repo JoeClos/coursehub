@@ -347,7 +347,7 @@ const ManageCourses = () => {
                     </TableCell>
                   </TableRow>
                   {/* Confirmation Dialog */}
-                  <AlertNotification
+                  {/* <AlertNotification
                     open={confirmDialogOpen}
                     onClose={handleCancel}
                     onConfirm={handleDeleteCourse}
@@ -369,7 +369,7 @@ const ManageCourses = () => {
                       color: "#FFFFFF",
                     }}
                     icon={<DeleteIcon />}
-                  />
+                  /> */}
                 </Fragment>
               ))}
             </TableBody>
@@ -412,6 +412,26 @@ const ManageCourses = () => {
           />
         </Box>
       )}
+
+      <AlertNotification
+        open={confirmDialogOpen}
+        onClose={handleCancel}
+        onConfirm={handleDeleteCourse}
+        title="Confirm Deletion"
+        content={
+          <Typography variant="body1">
+            Are you sure you want to delete this course?
+          </Typography>
+        }
+        confirmText="Delete"
+        cancelText="Cancel"
+        confirmColor="error"
+        cancelStyle={{
+          backgroundColor: "#FEDB30",
+          color: "#FFFFFF",
+        }}
+        icon={<DeleteIcon />}
+      />
     </Box>
   );
 };
