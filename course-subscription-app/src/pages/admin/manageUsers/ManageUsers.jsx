@@ -10,6 +10,7 @@ import {
   Table,
   TableBody,
   TableCell,
+  TableSortLabel,
   TableContainer,
   TableHead,
   TableRow,
@@ -26,6 +27,8 @@ const ManageUsers = () => {
   const [error, setError] = useState(null);
   const [page, setPage] = useState(1);
   const [rowsPerPage] = useState(6);
+  const [order, setOrder] = useState("desc");
+  const [orderBy, setOrderBy] = useState("firstName");
 
   const isMobile = useMediaQuery((theme) => theme.breakpoints.down("sm"));
 
@@ -50,6 +53,33 @@ const ManageUsers = () => {
 
   const totalPages = Math.ceil(users.length / rowsPerPage);
   const showPagination = users.length > 0 && totalPages > 1;
+
+  //Sort user alphabetically
+  const descendingComparator = (a, b, orderBy) => {
+    if (b[orderBy] < a[orderBy]) return -1;
+    if (b[orderBy] > a[orderBy]) return 1;
+
+    return 0;
+  };
+
+  const getComparator = (order, orderBy) => {
+    return order === "desc"
+      ? (a, b) => descendingComparator(a, b, orderBy)
+      : (a, b) => -descendingComparator(a, b, orderBy);
+  };
+
+  const sortedUsers = [...users].sort(getComparator(order, orderBy));
+
+  const paginatedUsers = sortedUsers.slice(
+    (page - 1) * rowsPerPage,
+    page * rowsPerPage
+  );
+
+  const handleRequestSort = (property) => {
+    const isAsc = orderBy === property && order === "asc";
+    setOrder(isAsc ? "desc" : "asc");
+    setOrderBy(property);
+  };
 
   if (loading) {
     return (
@@ -79,11 +109,6 @@ const ManageUsers = () => {
     );
   }
 
-  const paginatedUsers = users.slice(
-    (page - 1) * rowsPerPage,
-    page * rowsPerPage
-  );
-
   return (
     <Box>
       <Typography variant="h4" gutterBottom mt={6} sx={{ padding: "0 16px" }}>
@@ -104,6 +129,7 @@ const ManageUsers = () => {
                   variant="body2"
                   color="textSecondary"
                   sx={{ mt: "15px" }}
+                  sortingUsers
                 >
                   Email: {user.email}
                 </Typography>
@@ -121,7 +147,16 @@ const ManageUsers = () => {
             <TableHead sx={{ backgroundColor: "#201F40" }}>
               <TableRow>
                 <TableCell className="table-cell-style">#</TableCell>
-                <TableCell className="table-cell-style">User</TableCell>
+                <TableCell className="table-cell-style-sort">
+                  <TableSortLabel
+                    className="table-cell-style-sort"
+                    active={orderBy === "firstName"}
+                    direction={orderBy === "firstName" ? order : "asc"}
+                    onClick={() => handleRequestSort("firstName")}
+                  >
+                    User
+                  </TableSortLabel>
+                </TableCell>
                 <TableCell className="table-cell-style">Email</TableCell>
                 <TableCell className="table-cell-style">Role</TableCell>
               </TableRow>

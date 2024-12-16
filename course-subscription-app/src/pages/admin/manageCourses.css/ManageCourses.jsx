@@ -336,7 +336,7 @@ const ManageCourses = () => {
       )}
 
       {/* Pagination */}
-      {showPagination && (
+      {showPagination && !isMobile && (
         <Box
           sx={{
             display: "flex",
