@@ -7,7 +7,6 @@ import {
   Box,
   Snackbar,
   Alert,
-  Grid,
   CircularProgress,
   MenuItem,
 } from "@mui/material";
@@ -128,127 +127,129 @@ const UpdateCourse = () => {
   }
 
   return (
-    <Box sx={{ margin: 2 }}>
-      <Typography variant="h4" gutterBottom mb={4}>
-        Update{" "}
-        <Typography
-          component="span"
-          variant="h4"
-          sx={{
-            fontWeight: "bold",
-            color: "#1E88E5",
-            borderBottom: "4px solid #FF8E53",
-            paddingBottom: "5px",
-          }}
-        >
-          {course.title}
-        </Typography>{" "}
+    <Box
+      sx={{
+        mx: "auto",
+        mt: 4,
+        p: 2,
+        boxShadow: 2,
+        borderRadius: 2,
+        backgroundColor: "#fff",
+        padding: { xs: 1, sm: 2 },
+        maxWidth: { xs: "90%", sm: 600 },
+      }}
+    >
+      <Typography
+        variant="h5"
+        mb={2}
+        textAlign="center"
+        sx={{
+          fontWeight: "bold",
+          color: "#1E88E5",
+          borderBottom: "4px solid #FF8E53",
+          paddingBottom: "5px",
+        }}
+      >
+        {course.title}
       </Typography>
 
-      <Grid container spacing={2}>
-        <Grid item xs={12} sm={6}>
-          <TextField
-            fullWidth
-            label="Course Title"
-            name="title"
-            value={newInfo.title}
-            onChange={handleInputChange}
-            variant="outlined"
-          />
-        </Grid>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleOpenConfirmDialog();
+        }}
+      >
+        <TextField
+          fullWidth
+          label="Course Title"
+          name="title"
+          value={newInfo.title}
+          onChange={handleInputChange}
+          margin="normal"
+        />
 
-        <Grid item xs={12} sm={6}>
+        <TextField
+          fullWidth
+          select
+          label="Course Type"
+          name="courseType"
+          value={newInfo.courseType}
+          onChange={handleInputChange}
+          margin="normal"
+        >
+          <MenuItem value="Online">Online</MenuItem>
+          <MenuItem value="Offline">Offline</MenuItem>
+          <MenuItem value="Hybrid">Hybrid</MenuItem>
+        </TextField>
+        <TextField
+          fullWidth
+          label="Description"
+          name="description"
+          value={newInfo.description}
+          onChange={handleInputChange}
+          margin="normal"
+          multiline
+          rows={4}
+        />
+        <Typography variant="subtitle1" mt={2} mb={1}>
+          Duration (DD:HH:MM)
+        </Typography>
+        <Box display="flex" gap={2} flexDirection={{ xs: "column", sm: "row" }}>
           <TextField
-            fullWidth
-            label="Course Type"
-            name="courseType"
-            select
-            value={newInfo.courseType}
-            onChange={handleInputChange}
-            variant="outlined"
-          >
-            {/* Define the select options */}
-            <MenuItem value="Online">Online</MenuItem>
-            <MenuItem value="Offline">Offline</MenuItem>
-            <MenuItem value="Hybrid">Hybrid</MenuItem>
-          </TextField>
-        </Grid>
-
-        <Grid item xs={12}>
-          <TextField
-            fullWidth
-            label="Description"
-            name="description"
-            value={newInfo.description}
-            onChange={handleInputChange}
-            variant="outlined"
-            multiline
-            rows={4}
-          />
-        </Grid>
-
-        <Grid item xs={12} sm={4}>
-          <TextField
-            fullWidth
-            label="Duration (Days)"
+            label="Days"
             name="days"
+            type="number"
             value={newInfo.duration.days}
             onChange={handleDurationChange}
-            variant="outlined"
-            type="number"
           />
-        </Grid>
-
-        <Grid item xs={12} sm={4}>
           <TextField
-            fullWidth
-            label="Duration (Hours)"
+            label="Hours"
             name="hours"
+            type="number"
             value={newInfo.duration.hours}
             onChange={handleDurationChange}
-            variant="outlined"
-            type="number"
           />
-        </Grid>
-
-        <Grid item xs={12} sm={4}>
           <TextField
-            fullWidth
-            label="Duration (Minutes)"
+            label="Minutes"
             name="minutes"
+            type="number"
             value={newInfo.duration.minutes}
             onChange={handleDurationChange}
-            variant="outlined"
-            type="number"
           />
-        </Grid>
-
-        <Grid item xs={12}>
+        </Box>
+        <Box
+          mt={2}
+          display="flex"
+          flexDirection={{ xs: "column", sm: "row" }}
+          justifyContent="space-between"
+          gap={2}
+        >
           <Button
             variant="contained"
             color="primary"
             startIcon={<ArrowBackIcon />}
             onClick={handleBackButton}
-            sx={{ marginTop: 2 }}
+            sx={{ width: { xs: "100%", sm: "auto" } }}
           >
             Back to courses
           </Button>
+
           <Button
+            type="submit"
             variant="contained"
             startIcon={<UpdateIcon />}
+            disabled={loading || !isFormChanged()}
+            onClick={handleOpenConfirmDialog}
             sx={{
               bgcolor: "#757AD5",
               borderColor: "#757AD5",
-              marginTop: 2,
-              marginLeft: 2,
+              width: { xs: "100%", sm: "auto" },
             }}
-            onClick={handleOpenConfirmDialog}
-            disabled={loading || !isFormChanged()}
           >
             {loading ? "Updating..." : "Update Course"}
           </Button>
-        </Grid>
-      </Grid>
+        </Box>
+      </form>
 
       <Snackbar
         open={openSnackbar}
@@ -273,7 +274,12 @@ const UpdateCourse = () => {
         }}
         onConfirm={handleUpdate}
         title="Confirm Update"
-        content="Are you sure you want to update this course?"
+        content={
+          <Typography variant="body1">
+            Are you sure you want to update <strong  style={{ color: "#1E88E5" }}>{course.title}</strong>{" "}
+            course?
+          </Typography>
+        }
         confirmText="Proceed"
         cancelText="Cancel"
         confirmColor="warning"

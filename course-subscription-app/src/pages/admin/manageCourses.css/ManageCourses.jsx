@@ -346,6 +346,30 @@ const ManageCourses = () => {
                       </Collapse>
                     </TableCell>
                   </TableRow>
+                  {/* Confirmation Dialog */}
+                  <AlertNotification
+                    open={confirmDialogOpen}
+                    onClose={handleCancel}
+                    onConfirm={handleDeleteCourse}
+                    title="Confirm Deletion"
+                    content={
+                      <Typography variant="body1">
+                        Are you sure you want to delete{" "}
+                        <strong style={{ color: "#1E88E5" }}>
+                          {course.title}
+                        </strong>{" "}
+                        course?
+                      </Typography>
+                    }
+                    confirmText="Delete"
+                    cancelText="Cancel"
+                    confirmColor="error"
+                    cancelStyle={{
+                      backgroundColor: "#FEDB30",
+                      color: "#FFFFFF",
+                    }}
+                    icon={<DeleteIcon />}
+                  />
                 </Fragment>
               ))}
             </TableBody>
@@ -353,7 +377,7 @@ const ManageCourses = () => {
         </TableContainer>
       )}
 
-      {message.type && !isMobile && (
+      {message.type && (
         <Snackbar
           anchorOrigin={{ vertical: "top", horizontal: "center" }}
           open={openSnackbar}
@@ -388,20 +412,6 @@ const ManageCourses = () => {
           />
         </Box>
       )}
-
-      {/* Confirmation Dialog */}
-      <AlertNotification
-        open={confirmDialogOpen}
-        onClose={handleCancel}
-        onConfirm={handleDeleteCourse}
-        title="Confirm Deletion"
-        content="Are you sure you want to delete this course?"
-        confirmText="Delete"
-        cancelText="Cancel"
-        confirmColor="error"
-        cancelStyle={{ backgroundColor: "#FEDB30", color: "#FFFFFF" }}
-        icon={<DeleteIcon />}
-      />
     </Box>
   );
 };
