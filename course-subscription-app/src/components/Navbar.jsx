@@ -18,7 +18,8 @@ import {
 } from "@mui/material";
 import CssBaseline from "@mui/material/CssBaseline";
 import { useCart } from "../store/CartContext";
-import { ShoppingCart, ExitToApp } from "@mui/icons-material";
+import { ShoppingCart } from "@mui/icons-material";
+import LogoutIcon from "@mui/icons-material/Logout";
 import MenuIcon from "@mui/icons-material/Menu";
 import { deepOrange } from "@mui/material/colors";
 import SearchBar from "./SearchBar";
@@ -54,7 +55,7 @@ const Navbar = ({ onSearch }) => {
         { label: "Dashboard", link: "/dashboard" },
         {
           label: "Logout",
-          icon: <ExitToApp />,
+          icon: <LogoutIcon />,
           action: handleLogout,
         },
       ];
@@ -77,7 +78,7 @@ const Navbar = ({ onSearch }) => {
         },
         {
           label: "Logout",
-          icon: <ExitToApp />,
+          icon: <LogoutIcon />,
           action: handleLogout,
         },
       ];
@@ -229,7 +230,7 @@ const Navbar = ({ onSearch }) => {
                 primary="Logout"
                 sx={{ margin: 0, textAlign: "left" }}
               />
-              <ExitToApp fontSize="small" />
+              <LogoutIcon fontSize="small" />
             </ListItemButton>
           </>
         )}

@@ -7,6 +7,46 @@ export const buildUrl = (base, path) => {
 // Base URL for API
 const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
+// Create a course
+export const addCourse = async (courseData) => {
+  const endpoint = buildUrl(baseUrl, "/api/courses", courseData);
+
+  try {
+    const response = await axios.post(endpoint, courseData);
+    return response.data;
+  } catch (error) {
+    console.error("Error adding new course:", error);
+    throw error;
+  }
+};
+
+// Delete course
+export const deleteCourse = async (courseId) => {
+  const endpoint = buildUrl(baseUrl, `/api/courses/${courseId}`);
+
+  try {
+    const response = await axios.delete(endpoint);
+    return response.data;
+  } catch (error) {
+    console.error("Error deleting new course:", error);
+    throw error;
+  }
+};
+
+// Update a course by id
+export const updateCourse = async (courseId, updatedCourseData) => {
+  const endpoint = buildUrl(baseUrl, `/api/courses/${courseId}`);
+  try {
+    const response = await axios.put(endpoint, updatedCourseData);
+    return response.data;
+  } catch (error) {
+    console.error("Error updating new course:", error);
+    throw error;
+  }
+
+}
+
+
 // Fetch all courses
 export const fetchCourses = async () => {
   const endpoint = buildUrl(baseUrl, "/api/courses");
@@ -21,7 +61,7 @@ export const fetchCourses = async () => {
 };
 
 // Fetch course by Id
-export const fetchCourseById = async (courseId) => {
+export const fetchCourse = async (courseId) => {
   const endpoint = buildUrl(baseUrl, `/api/courses/${courseId}`);
 
   try {
@@ -30,12 +70,14 @@ export const fetchCourseById = async (courseId) => {
       throw new Error("Failed to fetch course data");
     }
     const data = await response.json();
+    console.log("🚀 ~ fetchCourse ~ data:", data)
     return data;
   } catch (error) {
     console.error("Error fetching course:", error);
     throw error;
   }
 };
+
 
 // Subscribe to a course
 export const subscribeToCourse = async (learnerId, courseId) => {
@@ -114,8 +156,6 @@ export const fetchUsers = async () => {
   try {
     const response = await axios.get(endpoint);
     return response;
-    console.log("🚀 ~ fetchUsers ~ response.data:", response)
-
   } catch (error) {
     console.error("Error fetching users:", error);
     throw error;

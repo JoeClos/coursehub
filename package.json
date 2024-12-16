@@ -14,7 +14,9 @@
     "start:backend": "npm --workspace backend run dev"
   },
   "dependencies": {
+    "@mui/material": "^6.1.9",
     "coursehub": "file:",
+    "react": "^19.0.0",
     "rollup": "^4.28.1",
     "vite": "^6.0.3"
   },

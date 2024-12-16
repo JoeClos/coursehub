@@ -10,14 +10,16 @@ import {
   Table,
   TableBody,
   TableCell,
+  TableSortLabel,
   TableContainer,
   TableHead,
   TableRow,
   useMediaQuery,
 } from "@mui/material";
-import { fetchUsers } from "../../utils/api";
-import Pagination from "../../components/Pagination";
-import ScrollToTopButton from "../../components/ScrollToTopButton"; // Import ScrollToTopButton
+import { fetchUsers } from "../../../utils/api";
+import Pagination from "../../../components/Pagination";
+import ScrollToTopButton from "../../../components/ScrollToTopButton"; // Import ScrollToTopButton
+import "./manageUsers.css";
 
 const ManageUsers = () => {
   const [users, setUsers] = useState([]);
@@ -25,6 +27,8 @@ const ManageUsers = () => {
   const [error, setError] = useState(null);
   const [page, setPage] = useState(1);
   const [rowsPerPage] = useState(6);
+  const [order, setOrder] = useState("desc");
+  const [orderBy, setOrderBy] = useState("firstName");
 
   const isMobile = useMediaQuery((theme) => theme.breakpoints.down("sm"));
 
@@ -49,6 +53,33 @@ const ManageUsers = () => {
 
   const totalPages = Math.ceil(users.length / rowsPerPage);
   const showPagination = users.length > 0 && totalPages > 1;
+
+  //Sort user alphabetically
+  const descendingComparator = (a, b, orderBy) => {
+    if (b[orderBy] < a[orderBy]) return -1;
+    if (b[orderBy] > a[orderBy]) return 1;
+
+    return 0;
+  };
+
+  const getComparator = (order, orderBy) => {
+    return order === "desc"
+      ? (a, b) => descendingComparator(a, b, orderBy)
+      : (a, b) => -descendingComparator(a, b, orderBy);
+  };
+
+  const sortedUsers = [...users].sort(getComparator(order, orderBy));
+
+  const paginatedUsers = sortedUsers.slice(
+    (page - 1) * rowsPerPage,
+    page * rowsPerPage
+  );
+
+  const handleRequestSort = (property) => {
+    const isAsc = orderBy === property && order === "asc";
+    setOrder(isAsc ? "desc" : "asc");
+    setOrderBy(property);
+  };
 
   if (loading) {
     return (
@@ -78,20 +109,15 @@ const ManageUsers = () => {
     );
   }
 
-  const paginatedUsers = users.slice(
-    (page - 1) * rowsPerPage,
-    page * rowsPerPage
-  );
-
   return (
     <Box>
-      <Typography variant="h4" gutterBottom mt={8}>
+      <Typography variant="h4" gutterBottom mt={6} sx={{ padding: "0 16px" }}>
         Total Users: {users.length}
       </Typography>
 
       {isMobile ? (
         // Mobile View - Cards
-        <Box display="flex" flexDirection="column" gap={2} p={2}>
+        <Box display="flex" flexDirection="column" gap={2}>
           {users.map((user) => (
             <Card key={user._id} variant="outlined">
               <CardContent>
@@ -103,6 +129,7 @@ const ManageUsers = () => {
                   variant="body2"
                   color="textSecondary"
                   sx={{ mt: "15px" }}
+                  sortingUsers
                 >
                   Email: {user.email}
                 </Typography>
@@ -115,24 +142,29 @@ const ManageUsers = () => {
         </Box>
       ) : (
         // Desktop View - Table
-        <TableContainer component={Paper}>
-          <Table sx={{ minWidth: 650 }} aria-label="user table">
-            <TableHead>
+        <TableContainer component={Paper} className="table-style">
+          <Table sx={{ minWidth: 650 }} aria-label="collapsible table">
+            <TableHead sx={{ backgroundColor: "#201F40" }}>
               <TableRow>
-                <TableCell sx={{ fontWeight: "bold", fontSize: "16px" }}>
-                  User
+                <TableCell className="table-cell-style">#</TableCell>
+                <TableCell className="table-cell-style-sort">
+                  <TableSortLabel
+                    className="table-cell-style-sort"
+                    active={orderBy === "firstName"}
+                    direction={orderBy === "firstName" ? order : "asc"}
+                    onClick={() => handleRequestSort("firstName")}
+                  >
+                    User
+                  </TableSortLabel>
                 </TableCell>
-                <TableCell sx={{ fontWeight: "bold", fontSize: "16px" }}>
-                  Email
-                </TableCell>
-                <TableCell sx={{ fontWeight: "bold", fontSize: "16px" }}>
-                  Role
-                </TableCell>
+                <TableCell className="table-cell-style">Email</TableCell>
+                <TableCell className="table-cell-style">Role</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {paginatedUsers.map((user) => (
+              {paginatedUsers.map((user, index) => (
                 <TableRow key={user._id}>
+                  <TableCell>{(page - 1) * rowsPerPage + index + 1}</TableCell>
                   <TableCell>
                     {user.firstName} {user.lastName}
                   </TableCell>
@@ -158,6 +190,7 @@ const ManageUsers = () => {
             count={totalPages}
             page={page}
             onChange={handleChangePage}
+            sx={{ backgroundColor: "#757AD5" }}
           />
         </Box>
       )}

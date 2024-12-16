@@ -18,15 +18,15 @@ const CourseSchema = new mongoose.Schema(
     duration: {
       days: {
         type: Number,
-        required: true,
+        required: false,
       },
       hours: {
         type: Number,
-        required: true,
+        required: false,
       },
       minutes: {
         type: Number,
-        required: true,
+        required: false,
       },
     },
   },
