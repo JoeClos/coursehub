@@ -11,6 +11,7 @@ import {
   TableHead,
   TableRow,
   TableCell,
+  TableSortLabel,
   TableBody,
   Paper,
   IconButton,
@@ -39,16 +40,40 @@ const ManageCourses = () => {
   const [page, setPage] = useState(1);
   const [rowsPerPage] = useState(6);
   const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
-  const [selectedCourseId, setSelectedCourseId] = useState(null); // Holds the ID of the course to delete
+  const [selectedCourseId, setSelectedCourseId] = useState(null);
+  const [order, setOrder] = useState("desc");
+  const [orderBy, setOrderBy] = useState("title");
   const isMobile = useMediaQuery((theme) => theme.breakpoints.down("sm"));
 
   const totalPages = Math.ceil(courses.length / rowsPerPage);
   const showPagination = courses.length > 0 && totalPages > 1;
 
-  const paginatedCourses = courses.slice(
+  //Sort user alphabetically
+  const descendingComparator = (a, b, orderBy) => {
+    if (b[orderBy] < a[orderBy]) return -1;
+    if (b[orderBy] > a[orderBy]) return 1;
+
+    return 0;
+  };
+
+  const getComparator = (order, orderBy) => {
+    return order === "desc"
+      ? (a, b) => descendingComparator(a, b, orderBy)
+      : (a, b) => -descendingComparator(a, b, orderBy);
+  };
+
+  const sortedCourses = [...courses].sort(getComparator(order, orderBy));
+
+  const paginatedCourses = sortedCourses.slice(
     (page - 1) * rowsPerPage,
     page * rowsPerPage
   );
+
+  const handleRequestSort = (property) => {
+    const isAsc = orderBy === property && order === "asc";
+    setOrder(isAsc ? "desc" : "asc");
+    setOrderBy(property);
+  };
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -216,7 +241,17 @@ const ManageCourses = () => {
             <TableHead sx={{ backgroundColor: "#201F40" }}>
               <TableRow hover>
                 <TableCell className="table-cell-style">#</TableCell>
-                <TableCell className="table-cell-style">Title</TableCell>
+                <TableCell className="table-cell-style-sort">
+                  <TableSortLabel
+                    className="table-cell-style-sort"
+                    active={orderBy === "title"}
+                    direction={orderBy === "title" ? order : "asc"}
+                    onClick={() => handleRequestSort("title")}
+                  >
+                    Title
+                  </TableSortLabel>
+                </TableCell>
+                {/* <TableCell className="table-cell-style">Title</TableCell> */}
                 <TableCell className="table-cell-style">Type</TableCell>
                 <TableCell className="table-cell-style">Description</TableCell>
                 <TableCell className="table-cell-style">
