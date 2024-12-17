@@ -68,7 +68,7 @@ const loginUser = async (req, res) => {
 const getUsers = async (req, res) => {
   try {
     const users = await User.find();
-    console.log("🚀 ~ getUsers ~ users:", users)
+    console.log("🚀 ~ getUsers ~ users:", users);
     res.status(200).json(users);
   } catch (error) {
     console.error("Error fetching users:", error);
@@ -76,5 +76,21 @@ const getUsers = async (req, res) => {
   }
 };
 
+// Get user by Id
+const getUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const user = await User.findById(id);
 
-module.exports = { registerUser, getUsers, loginUser };
+    if (!user) {
+      return res.status(404).json({ message: "User not found!" });
+    }
+
+    res.status(200).json(user);
+  } catch (error) {
+    console.error("Error fetching user by ID:", error);
+    res.status(500).json({ message: "Failed to fetch user" });
+  }
+};
+
+module.exports = { registerUser, getUsers, loginUser, getUser };
