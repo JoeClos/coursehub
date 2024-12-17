@@ -1,4 +1,4 @@
-import { useContext} from "react";
+import { useContext } from "react";
 // import PropTypes from "prop-types";
 import {
   AppBar,
@@ -13,6 +13,9 @@ import {
   ListItemButton,
   Toolbar,
   Typography,
+  Tooltip,
+  tooltipClasses,
+  styled,
 } from "@mui/material";
 import { Link, Outlet, useLocation } from "react-router-dom";
 import LogoutIcon from "@mui/icons-material/Logout";
@@ -24,24 +27,45 @@ import AuthContext from "../../store/AuthContext";
 
 const drawerWidth = 240;
 
+const BootstrapTooltip = styled(({ className, ...props }) => (
+  <Tooltip {...props} arrow classes={{ popper: className }} />
+))(() => ({
+  [`& .${tooltipClasses.arrow}`]: {
+    color: "#201F40",
+  },
+  [`& .${tooltipClasses.tooltip}`]: {
+    backgroundColor: "#201F40",
+  },
+}));
+
 const Dashboard = () => {
-  // const [mobileOpen, setMobileOpen] = useState(false);
   const { logout } = useContext(AuthContext);
   const location = useLocation(); // Get current route
-
-  // const handleDrawerToggle = () => {
-  //   setMobileOpen(!mobileOpen);
-  // };
 
   const handleLogout = () => {
     logout();
   };
 
   const navItems = [
-    { to: "users", icon: <GroupIcon />, text: "Users" },
-    { to: "subscriptions", icon: <SubscriptionsIcon />, text: "Subscriptions" },
-    { to: "courses", icon: <LibraryBooksIcon />, text: "Courses" },
-    { to: "analytics", icon: <LeaderboardIcon />, text: "Analytics" },
+    { to: "users", icon: <GroupIcon />, text: "Users", title: "Users" },
+    {
+      to: "subscriptions",
+      icon: <SubscriptionsIcon />,
+      text: "Subscriptions",
+      title: "Subscriptions",
+    },
+    {
+      to: "courses",
+      icon: <LibraryBooksIcon />,
+      text: "Courses",
+      title: "Courses",
+    },
+    {
+      to: "analytics",
+      icon: <LeaderboardIcon />,
+      text: "Analytics",
+      title: "Analytics",
+    },
   ];
 
   const drawer = (
@@ -169,36 +193,39 @@ const Dashboard = () => {
         }}
       >
         {navItems.map((item) => (
+          <BootstrapTooltip key={item.to} title={item.title}>
+            <IconButton
+              component={Link}
+              to={item.to}
+              sx={{
+                backgroundColor: location.pathname.includes(item.to)
+                  ? "#E0F2FE"
+                  : "transparent",
+                "&:hover": { backgroundColor: "#E0F2FE" },
+                color: location.pathname.includes(item.to)
+                  ? "#2F6FEB"
+                  : "#201F40",
+                borderRadius: "5px",
+                p: "8px",
+              }}
+            >
+              {item.icon}
+            </IconButton>
+          </BootstrapTooltip>
+        ))}
+        <BootstrapTooltip title="Logout">
           <IconButton
-            key={item.to}
-            component={Link}
-            to={item.to}
+            onClick={handleLogout}
             sx={{
-              backgroundColor: location.pathname.includes(item.to)
-                ? "#E0F2FE"
-                : "transparent",
-              "&:hover": { backgroundColor: "#E0F2FE" },
-              color: location.pathname.includes(item.to)
-                ? "#2F6FEB"
-                : "#201F40",
+              color: "#201F40",
               borderRadius: "5px",
               p: "8px",
+              "&:hover": { backgroundColor: "#E0F2FE" },
             }}
           >
-            {item.icon}
+            <LogoutIcon />
           </IconButton>
-        ))}
-        <IconButton
-          onClick={handleLogout}
-          sx={{
-            color: "#201F40",
-            borderRadius: "5px",
-            p: "8px",
-            "&:hover": { backgroundColor: "#E0F2FE" },
-          }}
-        >
-          <LogoutIcon />
-        </IconButton>
+        </BootstrapTooltip>
       </Box>
 
       {/* Page Content */}
