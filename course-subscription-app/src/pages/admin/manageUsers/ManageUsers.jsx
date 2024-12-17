@@ -16,13 +16,17 @@ import {
   TableRow,
   useMediaQuery,
 } from "@mui/material";
-import { fetchUsers } from "../../../utils/api";
+// import { fetchUsers } from "../../../utils/api";
+import { useUsers } from "../../../store/UserContext";
 import Pagination from "../../../components/Pagination";
 import ScrollToTopButton from "../../../components/ScrollToTopButton"; // Import ScrollToTopButton
 import "./manageUsers.css";
 
 const ManageUsers = () => {
-  const [users, setUsers] = useState([]);
+  // const [users, setUsers] = useState([]);
+  const { users, getUsers } = useUsers();
+  // console.log("🚀 ~ ManageUsers ~ users:", users);
+
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [page, setPage] = useState(1);
@@ -37,18 +41,16 @@ const ManageUsers = () => {
   };
 
   // Fetch users from API
+
   useEffect(() => {
-    const getUsers = async () => {
-      try {
-        const response = await fetchUsers();
-        setUsers(response.data);
-        setLoading(false);
-      } catch (err) {
-        setError("Error fetching users", err);
-        setLoading(false);
-      }
-    };
-    getUsers();
+    try {
+      getUsers();
+      setLoading(false);
+    } catch (error) {
+      setError("Error fetching users", error);
+      setLoading(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const totalPages = Math.ceil(users.length / rowsPerPage);
