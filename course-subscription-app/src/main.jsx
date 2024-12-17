@@ -12,6 +12,7 @@ import { CartProvider } from "./store/CartContext";
 import { AuthProvider } from "./store/AuthContext";
 import ErrorBoundary from "./components/ErrorBoundary.jsx";
 import { CourseProvider } from "./store/CourseContext.jsx";
+import { UserProvider } from "./store/UserContext.jsx";
 
 let theme = createTheme({
   typography: {
@@ -24,16 +25,18 @@ theme = responsiveFontSizes(theme);
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <ErrorBoundary>
-      <CourseProvider>
-        <CartProvider>
-          <AuthProvider>
-            <ThemeProvider theme={theme}>
-              <CssBaseline />
-              <App />
-            </ThemeProvider>
-          </AuthProvider>
-        </CartProvider>
-      </CourseProvider>
+      <UserProvider>
+        <CourseProvider>
+          <CartProvider>
+            <AuthProvider>
+              <ThemeProvider theme={theme}>
+                <CssBaseline />
+                <App />
+              </ThemeProvider>
+            </AuthProvider>
+          </CartProvider>
+        </CourseProvider>
+      </UserProvider>
     </ErrorBoundary>
   </StrictMode>
 );

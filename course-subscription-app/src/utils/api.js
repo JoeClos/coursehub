@@ -43,9 +43,7 @@ export const updateCourse = async (courseId, updatedCourseData) => {
     console.error("Error updating new course:", error);
     throw error;
   }
-
-}
-
+};
 
 // Fetch all courses
 export const fetchCourses = async () => {
@@ -70,14 +68,13 @@ export const fetchCourse = async (courseId) => {
       throw new Error("Failed to fetch course data");
     }
     const data = await response.json();
-    console.log("🚀 ~ fetchCourse ~ data:", data)
+    console.log("🚀 ~ fetchCourse ~ data:", data);
     return data;
   } catch (error) {
     console.error("Error fetching course:", error);
     throw error;
   }
 };
-
 
 // Subscribe to a course
 export const subscribeToCourse = async (learnerId, courseId) => {
@@ -155,9 +152,27 @@ export const fetchUsers = async () => {
 
   try {
     const response = await axios.get(endpoint);
-    return response;
+    return response.data;
   } catch (error) {
     console.error("Error fetching users:", error);
+    throw error;
+  }
+};
+
+// Fetch user by Id
+export const fetchUser = async (userId) => {
+  const endpoint = buildUrl(baseUrl, `/api/users/${userId}`);
+
+  try {
+    const response = await fetch(endpoint);
+    if (!response.ok) {
+      throw new Error("Failed to fetch course data");
+    }
+    const data = await response.json();
+    console.log("🚀 ~ fetchUser ~ data:", data);
+    return data;
+  } catch (error) {
+    console.error("Error fetching user:", error);
     throw error;
   }
 };
