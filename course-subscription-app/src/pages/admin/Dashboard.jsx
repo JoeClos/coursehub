@@ -13,9 +13,6 @@ import {
   ListItemButton,
   Toolbar,
   Typography,
-  Tooltip,
-  tooltipClasses,
-  styled,
 } from "@mui/material";
 import { Link, Outlet, useLocation } from "react-router-dom";
 import LogoutIcon from "@mui/icons-material/Logout";
@@ -26,17 +23,6 @@ import LeaderboardIcon from "@mui/icons-material/Leaderboard";
 import AuthContext from "../../store/AuthContext";
 
 const drawerWidth = 240;
-
-const BootstrapTooltip = styled(({ className, ...props }) => (
-  <Tooltip {...props} arrow classes={{ popper: className }} />
-))(() => ({
-  [`& .${tooltipClasses.arrow}`]: {
-    color: "#201F40",
-  },
-  [`& .${tooltipClasses.tooltip}`]: {
-    backgroundColor: "#201F40",
-  },
-}));
 
 const Dashboard = () => {
   const { logout } = useContext(AuthContext);
@@ -178,7 +164,7 @@ const Dashboard = () => {
       </Box>
 
       {/* Mobile Navigation */}
-      <Box
+      {/* <Box
         sx={{
           position: "fixed",
           top: 75,
@@ -226,6 +212,76 @@ const Dashboard = () => {
             <LogoutIcon />
           </IconButton>
         </BootstrapTooltip>
+      </Box> */}
+
+      <Box
+        sx={{
+          position: "fixed",
+          top: 75,
+          zIndex: 1400,
+          display: { xs: "flex", sm: "none" },
+          justifyContent: "space-around",
+          alignItems: "center",
+          width: "100%",
+          py: 1,
+          backgroundColor: "#fff",
+          boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
+        }}
+      >
+        {navItems.map((item) => (
+          <Box
+            key={item.to}
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              textAlign: "center",
+            }}
+          >
+            <IconButton
+              component={Link}
+              to={item.to}
+              sx={{
+                backgroundColor: location.pathname.includes(item.to)
+                  ? "#E0F2FE"
+                  : "transparent",
+                "&:hover": { backgroundColor: "#E0F2FE" },
+                color: location.pathname.includes(item.to)
+                  ? "#2F6FEB"
+                  : "#201F40",
+                borderRadius: "5px",
+                p: "8px",
+              }}
+            >
+              {item.icon}
+            </IconButton>
+            <Typography variant="caption" sx={{ color: "#201F40", mt: 0.5 }}>
+              {item.text}
+            </Typography>
+          </Box>
+        ))}
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+        >
+          <IconButton
+            onClick={handleLogout}
+            sx={{
+              color: "#201F40",
+              borderRadius: "5px",
+              p: "8px",
+              "&:hover": { backgroundColor: "#E0F2FE" },
+            }}
+          >
+            <LogoutIcon />
+          </IconButton>
+          <Typography variant="caption" sx={{ color: "#201F40", mt: 0.5 }}>
+            Logout
+          </Typography>
+        </Box>
       </Box>
 
       {/* Page Content */}
