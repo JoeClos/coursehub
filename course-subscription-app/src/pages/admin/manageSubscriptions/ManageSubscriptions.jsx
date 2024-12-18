@@ -11,6 +11,10 @@ import {
   TableRow,
   Paper,
   Button,
+  Divider,
+  Card,
+  CardContent,
+  useMediaQuery,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useCart } from "../../../store/CartContext";
@@ -25,11 +29,13 @@ const ManageSubscriptions = () => {
     getSubscriptionsForLearner,
     deleteSubscription,
   } = useCart();
+  console.log("🚀 ~ ManageSubscriptions ~ subscriptions:", subscriptions);
   const { user } = useContext(AuthContext);
   const [page, setPage] = useState(1);
-  const [rowsPerPage] = useState(3);
+  const [rowsPerPage] = useState(2);
   const [order, setOrder] = useState("desc");
   const [orderBy, setOrderBy] = useState("learnerId.firstName");
+  const isMobile = useMediaQuery((theme) => theme.breakpoints.down("sm"));
 
   // Group subscriptions by learner globally
   const globalGroupedSubscriptions = subscriptions.reduce((acc, sub) => {
@@ -97,9 +103,51 @@ const ManageSubscriptions = () => {
         Total Subscriptions: {subscriptions.length}
       </Typography>
 
-      <Box sx={{ overflowX: "auto" }}>
+      {isMobile ? (
+        // Mobile View - Cards
+        <Box display="flex" flexDirection="column" gap={2}>
+          {learnerKeys.map((learnerKey) => {
+            const learnerSubscriptions = globalGroupedSubscriptions[learnerKey];
+
+            return (
+              <Fragment key={learnerKey}>
+                <Card variant="outlined">
+                  <CardContent>
+                    <Typography variant="h6">
+                      {learnerKey} ({learnerSubscriptions.length} {learnerSubscriptions.length === 1 ? "Subscription" : "Subscriptions"})
+                    </Typography>
+                    <Divider sx={{ margin: "10px 0" }} />
+
+                    {learnerSubscriptions.map((sub) => (
+                      <Box key={sub._id} sx={{ marginBottom: "10px" }}>
+                        <Typography variant="body2" color="textSecondary">
+                          Course: {sub.courseId.title}
+                        </Typography>
+                        <Typography variant="body2" color="textSecondary">
+                          Subscription Date:{" "}
+                          {new Date(sub.createdAt).toLocaleDateString("de-DE")}
+                        </Typography>
+                        <Button
+                          size="small"
+                          variant="contained"
+                          color="error"
+                          startIcon={<DeleteIcon />}
+                          onClick={() => handleDeleteSubscription(sub._id)}
+                          sx={{ marginTop: "10px" }}
+                        >
+                          Delete
+                        </Button>
+                      </Box>
+                    ))}
+                  </CardContent>
+                </Card>
+              </Fragment>
+            );
+          })}
+        </Box>
+      ) : (
         <TableContainer component={Paper} className="table-style">
-          <Table aria-label="subscriptions table">
+          <Table sx={{ minWidth: 650 }} aria-label="collapsible table">
             <TableHead sx={{ backgroundColor: "#201F40" }}>
               <TableRow>
                 <TableCell className="table-cell-style">#</TableCell>
@@ -107,7 +155,9 @@ const ManageSubscriptions = () => {
                   <TableSortLabel
                     className="table-cell-style-sort"
                     active={orderBy === "learnerId.firstName"}
-                    direction={orderBy === "learnerId.firstName" ? order : "asc"}
+                    direction={
+                      orderBy === "learnerId.firstName" ? order : "asc"
+                    }
                     onClick={() => handleRequestSort("learnerId.firstName")}
                   >
                     Subscriber
@@ -139,7 +189,9 @@ const ManageSubscriptions = () => {
                         <TableRow key={sub._id}>
                           {subIndex === 0 && (
                             <TableCell
-                              rowSpan={globalGroupedSubscriptions[learnerKey].length}
+                              rowSpan={
+                                globalGroupedSubscriptions[learnerKey].length
+                              }
                             >
                               {/* Global learner index */}
                               {(page - 1) * rowsPerPage + learnerIndex + 1}
@@ -147,14 +199,18 @@ const ManageSubscriptions = () => {
                           )}
                           {subIndex === 0 && (
                             <TableCell
-                              rowSpan={globalGroupedSubscriptions[learnerKey].length}
+                              rowSpan={
+                                globalGroupedSubscriptions[learnerKey].length
+                              }
                             >
                               {learnerKey}
                             </TableCell>
                           )}
                           <TableCell>{sub.courseId?.title}</TableCell>
                           <TableCell>
-                            {new Date(sub.createdAt).toLocaleDateString("de-DE")}
+                            {new Date(sub.createdAt).toLocaleDateString(
+                              "de-DE"
+                            )}
                           </TableCell>
                           <TableCell>
                             <Button
@@ -176,10 +232,9 @@ const ManageSubscriptions = () => {
             </TableBody>
           </Table>
         </TableContainer>
-      </Box>
+      )}
 
-      {/* Pagination */}
-      {showPagination && (
+      {showPagination && !isMobile && (
         <Box
           sx={{
             display: "flex",
