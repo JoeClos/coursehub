@@ -14,18 +14,14 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  useMediaQuery,
 } from "@mui/material";
-// import { fetchUsers } from "../../../utils/api";
 import { useUsers } from "../../../store/UserContext";
 import Pagination from "../../../components/Pagination";
-import ScrollToTopButton from "../../../components/ScrollToTopButton"; // Import ScrollToTopButton
 import "./manageUsers.css";
+import { useIsMobile } from "../../../utils/useIsMobile";
 
 const ManageUsers = () => {
-  // const [users, setUsers] = useState([]);
   const { users, getUsers } = useUsers();
-  // console.log("🚀 ~ ManageUsers ~ users:", users);
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -34,13 +30,12 @@ const ManageUsers = () => {
   const [order, setOrder] = useState("desc");
   const [orderBy, setOrderBy] = useState("firstName");
 
-  const isMobile = useMediaQuery((theme) => theme.breakpoints.down("sm"));
+  const isMobile = useIsMobile();
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
 
-  // Fetch users from API
   useEffect(() => {
     try {
       getUsers();
@@ -130,7 +125,6 @@ const ManageUsers = () => {
                   variant="body2"
                   color="textSecondary"
                   sx={{ mt: "15px" }}
-                  sortingUsers
                 >
                   Email: {user.email}
                 </Typography>
@@ -195,9 +189,6 @@ const ManageUsers = () => {
           />
         </Box>
       )}
-
-      {/* Add the ScrollToTopButton component */}
-      <ScrollToTopButton />
     </Box>
   );
 };

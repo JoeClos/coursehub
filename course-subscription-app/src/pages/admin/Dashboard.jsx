@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 // import PropTypes from "prop-types";
 import {
   AppBar,
@@ -21,12 +21,21 @@ import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
 import SubscriptionsIcon from "@mui/icons-material/Subscriptions";
 import LeaderboardIcon from "@mui/icons-material/Leaderboard";
 import AuthContext from "../../store/AuthContext";
+import { useIsMobile } from "../../utils/useIsMobile";
+import ScrollToTopButton from "../../components/ScrollToTopButton";
 
 const drawerWidth = 240;
 
 const Dashboard = () => {
   const { logout } = useContext(AuthContext);
   const location = useLocation(); // Get current route
+
+  const isMobile = useIsMobile();
+  const [drawerOpen, setDrawerOpen] = useState(false);
+
+  const toggleDrawer = () => {
+    setDrawerOpen((prev) => !prev);
+  };
 
   const handleLogout = () => {
     logout();
@@ -133,7 +142,7 @@ const Dashboard = () => {
             color="inherit"
             aria-label="open drawer"
             edge="start"
-            // onClick={handleDrawerToggle}
+            onClick={toggleDrawer}
             sx={{ mr: 2, display: { sm: "none" } }}
           ></IconButton>
           <Typography
@@ -152,67 +161,23 @@ const Dashboard = () => {
         aria-label="navigation drawer"
       >
         <Drawer
-          variant="permanent"
-          open
+          variant={isMobile ? "temporary" : "permanent"}
+          open={!isMobile || drawerOpen}
+          onClose={() => setDrawerOpen(false)}
+          ModalProps={{
+            keepMounted: true, // Improve performance on mobile by keeping the drawer mounted
+          }}
           sx={{
-            display: { xs: "none", sm: "block" },
-            "& .MuiDrawer-paper": { width: drawerWidth },
+            "& .MuiDrawer-paper": {
+              width: drawerWidth,
+              boxSizing: "border-box",
+              ...(isMobile && { overflowY: "auto" }), // Enable scrolling for mobile
+            },
           }}
         >
-          {drawer}
+          <div style={{ height: "100%", overflowY: "auto" }}>{drawer}</div>
         </Drawer>
       </Box>
-
-      {/* Mobile Navigation */}
-      {/* <Box
-        sx={{
-          position: "fixed",
-          top: 75,
-          zIndex: 1400,
-          display: { xs: "flex", sm: "none" },
-          justifyContent: "space-around",
-          alignItems: "center",
-          width: "100%",
-          py: 1,
-          backgroundColor: "#fff",
-          boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
-        }}
-      >
-        {navItems.map((item) => (
-          <BootstrapTooltip key={item.to} title={item.title}>
-            <IconButton
-              component={Link}
-              to={item.to}
-              sx={{
-                backgroundColor: location.pathname.includes(item.to)
-                  ? "#E0F2FE"
-                  : "transparent",
-                "&:hover": { backgroundColor: "#E0F2FE" },
-                color: location.pathname.includes(item.to)
-                  ? "#2F6FEB"
-                  : "#201F40",
-                borderRadius: "5px",
-                p: "8px",
-              }}
-            >
-              {item.icon}
-            </IconButton>
-          </BootstrapTooltip>
-        ))}
-        <BootstrapTooltip title="Logout">
-          <IconButton
-            onClick={handleLogout}
-            sx={{
-              color: "#201F40",
-              borderRadius: "5px",
-              p: "8px",
-              "&:hover": { backgroundColor: "#E0F2FE" },
-            }}
-          >
-            <LogoutIcon />
-          </IconButton>
-        </BootstrapTooltip>
-      </Box> */}
 
       <Box
         sx={{
@@ -286,21 +251,23 @@ const Dashboard = () => {
 
       {/* Page Content */}
       <Box
-        component="main"
+        component="div"
+        id="scrollable-container"
         sx={{
           flexGrow: 1,
           p: 3,
           mt: { xs: "56px", sm: 0 },
           marginLeft: { sm: `${drawerWidth}px` },
           transition: "margin-left 0.3s ease",
+          overflowY: "auto",
+          height: "calc(100vh - 56px)",
         }}
       >
         <Outlet />
       </Box>
+      <ScrollToTopButton />
     </Box>
   );
 };
-
-// Dashboard.propTypes = { window: PropTypes.func };
 
 export default Dashboard;

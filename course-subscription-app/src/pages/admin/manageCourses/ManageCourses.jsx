@@ -19,7 +19,6 @@ import {
   Button,
   Snackbar,
   Alert,
-  useMediaQuery,
 } from "@mui/material";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
@@ -31,6 +30,7 @@ import { useCourses } from "../../../store/CourseContext";
 import Pagination from "../../../components/Pagination";
 import AlertNotification from "../../../components/AlertNotification";
 import "./manageCourses.css";
+import { useIsMobile } from "../../../utils/useIsMobile";
 
 const ManageCourses = () => {
   const { courses, getCourses, deleteCourseById, setCourses } = useCourses();
@@ -43,7 +43,8 @@ const ManageCourses = () => {
   const [selectedCourseId, setSelectedCourseId] = useState(null);
   const [order, setOrder] = useState("desc");
   const [orderBy, setOrderBy] = useState("title");
-  const isMobile = useMediaQuery((theme) => theme.breakpoints.down("sm"));
+  // const isMobile = useMediaQuery((theme) => theme.breakpoints.down("sm"));
+  const isMobile = useIsMobile();
 
   const totalPages = Math.ceil(courses.length / rowsPerPage);
   const showPagination = courses.length > 0 && totalPages > 1;
