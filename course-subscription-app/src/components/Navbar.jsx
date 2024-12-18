@@ -29,7 +29,7 @@ const Navbar = ({ onSearch }) => {
   const { user, logout } = useContext(AuthContext);
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
-  const { subscribedCourses } = useCart();
+  const { subscriptions } = useCart();
   const [mobileOpen, setMobileOpen] = useState(false);
   const drawerWidth = 240;
 
@@ -65,7 +65,7 @@ const Navbar = ({ onSearch }) => {
         {
           label: (
             <Badge
-              badgeContent={subscribedCourses.length}
+              badgeContent={subscriptions.length}
               color="secondary"
               sx={{
                 "& .MuiBadge-badge": { backgroundColor: deepOrange[500] },
@@ -207,7 +207,7 @@ const Navbar = ({ onSearch }) => {
                 sx={{ margin: 0, textAlign: "left" }}
               />
               <Badge
-                badgeContent={subscribedCourses.length}
+                badgeContent={subscriptions.length}
                 color="secondary"
                 sx={{
                   "& .MuiBadge-badge": { backgroundColor: deepOrange[500] },

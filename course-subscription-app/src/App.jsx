@@ -12,12 +12,12 @@ import Login from "./pages/Login";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Dashboard from "./pages/admin/Dashboard";
 import ManageUsers from "./pages/admin/manageUsers/ManageUsers";
-import ManageSubscriptions from "./pages/admin/ManageSubscriptions";
-import ManageCourses from "./pages/admin/manageCourses.css/ManageCourses";
+import ManageSubscriptions from "./pages/admin/manageSubscriptions/ManageSubscriptions";
+import ManageCourses from "./pages/admin/manageCourses/ManageCourses";
 import Analytics from "./pages/admin/Analytics";
 import Register from "./pages/Register";
 import { useCart } from "./store/CartContext";
-import { fetchSubscribedCourses, unsubscribeFromCourse } from "./utils/api";
+import { fetchSubscriptionsForLearner, unsubscribeFromCourse } from "./utils/api";
 import AuthContext from "./store/AuthContext";
 import AddCourse from "./pages/admin/AddCourse";
 import UpdateCourse from "./pages/admin/UpdateCourse";
@@ -41,7 +41,7 @@ function App() {
 
     const loadSubscribedCourses = async () => {
       try {
-        const courses = await fetchSubscribedCourses(learnerId);
+        const courses = await fetchSubscriptionsForLearner(learnerId);
         updateSubscribedCourses(courses);
       } catch (error) {
         console.error("Failed to load subscribed courses:", error);

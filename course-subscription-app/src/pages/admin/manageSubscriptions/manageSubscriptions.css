@@ -1,0 +1,12 @@
+.table-style .table-cell-style-sort .MuiTableSortLabel-root {
+    color: #ffffff;
+  }
+  
+  .table-style
+    .table-cell-style-sort
+    .MuiTableSortLabel-root
+    .MuiTableSortLabel-icon {
+    /* font-size: 16px; */
+    color: #ffffff;
+  }
+  

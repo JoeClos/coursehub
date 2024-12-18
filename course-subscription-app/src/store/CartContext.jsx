@@ -1,19 +1,27 @@
-import { createContext, useState, useContext, useCallback } from "react";
+import {
+  createContext,
+  useState,
+  useContext,
+  useCallback,
+  useEffect,
+} from "react";
 import PropTypes from "prop-types";
 import {
   subscribeToCourse as apiSubscribeToCourse,
   unsubscribeFromCourse as apiUnsubscribeFromCourse,
+  fetchSubscriptionsForLearner,
+  fetchAllSubscriptions,
 } from "../utils/api";
 
 export const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
-  const [subscribedCourses, setSubscribedCourses] = useState([]);
+  // const [subscribedCourses, setSubscribedCourses] = useState([]);
+  const [subscriptions, setSubscriptions] = useState([]);
+  const [learnerId, setLearnerId] = useState(null);
 
   const updateSubscribedCourses = useCallback((courses) => {
-    // setSubscribedCourses(courses);
-
-    setSubscribedCourses((prev) => {
+    setSubscriptions((prev) => {
       if (JSON.stringify(prev) !== JSON.stringify(courses)) {
         return courses;
       }
@@ -22,8 +30,8 @@ export const CartProvider = ({ children }) => {
   }, []);
 
   const clearSubscribedCourses = () => {
-    if (subscribedCourses.length > 0) {
-      setSubscribedCourses([]);
+    if (subscriptions.length > 0) {
+      setSubscriptions([]);
     }
     // setSubscribedCourses([]);
   };
@@ -34,7 +42,7 @@ export const CartProvider = ({ children }) => {
       return;
     }
     const newSubscription = await apiSubscribeToCourse(learnerId, course._id);
-    setSubscribedCourses((prev) => [
+    setSubscriptions((prev) => [
       ...prev,
       {
         ...newSubscription,
@@ -47,7 +55,7 @@ export const CartProvider = ({ children }) => {
     // console.log("Unsubscribing from course with ID:", subscriptionId);
     try {
       await apiUnsubscribeFromCourse(subscriptionId);
-      setSubscribedCourses((prev) =>
+      setSubscriptions((prev) =>
         prev.filter((sub) => sub._id !== subscriptionId)
       );
       // console.log("Unsubscribed successfully:", subscriptionId);
@@ -56,14 +64,61 @@ export const CartProvider = ({ children }) => {
     }
   }, []);
 
+  // Fetch subscriptions for a specific learner
+  const getSubscriptionsForLearner = useCallback(
+    async (learnerId) => {
+      try {
+        if (!learnerId) {
+          console.error("Learner ID is required to fetch subscriptions");
+          return;
+        }
+        const subscriptionData = await fetchSubscriptionsForLearner(learnerId);
+        if (subscriptionData.length === 0) {
+          console.log("No subscriptions found.");
+        } else {
+          updateSubscribedCourses(subscriptionData);
+        }
+      } catch (error) {
+        console.error("Error fetching subscriptions for learner:", error);
+      }
+    },
+    [updateSubscribedCourses]
+  );
+
+  // Fetch all subscriptions (for admin)
+  const getAllSubscriptions = useCallback(async () => {
+    try {
+      const subscriptionData = await fetchAllSubscriptions();
+      if (subscriptionData.length === 0) {
+        console.log("No subscriptions found.");
+      } else {
+        updateSubscribedCourses(subscriptionData);
+      }
+    } catch (error) {
+      console.error("Error fetching all subscriptions:", error);
+    }
+  }, [updateSubscribedCourses]);
+
+  // Fetch subscriptions when learnerId changes
+  useEffect(() => {
+    if (learnerId) {
+      getSubscriptionsForLearner(learnerId); // Fetch for a specific learner
+    } else {
+      getAllSubscriptions(); // Fetch all subscriptions for admin
+    }
+  }, [learnerId, getSubscriptionsForLearner, getAllSubscriptions]);
+
   return (
     <CartContext.Provider
       value={{
-        subscribedCourses,
+        subscriptions,
         clearSubscribedCourses,
         updateSubscribedCourses,
         subscribeToCourse,
         unsubscribeFromCourse,
+        getSubscriptionsForLearner,
+        getAllSubscriptions,
+        setLearnerId,
       }}
     >
       {children}

@@ -9,12 +9,12 @@ import {
   CardActions,
   Button,
 } from "@mui/material";
-import { fetchSubscribedCourses, fetchCourse } from "../utils/api";
+import { fetchSubscriptionsForLearner, fetchCourse } from "../utils/api";
 import { useCart } from "../store/CartContext";
 import CourseModalDescription from "../components/CourseModalDescription";
 
 const MyCourses = () => {
-  const { subscribedCourses, updateSubscribedCourses, unsubscribeFromCourse } =
+  const { subscriptions, updateSubscribedCourses, unsubscribeFromCourse } =
     useCart();
   const learnerId = localStorage.getItem("learnerId");
   const [selectedCourse, setSelectedCourse] = useState(null);
@@ -28,7 +28,7 @@ const MyCourses = () => {
       }
 
       try {
-        const subscriptionData = await fetchSubscribedCourses(learnerId);
+        const subscriptionData = await fetchSubscriptionsForLearner(learnerId);
         console.log("🚀 ~ getSubscriptions ~ subscriptionData:", subscriptionData);
 
         if (subscriptionData.length === 0) {
@@ -134,13 +134,13 @@ const MyCourses = () => {
         >
           Subscriptions
         </Typography>
-        {subscribedCourses.length === 0 ? (
+        {subscriptions.length === 0 ? (
           <Typography variant="body1" sx={{ color: "#555" }}>
             You have not subscribed to any courses yet.
           </Typography>
         ) : (
           <Grid container spacing={4}>
-            {subscribedCourses.map((sub) => (
+            {subscriptions.map((sub) => (
                sub.courseId ? (
               <Grid item xs={12} sm={6} md={4} key={sub._id}>
                 <Card sx={{ borderRadius: "10px" }}>

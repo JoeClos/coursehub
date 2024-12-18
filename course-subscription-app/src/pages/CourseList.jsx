@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Box, Typography, Container, ButtonGroup, Button } from "@mui/material";
-import { fetchCourses, fetchSubscribedCourses } from "../utils/api";
+import { fetchCourses, fetchSubscriptionsForLearner } from "../utils/api";
 import { useCart } from "../store/CartContext";
 import CardList from "../components/courses/CardList";
 import PropTypes from "prop-types";
@@ -10,7 +10,7 @@ const CourseList = ({ searchQuery }) => {
   const [courses, setCourses] = useState([]);
   const [filter, setFilter] = useState("All");
   const {
-    subscribedCourses,
+    subscriptions,
     subscribeToCourse,
     unsubscribeFromCourse,
     updateSubscribedCourses,
@@ -36,7 +36,7 @@ const CourseList = ({ searchQuery }) => {
         clearSubscribedCourses();
         return;
       }
-      const subscriptions = await fetchSubscribedCourses(learnerId);
+      const subscriptions = await fetchSubscriptionsForLearner(learnerId);
       updateSubscribedCourses(subscriptions);
     };
 
@@ -82,7 +82,7 @@ const CourseList = ({ searchQuery }) => {
   };
 
   const getSubscriptionForCourse = (courseId) =>
-    subscribedCourses.find((sub) => sub.courseId._id === courseId)?._id || null;
+    subscriptions.find((sub) => sub.courseId._id === courseId)?._id || null;
 
   return (
     <Container
