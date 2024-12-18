@@ -3,8 +3,10 @@ const router = express.Router();
 const {
   subscribeCourse,
   unsubscribeCourse,
-  getSubscriptions,
+  getSubscriptionsForLearner,
+  getAllSubscriptions,
 } = require("../controllers/subscriptionController");
+const {authenticate} = require( "../middleware/authMiddleware");
 
 // Subscribe to a course
 router.post("/subscribe", subscribeCourse);
@@ -13,6 +15,9 @@ router.post("/subscribe", subscribeCourse);
 router.delete("/unsubscribe/:subscriptionId", unsubscribeCourse);
 
 // Fetch subscritpions for a specific user
-router.get("/subscriptions/:learnerId", getSubscriptions);
+router.get("/subscriptions/:learnerId", getSubscriptionsForLearner);
+
+// Route to fetch all subscriptions (accessible only to the admin)
+router.get("/subscriptions", getAllSubscriptions);
 
 module.exports = router;

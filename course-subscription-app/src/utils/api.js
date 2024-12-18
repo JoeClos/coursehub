@@ -107,18 +107,33 @@ export const unsubscribeFromCourse = async (subscriptionId) => {
   }
 };
 
-//Fetch subscriptions
-export const fetchSubscribedCourses = async (learnerId) => {
+// Fetch subscriptions for a specific learner
+export const fetchSubscriptionsForLearner = async (learnerId) => {
   const endpoint = buildUrl(baseUrl, `/api/subscriptions/${learnerId}`);
 
   try {
     const response = await axios.get(endpoint);
     return response.data; // Return subscribed courses
   } catch (error) {
-    console.error("Error fetching subscribed courses:", error);
+    console.error("Error fetching subscriptions for learner:", error);
     throw error;
   }
 };
+
+
+// Fetch all subscriptions (Admin)
+export const fetchAllSubscriptions = async () => {
+  const endpoint = buildUrl(baseUrl, "/api/subscriptions");
+
+  try {
+    const response = await axios.get(endpoint);
+    return response.data; // Return all subscriptions
+  } catch (error) {
+    console.error("Error fetching all subscriptions:", error);
+    throw error;
+  }
+};
+
 
 // Register function
 export const registerUser = async (formData) => {

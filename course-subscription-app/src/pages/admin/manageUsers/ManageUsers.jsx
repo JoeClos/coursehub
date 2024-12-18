@@ -41,7 +41,6 @@ const ManageUsers = () => {
   };
 
   // Fetch users from API
-
   useEffect(() => {
     try {
       getUsers();

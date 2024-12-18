@@ -1,7 +1,7 @@
 import { createContext, useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { useCart } from "./CartContext";
-import { fetchSubscribedCourses } from "../utils/api";
+// import { fetchSubscribedCourses } from "../utils/api";
 
 // Create the Auth context
 export const AuthContext = createContext();
@@ -9,7 +9,7 @@ export const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-  const { clearSubscribedCourses, updateSubscribedCourses } = useCart();
+  const { subscriptions, clearSubscribedCourses, updateSubscribedCourses } = useCart();
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -27,39 +27,41 @@ export const AuthProvider = ({ children }) => {
     setLoading(false);
   }, []);
 
-  const getSubscriptions = async (learnerId) => {
-    if (!learnerId) {
-      console.warn("Learner ID is not available.");
-      return;
-    }
+  // const getSubscriptions = async (learnerId) => {
+  //   if (!learnerId) {
+  //     console.warn("Learner ID is not available.");
+  //     return;
+  //   }
 
-    try {
-      const subscriptionsData = await fetchSubscribedCourses(learnerId);
+  //   try {
+  //     const subscriptionData = await fetchSubscribedCourses(learnerId);
 
-      if (subscriptionsData.length === 0) {
-        console.log("No subscriptions found.");
-      } else {
-        const subscriptions = subscriptionsData.map((sub) => ({
-          subscriptionId: sub._id,
-          courseId: { _id: sub.courseId._id, title: sub.courseId.title },
-        }));
-        updateSubscribedCourses(subscriptions);
-      }
-    } catch (error) {
-      console.error("Error fetching subscribed courses:", error);
-    }
-  };
+  //     if (subscriptionData.length === 0) {
+  //       console.log("No subscriptions found.");
+  //     } else {
+  //       subscriptionData.map((sub) => ({
+  //         subscriptionId: sub._id,
+  //         courseId: { _id: sub.courseId._id, title: sub.courseId.title },
+  //       }));
+        
+  //       updateSubscribedCourses(subscriptions);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error fetching subscribed courses:", error);
+  //   }
+  // };
 
   const login = (userData) => {
     setUser(userData);
-    console.log("🚀 ~ login ~ userData:", userData);
+    // console.log("🚀 ~ login ~ userData:", userData);
 
     localStorage.setItem("token", userData.token);
     localStorage.setItem("user", JSON.stringify(userData));
     localStorage.setItem("role", userData.role);
     const learnerId = userData.id;
     localStorage.setItem("learnerId", learnerId);
-    getSubscriptions(learnerId);
+    // getSubscriptions(learnerId);
+     updateSubscribedCourses([]); 
   };
   const logout = () => {
     setUser(null);
@@ -74,7 +76,7 @@ export const AuthProvider = ({ children }) => {
   const isAdmin = user?.role === "admin";
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, loading, isAdmin }}>
+    <AuthContext.Provider value={{ user, login, logout, loading, isAdmin, subscriptions }}>
       {children}
     </AuthContext.Provider>
   );

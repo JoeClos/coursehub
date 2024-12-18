@@ -1,7 +1,7 @@
 import { createContext, useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { useCart } from './CartContext';
-import { fetchSubscribedCourses } from "../utils/api";
+import { fetchSubscriptionsForLearner } from "../utils/api";
 
 // Create the Auth context
 export const AuthContext = createContext();
@@ -29,7 +29,7 @@ export const AuthProvider = ({ children }) => {
     }
 
     try {
-      const subscriptionsData = await fetchSubscribedCourses(learnerId);
+      const subscriptionsData = await fetchSubscriptionsForLearner(learnerId);
 
       if (subscriptionsData.length === 0) {
         console.log("No subscriptions found.");

@@ -3,7 +3,6 @@ import {
   fetchCourses,
   subscribeToCourse,
   unsubscribeFromCourse,
-  fetchSubscribedCourses
 } from "../utils/api";
 import {
   Box,
@@ -21,9 +20,15 @@ import { useCart } from "../context/CartContext";
 
 const CourseList = () => {
   const [courses, setCourses] = useState([]);
-  const { subscribedCourses, updateSubscribedCourses, clearSubscribedCourses} = useCart();
+  const {
+    subscriptions,
+    updateSubscribedCourses,
+    clearSubscribedCourses,
+    getSubscriptionsForLearner,
+  } = useCart();
   const learnerId = localStorage.getItem("learnerId");
 
+  // Fetch subscriptions for the learner when learnerId changes
   useEffect(() => {
     const getSubscriptions = async () => {
       try {
@@ -32,8 +37,9 @@ const CourseList = () => {
           return;
         }
 
-        const subscriptions = await fetchSubscribedCourses(learnerId); // Fetch subscriptions for the new user
-        updateSubscribedCourses(subscriptions);
+        // Fetch subscriptions for the learner
+        const subscriptionData = await getSubscriptionsForLearner();
+        updateSubscribedCourses(subscriptionData);
       } catch (error) {
         console.error("Error fetching subscriptions:", error);
       }
@@ -88,7 +94,7 @@ const CourseList = () => {
   };
 
   const getSubscriptionForCourse = (courseId) => {
-    const subscription = subscribedCourses.find(
+    const subscription = subscriptions.find(
       (sub) => sub.courseId._id === courseId // Ensure matching against _id
     );
     return subscription ? subscription._id : null;
