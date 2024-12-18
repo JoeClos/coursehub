@@ -11,7 +11,7 @@ import {
 } from "recharts";
 import {
   Box,
-  Grid,
+  Grid2,
   Card,
   Typography,
   Table,
@@ -120,14 +120,20 @@ const Analytics = () => {
   }
 
   return (
-    <Box sx={{ p: 3 }}>
-      <Typography variant="h4" align="center" gutterBottom>
+    <Box>
+      <Typography
+        variant="h4"
+        align="center"
+        gutterBottom
+        mt={6}
+        sx={{ padding: "0 16px" }}
+      >
         Analytics Overview
       </Typography>
 
-      <Grid container spacing={3}>
+      <Grid2 container spacing={3}>
         {/* Line Chart Section */}
-        <Grid item xs={12} sm={12} md={8}>
+        <Grid2 item xs={12} sm={12} md={8}>
           <Card sx={{ p: 2 }}>
             <Typography variant="h6" gutterBottom>
               Users and Courses Growth (Monthly)
@@ -144,10 +150,10 @@ const Analytics = () => {
               </LineChart>
             </ResponsiveContainer>
           </Card>
-        </Grid>
+        </Grid2>
 
         {/* Data Table Section */}
-        <Grid item xs={12} sm={12} md={4}>
+        <Grid2 item xs={12} sm={12} md={4}>
           <Card sx={{ p: 2 }}>
             <Typography variant="h6" gutterBottom>
               Detailed Data
@@ -156,7 +162,9 @@ const Analytics = () => {
               <Table>
                 <TableHead>
                   <TableRow>
-                    <TableCell sx={{ fontWeight: "bold" }}>Month and Year</TableCell>
+                    <TableCell sx={{ fontWeight: "bold" }}>
+                      Month and Year
+                    </TableCell>
                     <TableCell align="right" sx={{ fontWeight: "bold" }}>
                       Users Registered
                     </TableCell>
@@ -177,11 +185,10 @@ const Analytics = () => {
               </Table>
             </TableContainer>
           </Card>
-        </Grid>
-      </Grid>
+        </Grid2>
+      </Grid2>
     </Box>
   );
 };
 
 export default Analytics;
-
