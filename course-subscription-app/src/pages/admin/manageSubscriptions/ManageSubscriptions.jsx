@@ -14,13 +14,13 @@ import {
   Divider,
   Card,
   CardContent,
-  useMediaQuery,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useCart } from "../../../store/CartContext";
 import AuthContext from "../../../store/AuthContext";
 import "./manageSubscriptions.css";
 import Pagination from "../../../components/Pagination";
+import { useIsMobile } from "../../../utils/useIsMobile";
 
 const ManageSubscriptions = () => {
   const {
@@ -35,7 +35,7 @@ const ManageSubscriptions = () => {
   const [rowsPerPage] = useState(2);
   const [order, setOrder] = useState("desc");
   const [orderBy, setOrderBy] = useState("learnerId.firstName");
-  const isMobile = useMediaQuery((theme) => theme.breakpoints.down("sm"));
+  const isMobile = useIsMobile();
 
   // Group subscriptions by learner globally
   const globalGroupedSubscriptions = subscriptions.reduce((acc, sub) => {
@@ -114,7 +114,11 @@ const ManageSubscriptions = () => {
                 <Card variant="outlined">
                   <CardContent>
                     <Typography variant="h6">
-                      {learnerKey} ({learnerSubscriptions.length} {learnerSubscriptions.length === 1 ? "Subscription" : "Subscriptions"})
+                      {learnerKey} ({learnerSubscriptions.length}{" "}
+                      {learnerSubscriptions.length === 1
+                        ? "Subscription"
+                        : "Subscriptions"}
+                      )
                     </Typography>
                     <Divider sx={{ margin: "10px 0" }} />
 
