@@ -1,5 +1,4 @@
-import { useContext, useState } from "react";
-// import PropTypes from "prop-types";
+import { useContext, useState, useEffect } from "react";
 import {
   AppBar,
   Box,
@@ -13,6 +12,9 @@ import {
   ListItemButton,
   Toolbar,
   Typography,
+  Grid2,
+  Card,
+  CardContent,
 } from "@mui/material";
 import { Link, Outlet, useLocation } from "react-router-dom";
 import LogoutIcon from "@mui/icons-material/Logout";
@@ -23,12 +25,38 @@ import LeaderboardIcon from "@mui/icons-material/Leaderboard";
 import AuthContext from "../../store/AuthContext";
 import { useIsMobile } from "../../utils/useIsMobile";
 import ScrollToTopButton from "../../components/ScrollToTopButton";
+import { useUsers } from "../../store/UserContext";
+import { useCart } from "../../store/CartContext";
+import { useCourses } from "../../store/CourseContext";
 
 const drawerWidth = 240;
 
 const Dashboard = () => {
   const { logout } = useContext(AuthContext);
   const location = useLocation(); // Get current route
+  const { users } = useUsers();
+  const { subscriptions } = useCart();
+  const { courses } = useCourses();
+  const [summary, setSummary] = useState({
+    users: 0,
+    subscriptions: 0,
+    courses: 0,
+    analytics: 0,
+  });
+
+  useEffect(() => {
+    const fetchSummaryData = async () => {
+      const fetchedSummary = {
+        users: users.length,
+        subscriptions: subscriptions.length,
+        courses: courses.length,
+        analytics: "",
+      };
+      setSummary(fetchedSummary);
+    };
+
+    fetchSummaryData();
+  }, [users, subscriptions, courses]);
 
   const isMobile = useIsMobile();
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -74,7 +102,7 @@ const Dashboard = () => {
             component={Link}
             to={item.to}
             sx={{
-              bordeRadius: "5px",
+              borderRadius: "5px",
               margin: " 5px",
               justifyContent: { xs: "center", sm: "flex-start" },
               backgroundColor: location.pathname.includes(item.to) && "#E0F2FE",
@@ -124,6 +152,41 @@ const Dashboard = () => {
     </div>
   );
 
+  // Determine whether to show the summary section based on the current path
+  const hideSummaryPages = [
+    "/dashboard/users",
+    "/dashboard/subscriptions",
+    "/dashboard/courses",
+    "/dashboard/analytics",
+    "/dashboard/courses/add",
+    "/dashboard/courses/update",
+  ];
+
+  const shouldHideSummary = hideSummaryPages.some((path) =>
+    location.pathname.startsWith(path)
+  );
+
+  // Define card styles
+
+  const cardStyles = {
+    width: { xs: "100%", sm: "200px", md: "300px" },
+    maxWidth: "100%",
+    height: "250px",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+  };
+
+  const cardContentStyles = {
+    color: "#fff",
+    fontSize: { xs: "20px", md: "28px" },
+    fontWeight: "bold",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+  };
+
   return (
     <Box sx={{ display: "flex", flexDirection: "column" }}>
       <CssBaseline />
@@ -146,10 +209,16 @@ const Dashboard = () => {
             sx={{ mr: 2, display: { sm: "none" } }}
           ></IconButton>
           <Typography
+            component={Link}
+            to={"/dashboard"}
             variant="h6"
             noWrap
-            component="div"
-            sx={{ flexGrow: 1, textAlign: "center" }}
+            sx={{
+              flexGrow: 1,
+              textAlign: "center",
+              color: "#FFFFFF",
+              textDecoration: "none",
+            }}
           >
             Dashboard
           </Typography>
@@ -165,13 +234,13 @@ const Dashboard = () => {
           open={!isMobile || drawerOpen}
           onClose={() => setDrawerOpen(false)}
           ModalProps={{
-            keepMounted: true, // Improve performance on mobile by keeping the drawer mounted
+            keepMounted: true,
           }}
           sx={{
             "& .MuiDrawer-paper": {
               width: drawerWidth,
               boxSizing: "border-box",
-              ...(isMobile && { overflowY: "auto" }), // Enable scrolling for mobile
+              ...(isMobile && { overflowY: "auto" }),
             },
           }}
         >
@@ -260,11 +329,98 @@ const Dashboard = () => {
           marginLeft: { sm: `${drawerWidth}px` },
           transition: "margin-left 0.3s ease",
           overflowY: "auto",
-          height: "calc(100vh - 56px)",
         }}
       >
+        {/* Conditionally render the Summary section */}
+        {!shouldHideSummary && (
+          <Box
+            sx={{
+              flexGrow: 1,
+              p: { xs: 3, sm: 0, xl: 0 },
+              mt: { xs: 3, sm: 0, xl: 0 },
+            }}
+          >
+            <Grid2
+              container
+              spacing={3}
+              justifyContent="center"
+              sx={{
+                flexDirection: { xs: "column", sm: "row" },
+              }}
+            >
+              {/* Users Summary Card */}
+              <Grid2 item xs={12} sm={6} md={6}>
+                <Card
+                  sx={{
+                    ...cardStyles,
+                    backgroundColor: "#FFEB3B", // Yellow
+                  }}
+                >
+                  <CardContent sx={cardContentStyles}>
+                    <GroupIcon sx={{ fontSize: { xs: 60, md: 100 } }} />
+                    <Typography variant="h4">{summary.users}</Typography>
+                    <Typography variant="h6">Users</Typography>
+                  </CardContent>
+                </Card>
+              </Grid2>
+
+              {/* Subscriptions Summary Card */}
+              <Grid2 item xs={12} sm={6} md={6}>
+                <Card
+                  sx={{
+                    ...cardStyles,
+                    backgroundColor: "#4CAF50", // Green
+                  }}
+                >
+                  <CardContent sx={cardContentStyles}>
+                    <SubscriptionsIcon sx={{ fontSize: { xs: 60, md: 100 } }} />
+                    <Typography variant="h4">
+                      {summary.subscriptions}
+                    </Typography>
+                    <Typography variant="h6">Subscriptions</Typography>
+                  </CardContent>
+                </Card>
+              </Grid2>
+
+              {/* Courses Summary Card */}
+              <Grid2 item xs={12} sm={6} md={6}>
+                <Card
+                  sx={{
+                    ...cardStyles,
+                    backgroundColor: "#2196F3", // Blue
+                  }}
+                >
+                  <CardContent sx={cardContentStyles}>
+                    <LibraryBooksIcon sx={{ fontSize: { xs: 60, md: 100 } }} />
+                    <Typography variant="h4">{summary.courses}</Typography>
+                    <Typography variant="h6">Courses</Typography>
+                  </CardContent>
+                </Card>
+              </Grid2>
+
+              {/* Analytics Summary Card */}
+              <Grid2 item xs={12} sm={6} md={6}>
+                <Card
+                  sx={{
+                    ...cardStyles,
+                    backgroundColor: "#FF5722", // Red
+                  }}
+                >
+                  <CardContent sx={cardContentStyles}>
+                    <LeaderboardIcon sx={{ fontSize: { xs: 60, md: 100 } }} />
+                    <Typography variant="h4">{summary.analytics}</Typography>
+                    <Typography variant="h6">Analytics</Typography>
+                  </CardContent>
+                </Card>
+              </Grid2>
+            </Grid2>
+          </Box>
+        )}
+
+        {/* Render the content of the selected route */}
         <Outlet />
       </Box>
+
       <ScrollToTopButton />
     </Box>
   );
