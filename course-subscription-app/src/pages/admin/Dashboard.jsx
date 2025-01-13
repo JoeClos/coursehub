@@ -19,6 +19,7 @@ import GroupIcon from "@mui/icons-material/Group";
 import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
 import SubscriptionsIcon from "@mui/icons-material/Subscriptions";
 import LeaderboardIcon from "@mui/icons-material/Leaderboard";
+import HomeIcon from "@mui/icons-material/Home";
 import AuthContext from "../../store/AuthContext";
 import { useIsMobile } from "../../utils/useIsMobile";
 import ScrollToTopButton from "../../components/ScrollToTopButton";
@@ -29,6 +30,7 @@ import SummarySection from "../../components/SummarySection";
 
 const drawerWidth = 240;
 const navItems = [
+  { to: "/", icon: <HomeIcon />, text: "Home", title: "Home" },
   { to: "users", icon: <GroupIcon />, text: "Users", title: "Users" },
   {
     to: "subscriptions",
@@ -50,10 +52,16 @@ const navItems = [
   },
 ];
 
+const isActiveRoute = (path) => {
+  if (path === "/") {
+    return location.pathname === "/dashboard" || location.pathname === "/";
+  }
+  return location.pathname.startsWith(`/dashboard/${path}`);
+};
+
 const Dashboard = () => {
   const { logout } = useContext(AuthContext);
   const location = useLocation(); // Get current route
-  // const navigate = useNavigate();
   const { users } = useUsers();
   const { subscriptions } = useCart();
   const { courses } = useCourses();
@@ -97,6 +105,7 @@ const Dashboard = () => {
     <div style={{ height: "100%", display: "flex", flexDirection: "column" }}>
       <Toolbar />
       <Divider />
+      {/* <List sx={{ flexGrow: 1, py: 8 }}> */}
       <List sx={{ flexGrow: 1, py: 8 }}>
         {navItems.map((item) => (
           <ListItemButton
@@ -105,17 +114,17 @@ const Dashboard = () => {
             to={item.to}
             sx={{
               borderRadius: "5px",
-              margin: " 5px",
+              margin: "5px",
               justifyContent: { xs: "center", sm: "flex-start" },
-              backgroundColor: location.pathname.includes(item.to) && "#E0F2FE",
+              backgroundColor: isActiveRoute(item.to)
+                ? "#E0F2FE"
+                : "transparent",
               "&:hover": { backgroundColor: "#E0F2FE" },
             }}
           >
             <ListItemIcon
               sx={{
-                color: location.pathname.includes(item.to)
-                  ? "#2F6FEB"
-                  : "inherit",
+                color: isActiveRoute(item.to) ? "#2F6FEB" : "inherit",
               }}
             >
               {item.icon}
@@ -124,14 +133,13 @@ const Dashboard = () => {
               primary={item.text}
               sx={{
                 display: { xs: "none", sm: "block" },
-                color: location.pathname.includes(item.to)
-                  ? "#2F6FEB"
-                  : "#201F40",
+                color: isActiveRoute(item.to) ? "#2F6FEB" : "#201F40",
               }}
             />
           </ListItemButton>
         ))}
       </List>
+      {/* </List> */}
       <ListItemButton
         onClick={handleLogout}
         sx={{
@@ -257,13 +265,11 @@ const Dashboard = () => {
               component={Link}
               to={item.to}
               sx={{
-                backgroundColor: location.pathname.includes(item.to)
+                backgroundColor: isActiveRoute(item.to)
                   ? "#E0F2FE"
                   : "transparent",
                 "&:hover": { backgroundColor: "#E0F2FE" },
-                color: location.pathname.includes(item.to)
-                  ? "#2F6FEB"
-                  : "#201F40",
+                color: isActiveRoute(item.to) ? "#2F6FEB" : "#201F40",
                 borderRadius: "5px",
                 p: "8px",
               }}
