@@ -81,7 +81,6 @@ function App() {
               <Route path="analytics" element={<Analytics />} />
             </Route>
             <Route path="/" element={getHomePageElement()} />
-
             <Route
               path="/my-courses"
               element={

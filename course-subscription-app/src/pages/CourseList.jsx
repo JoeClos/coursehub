@@ -140,41 +140,25 @@ const CourseList = ({ searchQuery }) => {
         {/* Filter Buttons */}{" "}
         <Box sx={{ textAlign: "center", marginTop: "40px" }}>
           {" "}
-          <ButtonGroup variant="contained">
-            {" "}
-            <Button
-              onClick={() => setFilter("All")}
-              sx={{
-                backgroundColor: filter === "All" ? "#201F40" : " #757AD5",
-              }}
-            >
-              All
-            </Button>{" "}
-            <Button
-              onClick={() => setFilter("Online")}
-              sx={{
-                backgroundColor: filter === "Online" ? "#201F40" : " #757AD5",
-              }}
-            >
-              Online
-            </Button>{" "}
-            <Button
-              onClick={() => setFilter("Offline")}
-              sx={{
-                backgroundColor: filter === "Offline" ? "#201F40" : " #757AD5",
-              }}
-            >
-              Offline
-            </Button>{" "}
-            <Button
-              onClick={() => setFilter("Hybrid")}
-              sx={{
-                backgroundColor: filter === "Hybrid" ? "#201F40" : " #757AD5",
-              }}
-            >
-              Hybrid
-            </Button>{" "}
-          </ButtonGroup>{" "}
+          <ButtonGroup
+            variant="contained"
+            aria-label="outlined primary button group"
+            color="primary.light"
+          >
+            {["All", "Online", "Offline", "Hybrid"].map((filterType) => (
+              <Button
+                key={filterType}
+                onClick={() => setFilter(filterType)}
+                sx={{
+                  backgroundColor:
+                    filter === filterType ? "#201F40" : "#757AD5",
+                  color: "#fff",
+                }}
+              >
+                {filterType}
+              </Button>
+            ))}
+          </ButtonGroup>
         </Box>
         <Box
           style={{
