@@ -3,32 +3,25 @@ import {
   AppBar,
   Box,
   CssBaseline,
-  Divider,
-  Drawer,
   IconButton,
-  List,
-  ListItemText,
-  ListItemIcon,
-  ListItemButton,
   Toolbar,
   Typography,
 } from "@mui/material";
 import { Link, Outlet, useLocation } from "react-router-dom";
-import LogoutIcon from "@mui/icons-material/Logout";
 import GroupIcon from "@mui/icons-material/Group";
 import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
 import SubscriptionsIcon from "@mui/icons-material/Subscriptions";
 import LeaderboardIcon from "@mui/icons-material/Leaderboard";
 import HomeIcon from "@mui/icons-material/Home";
 import AuthContext from "../../store/AuthContext";
-import { useIsMobile } from "../../utils/useIsMobile";
 import ScrollToTopButton from "../../components/ScrollToTopButton";
 import { useUsers } from "../../store/UserContext";
 import { useCart } from "../../store/CartContext";
 import { useCourses } from "../../store/CourseContext";
 import SummarySection from "../../components/SummarySection";
+import DashboardNavigationDrawer from "../../components/DashboardNavigationDrawer";
+import DashboardMobileNavigationBar from "../../components/DashboardMobileNavigationBar";
 
-const drawerWidth = 240;
 const navItems = [
   { to: "/", icon: <HomeIcon />, text: "Home", title: "Home" },
   { to: "users", icon: <GroupIcon />, text: "Users", title: "Users" },
@@ -52,14 +45,15 @@ const navItems = [
   },
 ];
 
-const isActiveRoute = (path) => {
-  if (path === "/") {
-    return location.pathname === "/dashboard" || location.pathname === "/";
-  }
-  return location.pathname.startsWith(`/dashboard/${path}`);
-};
+// const isActiveRoute = (path) => {
+//   if (path === "/") {
+//     return location.pathname === "/dashboard" || location.pathname === "/";
+//   }
+//   return location.pathname.startsWith(`/dashboard/${path}`);
+// };
 
 const Dashboard = () => {
+  const drawerWidth = 240;
   const { logout } = useContext(AuthContext);
   const location = useLocation(); // Get current route
   const { users } = useUsers();
@@ -90,7 +84,6 @@ const Dashboard = () => {
     fetchSummaryData();
   }, [users, subscriptions, courses]);
 
-  const isMobile = useIsMobile();
   const [drawerOpen, setDrawerOpen] = useState(false);
 
   const toggleDrawer = () => {
@@ -100,67 +93,6 @@ const Dashboard = () => {
   const handleLogout = () => {
     logout();
   };
-
-  const drawer = (
-    <div style={{ height: "100%", display: "flex", flexDirection: "column" }}>
-      <Toolbar />
-      <Divider />
-      {/* <List sx={{ flexGrow: 1, py: 8 }}> */}
-      <List sx={{ flexGrow: 1, py: 8 }}>
-        {navItems.map((item) => (
-          <ListItemButton
-            key={item.to}
-            component={Link}
-            to={item.to}
-            sx={{
-              borderRadius: "5px",
-              margin: "5px",
-              justifyContent: { xs: "center", sm: "flex-start" },
-              backgroundColor: isActiveRoute(item.to)
-                ? "#E0F2FE"
-                : "transparent",
-              "&:hover": { backgroundColor: "#E0F2FE" },
-            }}
-          >
-            <ListItemIcon
-              sx={{
-                color: isActiveRoute(item.to) ? "#2F6FEB" : "inherit",
-              }}
-            >
-              {item.icon}
-            </ListItemIcon>
-            <ListItemText
-              primary={item.text}
-              sx={{
-                display: { xs: "none", sm: "block" },
-                color: isActiveRoute(item.to) ? "#2F6FEB" : "#201F40",
-              }}
-            />
-          </ListItemButton>
-        ))}
-      </List>
-      {/* </List> */}
-      <ListItemButton
-        onClick={handleLogout}
-        sx={{
-          justifyContent: { xs: "center", sm: "flex-start" },
-          mt: "auto",
-          gap: 1,
-          "&:hover": { backgroundColor: "#E0F2FE" },
-        }}
-      >
-        <ListItemIcon sx={{ color: "inherit" }}>
-          <LogoutIcon />
-        </ListItemIcon>
-        <ListItemText
-          primary="Logout"
-          sx={{
-            display: { xs: "none", sm: "block" },
-          }}
-        />
-      </ListItemButton>
-    </div>
-  );
 
   // Determine whether to show the summary section based on the current path
   const hideSummaryPages = [
@@ -213,97 +145,24 @@ const Dashboard = () => {
           </Typography>
         </Toolbar>
       </AppBar>
-      <Box
-        component="nav"
-        sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
-        aria-label="navigation drawer"
-      >
-        <Drawer
-          variant={isMobile ? "temporary" : "permanent"}
-          open={!isMobile || drawerOpen}
-          onClose={() => setDrawerOpen(false)}
-          ModalProps={{
-            keepMounted: true,
-          }}
-          sx={{
-            "& .MuiDrawer-paper": {
-              width: drawerWidth,
-              boxSizing: "border-box",
-              ...(isMobile && { overflowY: "auto" }),
-            },
-          }}
-        >
-          <div style={{ height: "100%", overflowY: "auto" }}>{drawer}</div>
-        </Drawer>
-      </Box>
 
-      <Box
-        sx={{
-          position: "fixed",
-          top: 75,
-          zIndex: 1400,
-          display: { xs: "flex", sm: "none" },
-          justifyContent: "space-around",
-          alignItems: "center",
-          width: "100%",
-          py: 1,
-          backgroundColor: "#fff",
-          boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
-        }}
-      >
-        {navItems.map((item) => (
-          <Box
-            key={item.to}
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              textAlign: "center",
-            }}
-          >
-            <IconButton
-              component={Link}
-              to={item.to}
-              sx={{
-                backgroundColor: isActiveRoute(item.to)
-                  ? "#E0F2FE"
-                  : "transparent",
-                "&:hover": { backgroundColor: "#E0F2FE" },
-                color: isActiveRoute(item.to) ? "#2F6FEB" : "#201F40",
-                borderRadius: "5px",
-                p: "8px",
-              }}
-            >
-              {item.icon}
-            </IconButton>
-            <Typography variant="caption" sx={{ color: "#201F40", mt: 0.5 }}>
-              {item.text}
-            </Typography>
-          </Box>
-        ))}
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-          }}
-        >
-          <IconButton
-            onClick={handleLogout}
-            sx={{
-              color: "#201F40",
-              borderRadius: "5px",
-              p: "8px",
-              "&:hover": { backgroundColor: "#E0F2FE" },
-            }}
-          >
-            <LogoutIcon />
-          </IconButton>
-          <Typography variant="caption" sx={{ color: "#201F40", mt: 0.5 }}>
-            Logout
-          </Typography>
-        </Box>
-      </Box>
+      {/* Sidebar Navigation  */}
+      <DashboardNavigationDrawer
+        drawerWidth={drawerWidth}
+        navItems={navItems}
+        drawerOpen={drawerOpen}
+        toggleDrawer={toggleDrawer}
+        location={location}
+        handleLogout={handleLogout}
+      />
+
+      {/* Mobile navigation bar */}
+      <DashboardMobileNavigationBar
+        navItems={navItems}
+        // isActiveRoute={isActiveRoute}
+        location={location}
+        handleLogout={handleLogout}
+      />
 
       {/* Page Content */}
       <Box
