@@ -2,20 +2,23 @@ const express = require("express");
 const cors = require("cors");
 const connectDB = require("./config/db");
 const courseRoutes = require("./routes/courses");
-const userRoutes = require('./routes/users');
-const subscriptionRoutes = require('./routes/subscriptions');
+const userRoutes = require("./routes/users");
+const subscriptionRoutes = require("./routes/subscriptions");
 
 require("dotenv").config();
+console.log("Allowed Frontend URL:", process.env.CLIENT_URL);
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
 // app.use(cors());
-app.use(cors({
-  origin: process.env.CLIENT_URL, // Allow frontend to access
-  methods: "GET,POST,PUT,DELETE",
-  credentials: true, 
-}));
+app.use(
+  cors({
+    origin: [process.env.CLIENT_URL, "http://localhost:5173"],
+    methods: "GET,POST,PUT,DELETE",
+    credentials: true,
+  })
+);
 app.options("*", cors());
 
 app.use(express.json());
@@ -28,8 +31,8 @@ app.get("/", (req, res) => {
 
 // Routes
 app.use("/api", courseRoutes);
-app.use('/api', userRoutes);
-app.use('/api', subscriptionRoutes)
+app.use("/api", userRoutes);
+app.use("/api", subscriptionRoutes);
 
 // Catch-all for undefined routes
 // app.use((req, res) => {
