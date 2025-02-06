@@ -1,7 +1,6 @@
 import { createContext, useState, useContext, useCallback } from "react";
 import PropTypes from "prop-types";
 import { subscribeToCourse as apiSubscribeToCourse, unsubscribeFromCourse as apiUnsubscribeFromCourse,  } from "../utils/api";
-import { deleteSubscription } from "../utils/api";
 
 const CartContext = createContext();
 
@@ -41,18 +40,6 @@ export const CartProvider = ({ children }) => {
     );
   }, []);
 
-  const deleteSubscriptionById = useCallback(async (subscriptionId) => {
-    console.log("🚀 ~ deleteSubscriptionById called with subscriptionId:", subscriptionId);
-    try {
-      const response = await deleteSubscription(subscriptionId);
-      console.log("🚀 ~ deleteSubscriptionById ~ response:", response);
-      setSubscribedCourses((prev) =>
-        prev.filter((sub) => sub._id !== subscriptionId)
-      );
-    } catch (error) {
-      console.error("Error in deleteSubscriptionById:", error);
-    }
-  }, []);
 
   return (
     <CartContext.Provider
@@ -62,7 +49,6 @@ export const CartProvider = ({ children }) => {
         clearSubscribedCourses,
         subscribeToCourse,
         unsubscribeFromCourse,
-        deleteSubscriptionById,
       }}
     >
       {children}
