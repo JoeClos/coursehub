@@ -6,6 +6,7 @@ import {
   IconButton,
   Toolbar,
   Typography,
+  CircularProgress,
 } from "@mui/material";
 import { Link, Outlet, useLocation } from "react-router-dom";
 import GroupIcon from "@mui/icons-material/Group";
@@ -57,15 +58,30 @@ const Dashboard = () => {
   const { logout } = useContext(AuthContext);
   const location = useLocation(); // Get current route
   const { users } = useUsers();
-  const { subscriptions } = useCart();
+  const { subscriptions, getAllSubscriptions } = useCart();
   console.log("🚀 ~ Dashboard ~ subscriptions:", subscriptions)
   const { courses } = useCourses();
+  const [loading, setLoading] = useState(true);
   const [summary, setSummary] = useState({
     users: 0,
     subscriptions: 0,
     courses: 0,
     analytics: 0,
   });
+
+  useEffect(() => {
+    const fetchSubscriptions = async () => {
+      try {
+        await getAllSubscriptions();
+      } catch (error) {
+        console.error("Failed to fetch subscriptions:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchSubscriptions();
+  }, [getAllSubscriptions]);
 
   useEffect(() => {
     const fetchSummaryData = async () => {
@@ -108,6 +124,19 @@ const Dashboard = () => {
   const shouldHideSummary = hideSummaryPages.some((path) =>
     location.pathname.startsWith(path)
   );
+
+  if (loading) {
+    return (
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        minHeight="100vh"
+      >
+        <CircularProgress />
+      </Box>
+    );
+  }
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column" }}>
