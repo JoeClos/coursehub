@@ -59,42 +59,6 @@ const MyCourses = () => {
     getSubscriptions();
   }, [learnerId, updateSubscribedCourses]);
 
-  // useEffect(() => {
-  //   const getSubscriptions = async () => {
-  //     if (!learnerId) {
-  //       console.warn("Learner ID is not available.");
-  //       return;
-  //     }
-
-  //     try {
-  //       const subscriptionData = await fetchSubscribedCourses(learnerId);
-  //       console.log(
-  //         "🚀 ~ getSubscriptions ~ subscriptionData:",
-  //         subscriptionData
-  //       );
-
-  //       if (subscriptionData.length === 0) {
-  //         console.log("No subscriptions found.");
-  //       } else {
-  //         const subscriptions = subscriptionData.map((sub) => ({
-  //           _id: sub._id,
-  //           courseId: {
-  //             _id: sub.courseId._id,
-  //             title: sub.courseId.title,
-  //             description: sub.courseId.description,
-  //           },
-  //         }));
-
-  //         updateSubscribedCourses(subscriptions);
-  //       }
-  //     } catch (error) {
-  //       console.error("Error fetching subscribed courses:", error);
-  //     }
-  //   };
-
-  //   getSubscriptions();
-  // }, [learnerId, updateSubscribedCourses]);
-
   const handleUnsubscribe = async (subscriptionId) => {
     await unsubscribeFromCourse(subscriptionId);
   };

@@ -107,6 +107,22 @@ export const unsubscribeFromCourse = async (subscriptionId) => {
   }
 };
 
+// Delete subscription by ID
+export const deleteSubscription = async (subscriptionId) => {
+  const endpoint = buildUrl(baseUrl, `/api/subscriptions/${subscriptionId}`);
+
+  try {
+    const response = await axios.delete(endpoint);
+    console.log("🚀 ~ deleteSubscription ~ response.data:", response.data)
+
+    return response.data;
+    
+  } catch (error) {
+    console.error("Error deleting subscription:", error);
+    throw error;
+  }
+};
+
 // Fetch subscriptions for a specific learner
 export const fetchSubscriptionsForLearner = async (learnerId) => {
   const endpoint = buildUrl(baseUrl, `/api/subscriptions/${learnerId}`);

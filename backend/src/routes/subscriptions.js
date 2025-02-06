@@ -5,6 +5,7 @@ const {
   unsubscribeCourse,
   getSubscriptionsForLearner,
   getAllSubscriptions,
+  deleteSubscription,
 } = require("../controllers/subscriptionController");
 const {authenticate} = require( "../middleware/authMiddleware");
 
@@ -13,6 +14,9 @@ router.post("/subscribe", subscribeCourse);
 
 // Unsubscribe from a course
 router.delete("/unsubscribe/:subscriptionId", unsubscribeCourse);
+
+// Delete subscription by ID
+router.delete("/subscriptions/:subscriptionId", deleteSubscription);
 
 // Fetch subscritpions for a specific user
 router.get("/subscriptions/:learnerId", getSubscriptionsForLearner);

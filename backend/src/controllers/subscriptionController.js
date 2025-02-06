@@ -28,6 +28,40 @@ const subscribeCourse = async (req, res) => {
   }
 };
 
+// Unsubscribe from a course
+const unsubscribeCourse = async (req, res) => {
+  const { subscriptionId } = req.params; // Accept subscription _id from the request parameters
+
+  try {
+    console.log(
+      `Received request to unsubscribe subscription ID: ${subscriptionId}`
+    );
+
+    if (!subscriptionId) {
+      return res.status(400).json({ message: "Subscription ID is required" });
+    }
+
+    // Validate ObjectId format
+    if (!mongoose.Types.ObjectId.isValid(subscriptionId)) {
+      return res.status(400).json({ message: "Invalid subscription ID" });
+    }
+
+    // Attempt to delete the subscription by its ObjectId
+    const subscription = await Subscription.findByIdAndDelete(subscriptionId);
+
+    if (!subscription) {
+      return res.status(404).json({ message: "Subscription not found" });
+    }
+
+    // Return success message
+    res.status(200).json({ message: "Unsubscribed successfully" });
+  } catch (error) {
+    console.error("Error unsubscribing from course:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+// Fetch all subscriptions for a specific learner
 const getSubscriptionsForLearner = async (req, res) => {
   const { learnerId } = req.params;
   if (!mongoose.Types.ObjectId.isValid(learnerId)) {
@@ -77,17 +111,13 @@ const getAllSubscriptions = async (req, res) => {
   }
 };
 
-module.exports = {
-  getAllSubscriptions,
-};
-
-// Unsubscribe from a course
-const unsubscribeCourse = async (req, res) => {
+// Delete a subscription
+const deleteSubscription = async (req, res) => {
   const { subscriptionId } = req.params; // Accept subscription _id from the request parameters
 
   try {
     console.log(
-      `Received request to unsubscribe subscription ID: ${subscriptionId}`
+      `Received request to delete subscription ID: ${subscriptionId}`
     );
 
     if (!subscriptionId) {
@@ -107,11 +137,17 @@ const unsubscribeCourse = async (req, res) => {
     }
 
     // Return success message
-    res.status(200).json({ message: "Unsubscribed successfully" });
+    res.status(200).json({ message: "Delete subscription successfully" });
   } catch (error) {
-    console.error("Error unsubscribing from course:", error);
+    console.error("Error deleting subscription:", error);
     res.status(500).json({ message: "Server error" });
   }
 };
 
-module.exports = { subscribeCourse, unsubscribeCourse, getSubscriptionsForLearner, getAllSubscriptions };
+module.exports = {
+  subscribeCourse,
+  unsubscribeCourse,
+  getSubscriptionsForLearner,
+  getAllSubscriptions,
+  deleteSubscription
+};

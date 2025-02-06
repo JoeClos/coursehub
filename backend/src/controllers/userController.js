@@ -68,7 +68,7 @@ const loginUser = async (req, res) => {
 const getUsers = async (req, res) => {
   try {
     const users = await User.find();
-    console.log("🚀 ~ getUsers ~ users:", users);
+    // console.log("🚀 ~ getUsers ~ users:", users);
     res.status(200).json(users);
   } catch (error) {
     console.error("Error fetching users:", error);

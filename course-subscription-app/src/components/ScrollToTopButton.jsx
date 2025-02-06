@@ -6,7 +6,7 @@ import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 const ScrollToTopButton = () => {
   const isMobile = useIsMobile();
   const [isVisible, setIsVisible] = useState(false);
-  console.log("🚀 ~ ScrollToTopButton ~ isVisible:", isVisible);
+  // console.log("🚀 ~ ScrollToTopButton ~ isVisible:", isVisible);
 
   useEffect(() => {
     const scrollableElement = document.querySelector("#scrollable-container");
@@ -41,7 +41,7 @@ const ScrollToTopButton = () => {
   };
 
   if (!isMobile || !isVisible) {
-    console.log(`🚀 ~ ScrollToTopButton ~ isVisible: ${isVisible}`);
+    // console.log(`🚀 ~ ScrollToTopButton ~ isVisible: ${isVisible}`);
     return null;
   }
 
