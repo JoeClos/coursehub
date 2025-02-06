@@ -6,19 +6,28 @@ const userRoutes = require("./routes/users");
 const subscriptionRoutes = require("./routes/subscriptions");
 
 require("dotenv").config();
-console.log("Allowed Frontend URL:", process.env.CLIENT_URL);
+// console.log("Allowed Frontend URL:", process.env.CLIENT_URL);
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+const allowedOrigins = process.env.CLIENT_URL;
+console.log("CORS Allowed Origins:", allowedOrigins);
 
-// app.use(cors());
 app.use(
   cors({
-    origin: [process.env.CLIENT_URL, "http://localhost:5173"],
+    origin: function (origin, callback) {
+      console.log("Request Origin:", origin);
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("CORS not allowed for this origin"));
+      }
+    },
     methods: "GET,POST,PUT,DELETE",
     credentials: true,
   })
 );
+
 app.options("*", cors());
 
 app.use(express.json());
