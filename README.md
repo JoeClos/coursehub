@@ -10,6 +10,7 @@
   <img src="https://github.com/user-attachments/assets/e1795b6f-4c0b-4426-9869-57619bc795f6" alt="Landing Page" width="300">
   <img src="https://github.com/user-attachments/assets/0963a029-9a92-457d-bc1e-dd690e81bcec" alt="Logged User" width="300">
   <img src="https://github.com/user-attachments/assets/e8c0bc55-31bd-4e71-aa3e-d0b2fecd8ba1" alt="Analytics" width="300">
+  <img src="https://github.com/user-attachments/assets/4d8c59b8-9e19-44ff-903c-1e2ba0f3da9d)" alt="Dashboard" width="300">
 </div>
 
 ### Mobile View:
