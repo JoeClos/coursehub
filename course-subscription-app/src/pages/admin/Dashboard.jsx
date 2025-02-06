@@ -58,6 +58,7 @@ const Dashboard = () => {
   const location = useLocation(); // Get current route
   const { users } = useUsers();
   const { subscriptions } = useCart();
+  console.log("🚀 ~ Dashboard ~ subscriptions:", subscriptions)
   const { courses } = useCourses();
   const [summary, setSummary] = useState({
     users: 0,
