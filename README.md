@@ -6,19 +6,24 @@
 ## Screenshots:
 
 ### Desktop View:
-<div style="display: flex; gap: 10px;">
-  <img src="https://github.com/user-attachments/assets/e1795b6f-4c0b-4426-9869-57619bc795f6" alt="Landing Page" width="300">
-  <img src="https://github.com/user-attachments/assets/0963a029-9a92-457d-bc1e-dd690e81bcec" alt="Logged User" width="300">
-  <img src="https://github.com/user-attachments/assets/e8c0bc55-31bd-4e71-aa3e-d0b2fecd8ba1" alt="Analytics" width="300">
-  <img src="https://github.com/user-attachments/assets/4d8c59b8-9e19-44ff-903c-1e2ba0f3da9d)" alt="Dashboard" width="300">
-</div>
+| Landing Page | Logged User |
+|-------------|------------|
+| <img src="https://github.com/user-attachments/assets/e1795b6f-4c0b-4426-9869-57619bc795f6" width="400"> | <img src="https://github.com/user-attachments/assets/0963a029-9a92-457d-bc1e-dd690e81bcec" width="400"> |
+
+| ADMIN - Analytics | ADMIN - Dashboard |
+|----------|----------|
+| <img src="https://github.com/user-attachments/assets/73bd8a98-f605-4aaa-9174-89a060a43ed5" width="400"> | <img src="https://github.com/user-attachments/assets/4d8c59b8-9e19-44ff-903c-1e2ba0f3da9d" width="400"> |
+
 
 ### Mobile View:
-<div style="display: flex; gap: 10px;">
-  <img src="https://github.com/user-attachments/assets/1ba243a9-b770-4f14-82f1-ee479da672b2" alt="Mobile Landing Page" width="150">
-  <img src="https://github.com/user-attachments/assets/38ddcb74-4c20-4b74-bb24-f05a86bdd47e" alt="Mobile Logged User" width="150">
-</div>
 
+| Mobile Landing Page | Logged User |
+|---------------------|------------|
+| <img src="https://github.com/user-attachments/assets/9b912c64-51b7-4847-814f-d44e237bc88e" width="250"> | <img src="https://github.com/user-attachments/assets/4bbe3a09-2134-4a04-a1b3-798678d4b0ad" width="250"> |
+
+| ADMIN - Dashboard | ADMIN - Subscriptions |
+|----------|--------------|
+| <img src="https://github.com/user-attachments/assets/8fa5e026-7ead-41b4-957d-90aee1176db4" width="250"> | <img src="https://github.com/user-attachments/assets/c1c08c58-9b44-417b-842f-f6a138566609" width="250"> |
 
 
 ---
